@@ -24,7 +24,8 @@ namespace AudioClickRepair.Data
             int positionExcluding,
             int length)
         {
-            var range = GetRangeFromImmutable(
+            var range = RangeData.GetRangeFromImmutable(
+                _immutableArray,
                 positionExcluding - length,
                 length);
 
@@ -37,7 +38,7 @@ namespace AudioClickRepair.Data
         }
 
         private void UpdateRange(
-            Range range,
+            RangeData range,
             IPatch patch)
         {
             var start = Math.Max(patch.StartPosition, range.StartPosition);
@@ -47,23 +48,13 @@ namespace AudioClickRepair.Data
                 range.SetValue(position, _updateFunc(patch, position));
         }
 
-        private IPatch[] GetPatchesForRange(Range range)
+        private IPatch[] GetPatchesForRange(RangeData range)
         {
             var patchesForRange = _patchCollection.Where(
                 p => p?.StartPosition <= range.EndPosition &&
                 p?.GetEndPosition() >= range.StartPosition);
 
             return patchesForRange.ToArray();
-        }
-
-        private Range GetRangeFromImmutable(
-            int rangeStartPosition,
-            int rangeLength)
-        {
-            var shortArray = new double[rangeLength];
-            _immutableArray.CopyTo(rangeStartPosition, shortArray, 0, rangeLength);
-
-            return new Range(shortArray, rangeStartPosition);
         }
     }
 }
