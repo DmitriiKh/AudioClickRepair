@@ -11,8 +11,8 @@ namespace AudioClickRepair.Data
         private readonly BlockingCollection<IPatch> _patchCollection;
         private readonly Func<IPatch, int, double> _updateFunc;
 
-        public Patcher(ImmutableArray<double> immutableArray, 
-            BlockingCollection<IPatch> patchCollection, 
+        public Patcher(ImmutableArray<double> immutableArray,
+            BlockingCollection<IPatch> patchCollection,
             Func<IPatch, int, double> updateFunc)
         {
             _immutableArray = immutableArray;

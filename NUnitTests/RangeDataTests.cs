@@ -8,7 +8,7 @@ namespace NUnitTests
     public class RangeDataTests
     {
         private const int _testArrayLength = 1000;
-        private ImmutableArray<double> _arrayValueEqualsIndex ;
+        private ImmutableArray<double> _arrayValueEqualsIndex;
 
         [SetUp]
         public void Setup()
@@ -21,12 +21,12 @@ namespace NUnitTests
         [TestCase(0, 100)] // Beginning
         [TestCase(_testArrayLength - 100, 100)] // End
         public void RangeData_Converts_ReturnsCorrectArray(
-            int rangeStart, 
+            int rangeStart,
             int rangeLength)
         {
             var range = RangeData.GetRangeFromImmutable(
-                _arrayValueEqualsIndex, 
-                rangeStart, 
+                _arrayValueEqualsIndex,
+                rangeStart,
                 rangeLength);
 
             Assert.AreEqual(
@@ -44,7 +44,7 @@ namespace NUnitTests
                 1);
 
             Assert.AreEqual(
-                _arrayValueEqualsIndex[rangeStart], 
+                _arrayValueEqualsIndex[rangeStart],
                 range.GetValue(rangeStart));
         }
 

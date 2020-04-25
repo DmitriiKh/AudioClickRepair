@@ -46,7 +46,7 @@ namespace NUnitTests
 
             // Correct result based on _blockSize = 16 and _blocksNumber = 16
             const double correctResult = (double)(16 + 32 + 48 + 64 + 80 + 96
-                + 112 + 128 + 144 + 160 + 176 + 192 + 208 + 224 + 240 + 256) 
+                + 112 + 128 + 144 + 160 + 176 + 192 + 208 + 224 + 240 + 256)
                 / 16;
 
             Assert.AreEqual(correctResult, result);
@@ -64,8 +64,8 @@ namespace NUnitTests
             var result = _analyzer.GetResult(errors);
 
             // Correct result based on _blockSize = 16 and _blocksNumber = 16
-            const double correctResult = (double)(128 + 112 + 96 + 80 + 64 
-                + 48 + 32 + 16 + 15 + 31 + 47 + 63 + 79 + 95 + 111 + 127) 
+            const double correctResult = (double)(128 + 112 + 96 + 80 + 64
+                + 48 + 32 + 16 + 15 + 31 + 47 + 63 + 79 + 95 + 111 + 127)
                 / 16;
 
             Assert.AreEqual(correctResult, result);

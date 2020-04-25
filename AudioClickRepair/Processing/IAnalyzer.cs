@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-
-namespace AudioClickRepair.Processing
+﻿namespace AudioClickRepair.Processing
 {
     public interface IAnalyzer
     {

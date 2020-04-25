@@ -18,19 +18,19 @@ namespace AudioClickRepair.Data
         {
             if (inputSamples is null)
                 throw new ArgumentNullException(nameof(inputSamples));
-            
+
             _patchCollection = new BlockingCollection<IPatch>();
 
             _input = ImmutableArray.Create(inputSamples);
             _inputPatcher = new Patcher(
-                _input, 
-                _patchCollection, 
+                _input,
+                _patchCollection,
                 (patch, position) => patch.GetOutputSample(position));
 
             _predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
             _inputPatcher = new Patcher(
-                _predictionErr, 
-                _patchCollection, 
+                _predictionErr,
+                _patchCollection,
                 (_, __) => IPatch.MinimalPredictionError);
 
             IsReadyForScan = false;

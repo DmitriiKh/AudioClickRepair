@@ -35,7 +35,7 @@ namespace NUnitTests
         [TestCase(200, 100, 245, 10)] // patch outside of range (right)
         [TestCase(200, 100, 95, 110)] // patch covers entire range
         public void RangeData_GetRangeBefore_OnePatch_ReturnsCorrectRange(
-            int positionExcluding, 
+            int positionExcluding,
             int length,
             int patchStart,
             int patchLength)
@@ -45,14 +45,14 @@ namespace NUnitTests
 
             var range = _patcher.GetRangeBefore(positionExcluding, length);
 
-            for (var position = range.StartPosition; 
-                position <= range.EndPosition; 
+            for (var position = range.StartPosition;
+                position <= range.EndPosition;
                 position++)
             {
-                var patched = position >= patch.StartPosition && 
+                var patched = position >= patch.StartPosition &&
                     position <= patch.GetEndPosition();
                 var expected = patched ? -position : position;
-                   
+
                 Assert.AreEqual(expected, range.GetValue(position));
             }
         }
