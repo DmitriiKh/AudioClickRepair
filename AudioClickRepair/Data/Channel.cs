@@ -28,7 +28,7 @@ namespace AudioClickRepair.Data
                 (patch, position) => patch.GetOutputSample(position));
 
             _predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
-            _inputPatcher = new Patcher(
+            _predictionErrPatcher = new Patcher(
                 _predictionErr,
                 _patchCollection,
                 (_, __) => IPatch.MinimalPredictionError);
