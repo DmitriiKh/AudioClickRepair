@@ -97,7 +97,8 @@ namespace AudioClickRepair.Data
             return normCalculator.GetResult(
                 _predictionErrPatcher.GetRangeBefore(
                     position,
-                    normCalculator.GetInputDataSize()));
+                    normCalculator.GetInputDataSize())
+                .GetInternalArray());
         }
     }
 }

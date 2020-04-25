@@ -20,7 +20,7 @@ namespace AudioClickRepair.Data
             _updateFunc = updateFunc;
         }
 
-        public double[] GetRangeBefore(
+        public RangeData GetRangeBefore(
             int positionExcluding,
             int length)
         {
@@ -34,7 +34,7 @@ namespace AudioClickRepair.Data
             foreach (var patch in patches)
                 UpdateRange(range, patch);
 
-            return range.GetInternalArray();
+            return range;
         }
 
         private void UpdateRange(
