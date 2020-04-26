@@ -42,7 +42,7 @@ namespace AudioClickRepair.Data
             IPatch patch)
         {
             var start = Math.Max(patch.StartPosition, range.StartPosition);
-            var end = Math.Min(patch.GetEndPosition(), range.EndPosition);
+            var end = Math.Min(patch.EndPosition, range.EndPosition);
 
             for (var position = start; position <= end; position++)
                 range.SetValue(position, _updateFunc(patch, position));
@@ -52,7 +52,7 @@ namespace AudioClickRepair.Data
         {
             var patchesForRange = _patchCollection.Where(
                 p => p?.StartPosition <= range.EndPosition &&
-                p?.GetEndPosition() >= range.StartPosition);
+                p?.EndPosition >= range.StartPosition);
 
             return patchesForRange.ToArray();
         }

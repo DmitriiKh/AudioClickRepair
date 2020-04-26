@@ -50,7 +50,7 @@ namespace NUnitTests
                 position++)
             {
                 var patched = position >= patch.StartPosition &&
-                    position <= patch.GetEndPosition();
+                    position <= patch.EndPosition;
                 var expected = patched ? -position : position;
 
                 Assert.AreEqual(expected, range.GetValue(position));
@@ -79,9 +79,9 @@ namespace NUnitTests
                 position++)
             {
                 var patchedFirst = position >= firstPatch.StartPosition &&
-                    position <= firstPatch.GetEndPosition();
+                    position <= firstPatch.EndPosition;
                 var patchedSecond = position >= secondPatch.StartPosition &&
-                    position <= secondPatch.GetEndPosition();
+                    position <= secondPatch.EndPosition;
 
                 var expected = patchedFirst || patchedSecond ? -position : position;
 
@@ -96,7 +96,7 @@ namespace NUnitTests
                 patchLength);
 
             for (var position = patch.StartPosition;
-                position <= patch.GetEndPosition();
+                position <= patch.EndPosition;
                 position++)
                 // Change sign to opposite
                 patch.SetOutputSample(position, -_arrayValueEqualsIndex[position]);
@@ -120,7 +120,7 @@ namespace NUnitTests
 
             public int Length { get; private set; }
 
-            public int GetEndPosition() => StartPosition + Length - 1;
+            public int EndPosition => StartPosition + Length - 1;
 
             public double GetOutputSample(int position) =>
                 _output[position - StartPosition];

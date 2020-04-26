@@ -13,7 +13,7 @@ namespace AudioClickRepair.Data
 
         public const double MinimalPredictionError = 0.001f;
 
-        public int GetEndPosition() => StartPosition + Length - 1;
+        public int EndPosition => StartPosition + Length - 1;
 
         public void SetOutputSample(int position, double value) =>
             _output[position - StartPosition] = value;
@@ -93,7 +93,7 @@ namespace AudioClickRepair.Data
         {
             if (position < StartPosition)
                 return _audioDataOwningThisPatch.GetPredictionErr(FromChannel, position);
-            else if (position <= GetEndPosition())
+            else if (position <= EndPosition)
                 return MinimalPredictionError;
             else
                 return 0;
@@ -179,7 +179,7 @@ namespace AudioClickRepair.Data
         {
             if (position < StartPosition)
                 return _audioDataOwningThisPatch.GetOutputSample(FromChannel, position);
-            else if (position <= GetEndPosition())
+            else if (position <= EndPosition)
                 return _output[position - StartPosition];
             else
                 return _audioDataOwningThisPatch.GetOutputSample(FromChannel, position);
@@ -215,7 +215,7 @@ namespace AudioClickRepair.Data
         {
             _output = new double[Length];
 
-            for (var index = StartPosition; index < GetEndPosition(); index++)
+            for (var index = StartPosition; index < EndPosition; index++)
                 _output[index - StartPosition] =
                     _audioDataOwningThisPatch.GetInputSample(FromChannel, index);
 

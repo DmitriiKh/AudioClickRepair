@@ -70,7 +70,7 @@ namespace AudioClickRepair.Data
         private IPatch GetPatchOrNullAt(int position) =>
             _patchCollection.FirstOrDefault(
                 c => c.StartPosition <= position
-                    && c.GetEndPosition() >= position);
+                    && c.EndPosition >= position);
 
         internal int GetNumberOfPatches() => _patchCollection.Count;
 

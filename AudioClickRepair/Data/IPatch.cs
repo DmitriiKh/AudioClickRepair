@@ -6,7 +6,8 @@
         // TODO remove this static property
         static int MinimalPredictionError { get; } = 0;
 
-        int GetEndPosition();
+        int EndPosition { get; }
+
         double GetOutputSample(int position);
     }
 }
