@@ -1,0 +1,310 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AudioClickRepair</name>
+    </assembly>
+    <members>
+        <member name="T:AudioClickRepair.Data.ChannelType">
+            <summary>
+            Audio channel type (left or right).
+            </summary>
+        </member>
+        <member name="F:AudioClickRepair.Data.ChannelType.Left">
+            <summary>
+            Left audio channel.
+            </summary>
+        </member>
+        <member name="F:AudioClickRepair.Data.ChannelType.Right">
+            <summary>
+            Right audio channel.
+            </summary>
+        </member>
+        <member name="T:AudioClickRepair.Data.IPatch">
+            <summary>
+            IPatch interface.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IPatch.StartPosition">
+            <summary>
+            Gets relative position of the first sample of patch.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IPatch.EndPosition">
+            <summary>
+            Gets relative position of the last sample of patch.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IPatch.MinimalPredictionError">
+            <summary>
+            Gets minimal allowed value of prediction error.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.IPatch.GetOutputSample(System.Int32)">
+            <summary>
+            Returns patched value for relative position.
+            </summary>
+            <returns>Patched value (double).</returns>
+            <param name="position">Relative position.</param>
+        </member>
+        <member name="T:AudioClickRepair.Data.Mono">
+            <summary>
+                Represents mono audio samples and includes information
+                about damaged samples
+            </summary>
+        </member>
+        <member name="T:AudioClickRepair.Data.Patch">
+            <summary>
+            Contains information on sequences of damaged samples.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patch.#ctor(System.Int32,System.Int32,System.Double,AudioClickRepair.Data.AudioData,AudioClickRepair.Data.ChannelType)">
+            <summary>
+            Creates new object containing information on sequence of damaged
+            samples such as position, length etc 
+            </summary>
+            <param name="position"> Position of begining of a sequence of
+            damaged samples in the input audio data </param>
+            <param name="length"> Length of sequence of damaged samles </param>
+            <param name="errorLevelDetected"> Prediction error to average
+            error ratio </param>
+            <param name="audioData"> Object of type of AudioData containing
+            audio containig this sequence of damaged samples</param>
+            <param name="fromChannel"> The channel (left, right) containing
+            this sequence of damaged samples</param>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patch.CompareTo(AudioClickRepair.Data.Patch)">
+            <summary>
+            Comparision by position 
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="T:AudioClickRepair.Data.Patcher">
+            <summary>
+            Replaces samples from immutable array that were patched using update function.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{AudioClickRepair.Data.IPatch},System.Func{AudioClickRepair.Data.IPatch,System.Int32,System.Double})">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.Patcher"/> class.
+            </summary>
+            <param name="immutableArray">Immutable array of samples.</param>
+            <param name="patchCollection">Collection of patches.</param>
+            <param name="updateFunc">Function to call to get the patched value.
+            Example: (patch, position) => patch.GetOutputSample(position).</param>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patcher.GetRangeBefore(System.Int32,System.Int32)">
+            <summary>
+            Gets range containing sequence of patched samples of specified length
+            before the specified position.
+            </summary>
+            <param name="positionExcluding">End position of the returned range plus one.</param>
+            <param name="length">Length of range.</param>
+            <returns>RangeData.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Data.RangeData">
+            <summary>
+            Contains a sequence of samples from a larger array.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.RangeData.#ctor(System.Double[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.RangeData"/> class.
+            </summary>
+            <param name="internalArray">Contains short sequence of samples.</param>
+            <param name="startPosition">Relative position of the first sample.</param>
+        </member>
+        <member name="P:AudioClickRepair.Data.RangeData.StartPosition">
+            <summary>
+            Gets relative position of the first sample of range.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.RangeData.EndPosition">
+            <summary>
+            Gets relative position of the last sample of range.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.RangeData.GetRangeFromImmutable(System.Collections.Immutable.ImmutableArray{System.Double},System.Int32,System.Int32)">
+            <summary>
+            Creates a new instance of the <see cref="T:AudioClickRepair.Data.RangeData"/> class
+            by copying samples from immutable array.
+            </summary>
+            <param name="immutableArray">Source of samples.</param>
+            <param name="rangeStartPosition">Relative position of the first sample.</param>
+            <param name="rangeLength">Length of sequence to be copied.</param>
+            <returns>RangeData.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.RangeData.SetValue(System.Int32,System.Double)">
+            <summary>
+            Sets value of internal array using relative position.
+            </summary>
+            <param name="position">Relative position.</param>
+            <param name="value">Value.</param>
+        </member>
+        <member name="M:AudioClickRepair.Data.RangeData.GetValue(System.Int32)">
+            <summary>
+            Gets value from internal array using relative position.
+            </summary>
+            <param name="position">Relative position.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.RangeData.GetInternalArray">
+            <summary>
+            Gets internal array of samples.
+            </summary>
+            <returns>Array of samples.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Data.Stereo">
+            <summary>
+                Represents stereo audio samples and includes information
+                about damaged samples
+            </summary>
+        </member>
+        <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64">
+            <summary>
+                Fast implimentation of Burg algorithm for real signals.
+                For details see paper A Fast Implementation of Burg’s Method by Koen Vos.
+                FastBurgAlgorithm64 uses internal variables of type double
+            </summary>
+        </member>
+        <member name="F:AudioClickRepair.Processing.FastBurgAlgorithm64._absolutePosition">
+            <summary>
+                Position in x_inputSignal that we need prediction for.
+            </summary>
+        </member>
+        <member name="F:AudioClickRepair.Processing.FastBurgAlgorithm64._deltaRAndAProduct">
+            <summary>
+                Product of deltaR matrix and a_predictionCoefs
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.Train(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Calculates prediction coefficients for one sample using CPU
+            </summary>
+            <param name="position">
+                Position in inputSignal that we need
+                prediction for. Must be greater than historyLengthSamples
+            </param>
+            <param name="coefficientsNumber">
+                Number of prediction coefficients
+                that will be calculated. Greater number gives more accurate
+                prediction but takes more time to calculate
+            </param>
+            <param name="historyLengthSamples">
+                Number of samples that will
+                be used to calculate prediction coefficients
+            </param>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.CreateInternalVariables">
+            <summary>
+                Creates internal variables with desirable length
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.GetForwardPrediction">
+            <summary>
+                Returns forward prediction based on prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.GetBackwardPrediction">
+            <summary>
+                Returns backward prediction based on prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.GetPredictionCoefs">
+            <summary>
+                Returns prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.GetReflectionCoefs">
+            <summary>
+                Returns prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.UpdateG">
+            <summary>
+                Updates vector g. For details see step 7 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.ComputeDeltaRMultByA">
+            <summary>
+                Calculates vector deltaRAndAProduct. For details see step 6 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.UpdateR">
+            <summary>
+                Updates vector r. For details see step 5 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.UpdatePredictionCoefs">
+            <summary>
+                Updates vector of prediction coefficients. For details see step 2 of
+                algorithm on page 3 of A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.ComputeReflectionCoef">
+            <summary>
+                Computes vector of reflection coefficients. For details see step 1
+                of algorithm on page 3 of A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.JinversOrder(System.Int32,System.Int32)">
+            <summary>
+                Inverts index to flip a vector insted of multiplication with J matrix.
+                For details see (12) on page 2 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+            <param name="index">from 0 to max</param>
+            <param name="max">positive number</param>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.Initialization">
+            <summary>
+                Initializes i_iterationCounter and vectors. For details see step 0 of
+                algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.FindAutocorrelations">
+            <summary>
+                Calculates autocorrelations. For details see step 0 of
+                algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="T:AudioClickRepair.Processing.IAnalyzer">
+            <summary>
+            IAnalyzer interface.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IAnalyzer.GetInputDataSize">
+            <summary>
+            Returns size of input data array.
+            </summary>
+            <returns>Size.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IAnalyzer.GetDefaultResult">
+            <summary>
+            Returns default result. Can be used if calculation can not be done.
+            </summary>
+            <returns>Default result.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IAnalyzer.GetResult(System.Double[])">
+            <summary>
+            Returns result of calculation.
+            </summary>
+            <param name="inputData">Input data.</param>
+            <returns>Result.</returns>
+        </member>
+    </members>
+</doc>

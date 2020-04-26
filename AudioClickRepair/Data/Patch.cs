@@ -4,7 +4,7 @@ namespace AudioClickRepair.Data
 
 {
     /// <summary>
-    /// Contains information on sequences of damaged samples 
+    /// Contains information on sequences of damaged samples.
     /// </summary>
     public sealed class Patch : IPatch, IComparable<Patch>
     {
