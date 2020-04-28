@@ -28,39 +28,39 @@ namespace NUnitTests
                 (patch, position) => patch.GetOutputSample(position));
         }
 
-        [TestCase(200, 100, 45, 10)] // patch outside of range (left)
-        [TestCase(200, 100, 95, 10)] // patch covers beginning of range
-        [TestCase(200, 100, 145, 10)] // patch in the middle
-        [TestCase(200, 100, 195, 10)] // patch covers ending of range
-        [TestCase(200, 100, 245, 10)] // patch outside of range (right)
-        [TestCase(200, 100, 95, 110)] // patch covers entire range
-        public void RangeData_GetRangeBefore_OnePatch_ReturnsCorrectRange(
-            int positionExcluding,
-            int length,
+        [TestCase(100, 100, 45, 10)] // patch outside of range (left)
+        [TestCase(100, 100, 95, 10)] // patch covers beginning of range
+        [TestCase(100, 100, 145, 10)] // patch in the middle
+        [TestCase(100, 100, 195, 10)] // patch covers ending of range
+        [TestCase(100, 100, 245, 10)] // patch outside of range (right)
+        [TestCase(100, 100, 95, 110)] // patch covers entire range
+        public void RangeData_GetRange_OnePatch_ReturnsCorrectArray(
+            int rangeStart,
+            int rangeLength,
             int patchStart,
             int patchLength)
         {
             var patch = CreatePatchChangedSign(patchStart, patchLength);
             _patchCollection.Add(patch);
 
-            var range = _patcher.GetRangeBefore(positionExcluding, length) as RangeData;
+            var rangeArray = _patcher.GetRange(rangeStart, rangeLength);
 
-            for (var position = range.StartPosition;
-                position <= range.EndPosition;
+            for (var position = rangeStart;
+                position < rangeStart + rangeLength;
                 position++)
             {
                 var patched = position >= patch.StartPosition &&
                     position <= patch.EndPosition;
                 var expected = patched ? -position : position;
 
-                Assert.AreEqual(expected, range.GetValue(position));
+                Assert.AreEqual(expected, rangeArray[position - rangeStart]);
             }
         }
 
-        [TestCase(200, 100, 110, 10, 150, 10)]
-        public void RangeData_GetRangeBefore_TwoPatches_ReturnsCorrectRange(
-            int positionExcluding,
-            int length,
+        [TestCase(100, 100, 110, 10, 150, 10)]
+        public void RangeData_GetRange_TwoPatches_ReturnsCorrectArray(
+            int rangeStart,
+            int rangeLength,
             int patchStartFirst,
             int patchLengthFirst,
             int patchStartSecond,
@@ -72,10 +72,10 @@ namespace NUnitTests
             var secondPatch = CreatePatchChangedSign(patchStartSecond, patchLengthSecond);
             _patchCollection.Add(secondPatch);
 
-            var range = _patcher.GetRangeBefore(positionExcluding, length) as RangeData;
+            var rangeArray = _patcher.GetRange(rangeStart, rangeLength);
 
-            for (var position = range.StartPosition;
-                position <= range.EndPosition;
+            for (var position = rangeStart;
+                position < rangeStart + rangeLength;
                 position++)
             {
                 var patchedFirst = position >= firstPatch.StartPosition &&
@@ -85,7 +85,7 @@ namespace NUnitTests
 
                 var expected = patchedFirst || patchedSecond ? -position : position;
 
-                Assert.AreEqual(expected, range.GetValue(position));
+                Assert.AreEqual(expected, rangeArray[position - rangeStart]);
             }
         }
 

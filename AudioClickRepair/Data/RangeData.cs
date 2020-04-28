@@ -10,7 +10,7 @@ namespace AudioClickRepair.Data
     /// <summary>
     /// Contains a sequence of samples from a larger array.
     /// </summary>
-    public class RangeData : IDataArray
+    public class RangeData
     {
         private readonly double[] internalArray;
 
@@ -46,18 +46,18 @@ namespace AudioClickRepair.Data
         /// by copying samples from immutable array.
         /// </summary>
         /// <param name="immutableArray">Source of samples.</param>
-        /// <param name="rangeStartPosition">Relative position of the first sample.</param>
+        /// <param name="rangeStart">Relative position of the first sample.</param>
         /// <param name="rangeLength">Length of sequence to be copied.</param>
         /// <returns>RangeData.</returns>
         public static RangeData GetRangeFromImmutable(
             ImmutableArray<double> immutableArray,
-            int rangeStartPosition,
+            int rangeStart,
             int rangeLength)
         {
             var shortArray = new double[rangeLength];
-            immutableArray.CopyTo(rangeStartPosition, shortArray, 0, rangeLength);
+            immutableArray.CopyTo(rangeStart, shortArray, 0, rangeLength);
 
-            return new RangeData(shortArray, rangeStartPosition);
+            return new RangeData(shortArray, rangeStart);
         }
 
         /// <summary>

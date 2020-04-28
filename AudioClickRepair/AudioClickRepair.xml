@@ -93,12 +93,12 @@
             <param name="updateFunc">Function to call to get the patched value.
             Example: (patch, position) => patch.GetOutputSample(position).</param>
         </member>
-        <member name="M:AudioClickRepair.Data.Patcher.GetRangeBefore(System.Int32,System.Int32)">
+        <member name="M:AudioClickRepair.Data.Patcher.GetRange(System.Int32,System.Int32)">
             <summary>
             Gets range containing sequence of patched samples of specified length
             before the specified position.
             </summary>
-            <param name="positionExcluding">End position of the returned range plus one.</param>
+            <param name="startPosition">End position of the returned range plus one.</param>
             <param name="length">Length of range.</param>
             <returns>RangeData.</returns>
         </member>
@@ -130,7 +130,7 @@
             by copying samples from immutable array.
             </summary>
             <param name="immutableArray">Source of samples.</param>
-            <param name="rangeStartPosition">Relative position of the first sample.</param>
+            <param name="rangeStart">Relative position of the first sample.</param>
             <param name="rangeLength">Length of sequence to be copied.</param>
             <returns>RangeData.</returns>
         </member>

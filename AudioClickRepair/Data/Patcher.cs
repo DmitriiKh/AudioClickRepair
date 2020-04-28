@@ -36,19 +36,17 @@ namespace AudioClickRepair.Data
         }
 
         /// <summary>
-        /// Gets range containing sequence of patched samples of specified length
-        /// before the specified position.
+        /// Gets array containing sequence of patched samples of specified length
+        /// starting from the specified position.
         /// </summary>
-        /// <param name="positionExcluding">End position of the returned range plus one.</param>
+        /// <param name="start">Start position of range.</param>
         /// <param name="length">Length of range.</param>
-        /// <returns>RangeData.</returns>
-        public IDataArray GetRangeBefore(
-            int positionExcluding,
-            int length)
+        /// <returns>Array of patched samples.</returns>
+        public double[] GetRange(int start, int length)
         {
             var range = RangeData.GetRangeFromImmutable(
                 this.immutableArray,
-                positionExcluding - length,
+                start,
                 length);
 
             var patches = this.GetPatchesForRange(range);
@@ -58,12 +56,10 @@ namespace AudioClickRepair.Data
                 this.UpdateRange(range, patch);
             }
 
-            return range;
+            return range.GetInternalArray();
         }
 
-        private void UpdateRange(
-            RangeData range,
-            IPatch patch)
+        private void UpdateRange(RangeData range, IPatch patch)
         {
             var start = Math.Max(patch.StartPosition, range.StartPosition);
             var end = Math.Min(patch.EndPosition, range.EndPosition);
