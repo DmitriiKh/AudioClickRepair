@@ -289,7 +289,7 @@
         </member>
         <member name="M:AudioClickRepair.Processing.IAnalyzer.GetInputDataSize">
             <summary>
-            Returns size of input data array.
+            Returns size of input data array needed to perform calculations.
             </summary>
             <returns>Size.</returns>
         </member>

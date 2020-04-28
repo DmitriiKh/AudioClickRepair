@@ -10,7 +10,7 @@ namespace AudioClickRepair.Processing
     public interface IAnalyzer
     {
         /// <summary>
-        /// Returns size of input data array.
+        /// Returns size of input data array needed to perform calculations.
         /// </summary>
         /// <returns>Size.</returns>
         int GetInputDataSize();

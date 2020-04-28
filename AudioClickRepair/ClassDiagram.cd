@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AudioClickRepair.Data.AudioData" Collapsed="true">
+    <Position X="2.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAACCAAAAAIAAAAIABAAAIAAAAAAAAAADgAAAAA=</HashCode>
+      <FileName>Data\AudioData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioClickRepair.Data.Mono" Collapsed="true">
+    <Position X="0.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAACAAIAAAAIABAAAIAAAAAAAAAADgAAAAA=</HashCode>
+      <FileName>Data\Mono.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_monoChannel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AudioClickRepair.Data.Stereo" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <AssociationLine Name="_leftChannel" Type="AudioClickRepair.Data.Channel" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.344" Y="3.191" />
+        <Point X="5.344" Y="3.971" />
+        <Point X="4.25" Y="3.971" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAABgAAAAAAAIIAAAAIABAAAIAAAAAAAAAADgAAAAA=</HashCode>
+      <FileName>Data\Stereo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_leftChannel" />
+      <Field Name="_rightChannel" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AudioClickRepair.Data.Channel" Collapsed="true">
+    <Position X="2.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAQAAAAIAACMQAAAMKAAAAYAQAABAAAAACAAAAAA=</HashCode>
+      <FileName>Data\Channel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_patchCollection" />
+      <Field Name="_inputPatcher" />
+      <Field Name="_predictionErrPatcher" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AudioClickRepair.Data.Patcher">
+    <Position X="5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAQEAQAAAAgA=</HashCode>
+      <FileName>Data\Patcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Collections.Concurrent.BlockingCollection&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AudioClickRepair.Data.RangeData" Collapsed="true">
+    <Position X="3" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAQMAAAAgAAAAAEAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\RangeData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioClickRepair.Data.Patch" Collapsed="true">
+    <Position X="1.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQEEAAAA4JhgSICgBIIJCIAIIAAAAAAAAARyA=</HashCode>
+      <FileName>Data\Patch.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
