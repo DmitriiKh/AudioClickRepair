@@ -10,7 +10,7 @@ namespace AudioClickRepair.Data
     /// <summary>
     /// Contains a sequence of samples from a larger array.
     /// </summary>
-    public class RangeData
+    public class RangeData : IDataArray
     {
         private readonly double[] internalArray;
 

@@ -42,7 +42,7 @@ namespace AudioClickRepair.Data
         /// <param name="positionExcluding">End position of the returned range plus one.</param>
         /// <param name="length">Length of range.</param>
         /// <returns>RangeData.</returns>
-        public RangeData GetRangeBefore(
+        public IDataArray GetRangeBefore(
             int positionExcluding,
             int length)
         {

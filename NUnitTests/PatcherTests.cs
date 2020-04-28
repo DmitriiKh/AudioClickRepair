@@ -43,7 +43,7 @@ namespace NUnitTests
             var patch = CreatePatchChangedSign(patchStart, patchLength);
             _patchCollection.Add(patch);
 
-            var range = _patcher.GetRangeBefore(positionExcluding, length);
+            var range = _patcher.GetRangeBefore(positionExcluding, length) as RangeData;
 
             for (var position = range.StartPosition;
                 position <= range.EndPosition;
@@ -72,7 +72,7 @@ namespace NUnitTests
             var secondPatch = CreatePatchChangedSign(patchStartSecond, patchLengthSecond);
             _patchCollection.Add(secondPatch);
 
-            var range = _patcher.GetRangeBefore(positionExcluding, length);
+            var range = _patcher.GetRangeBefore(positionExcluding, length) as RangeData;
 
             for (var position = range.StartPosition;
                 position <= range.EndPosition;
