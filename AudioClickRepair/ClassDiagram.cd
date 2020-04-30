@@ -44,36 +44,21 @@
         <Point X="2" Y="5.781" />
       </Path>
     </AssociationLine>
-    <AssociationLine Name="_inputPatcher" Type="AudioClickRepair.Data.Patcher" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="3.625" Y="4.312" />
-        <Point X="3.625" Y="7.19" />
-        <Point X="6.25" Y="7.19" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="_predictionErrPatcher" Type="AudioClickRepair.Data.Patcher" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="3.938" Y="4.312" />
-        <Point X="3.938" Y="6.454" />
-        <Point X="6.25" Y="6.454" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AgAAAQAAAAIAACMQAAAMKAAAAYAQAABAAAAACAAAAAA=</HashCode>
       <FileName>Data\Channel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="_patchCollection" />
-      <Field Name="_inputPatcher" />
-      <Field Name="_predictionErrPatcher" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="AudioClickRepair.Data.Patcher">
+  <Class Name="AudioClickRepair.Data.Patcher" Collapsed="true">
     <Position X="6.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAQEAQAAAAgA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAQkAQAAAAgA=</HashCode>
       <FileName>Data\Patcher.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="System.Collections.Concurrent.BlockingCollection&lt;T&gt;" Collapsed="true">
     <Position X="0.5" Y="5.5" Width="1.5" />
@@ -86,10 +71,9 @@
       <HashCode>AIAAAAAQMAAAAgAAAAAEAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\RangeData.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Class Name="AudioClickRepair.Data.Patch" Collapsed="true">
-    <Position X="1.25" Y="8" Width="1.5" />
+    <Position X="3.75" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAQEEAAAA4JhgSICgBIIJCIAIIAAAAAAAAARyA=</HashCode>
       <FileName>Data\Patch.cs</FileName>

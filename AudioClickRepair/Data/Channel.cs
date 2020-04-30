@@ -11,8 +11,8 @@ namespace AudioClickRepair.Data
         private readonly BlockingCollection<IPatch> _patchCollection;
         private readonly ImmutableArray<double> _input;
         private readonly ImmutableArray<double> _predictionErr;
-        private readonly Patcher _inputPatcher;
-        private readonly Patcher _predictionErrPatcher;
+        private readonly IPatcher _inputPatcher;
+        private readonly IPatcher _predictionErrPatcher;
 
         internal Channel(double[] inputSamples)
         {
