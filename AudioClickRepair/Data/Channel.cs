@@ -8,7 +8,7 @@ namespace AudioClickRepair.Data
 {
     internal class Channel
     {
-        private readonly BlockingCollection<IPatch> _patchCollection;
+        private readonly BlockingCollection<AbstractPatch> _patchCollection;
         private readonly ImmutableArray<double> _input;
         private readonly ImmutableArray<double> _predictionErr;
         private readonly IPatcher _inputPatcher;
@@ -19,19 +19,19 @@ namespace AudioClickRepair.Data
             if (inputSamples is null)
                 throw new ArgumentNullException(nameof(inputSamples));
 
-            _patchCollection = new BlockingCollection<IPatch>();
+            _patchCollection = new BlockingCollection<AbstractPatch>();
 
             _input = ImmutableArray.Create(inputSamples);
             _inputPatcher = new Patcher(
                 _input,
                 _patchCollection,
-                (patch, position) => patch.GetOutputSample(position));
+                (patch, position) => patch.GetValue(position));
 
             _predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
             _predictionErrPatcher = new Patcher(
                 _predictionErr,
                 _patchCollection,
-                (_, __) => IPatch.MinimalPredictionError);
+                (_, __) => AbstractPatch.MinimalPredictionError);
 
             IsReadyForScan = false;
         }
@@ -54,7 +54,7 @@ namespace AudioClickRepair.Data
 
             return patch is null
                 ? _input[position]
-                : patch.GetOutputSample(position);
+                : patch.GetValue(position);
         }
 
         internal double GetPredictionErr(int position)
@@ -64,10 +64,10 @@ namespace AudioClickRepair.Data
             return patch is null
                 ? _predictionErr[position]
                 // TODO return zero in this case
-                : IPatch.MinimalPredictionError;
+                : AbstractPatch.MinimalPredictionError;
         }
 
-        private IPatch GetPatchOrNullAt(int position) =>
+        private AbstractPatch GetPatchOrNullAt(int position) =>
             _patchCollection.FirstOrDefault(
                 c => c.StartPosition <= position
                     && c.EndPosition >= position);
@@ -79,7 +79,7 @@ namespace AudioClickRepair.Data
             while (_patchCollection.TryTake(out _)) { };
         }
 
-        internal IPatch[] GetAllPatches()
+        internal AbstractPatch[] GetAllPatches()
         {
             var patchList = _patchCollection.ToList();
             patchList.Sort();

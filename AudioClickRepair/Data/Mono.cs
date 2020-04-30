@@ -35,7 +35,7 @@
         public override int GetNumberOfClicksIn(ChannelType channelType) =>
             _monoChannel.GetNumberOfPatches();
 
-        public override IPatch[] GetAllClicks() => _monoChannel.GetAllPatches();
+        public override AbstractPatch[] GetAllClicks() => _monoChannel.GetAllPatches();
 
         public override double GetOutputSample(ChannelType channelType, int position) =>
             _monoChannel.GetOutputSample(position);

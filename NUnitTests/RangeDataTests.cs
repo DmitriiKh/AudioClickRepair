@@ -24,7 +24,7 @@ namespace NUnitTests
             int rangeStart,
             int rangeLength)
         {
-            var range = RangeData.GetRangeFromImmutable(
+            var range = new ArrayFragment(
                 _arrayValueEqualsIndex,
                 rangeStart,
                 rangeLength);
@@ -38,7 +38,7 @@ namespace NUnitTests
         public void RangeData_OneElementLength_WorkCorrectly()
         {
             const int rangeStart = 100;
-            var range = RangeData.GetRangeFromImmutable(
+            var range = new ArrayFragment(
                 _arrayValueEqualsIndex,
                 rangeStart,
                 1);
@@ -52,7 +52,7 @@ namespace NUnitTests
         public void RangeData_SetGet_WorkCorrectly()
         {
             const int position = 100;
-            var range = RangeData.GetRangeFromImmutable(
+            var range = new ArrayFragment(
                 _arrayValueEqualsIndex,
                 position,
                 1);

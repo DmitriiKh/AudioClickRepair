@@ -15,8 +15,8 @@ namespace AudioClickRepair.Data
     public class Patcher : IPatcher
     {
         private readonly ImmutableArray<double> immutableArray;
-        private readonly BlockingCollection<IPatch> patchCollection;
-        private readonly Func<IPatch, int, double> updateFunc;
+        private readonly BlockingCollection<AbstractPatch> patchCollection;
+        private readonly Func<AbstractPatch, int, double> updateFunc;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Patcher"/> class.
@@ -27,8 +27,8 @@ namespace AudioClickRepair.Data
         /// Example: (patch, position) => patch.GetOutputSample(position).</param>
         public Patcher(
             ImmutableArray<double> immutableArray,
-            BlockingCollection<IPatch> patchCollection,
-            Func<IPatch, int, double> updateFunc)
+            BlockingCollection<AbstractPatch> patchCollection,
+            Func<AbstractPatch, int, double> updateFunc)
         {
             this.immutableArray = immutableArray;
             this.patchCollection = patchCollection;
@@ -44,7 +44,7 @@ namespace AudioClickRepair.Data
         /// <returns>Array of patched samples.</returns>
         public double[] GetRange(int start, int length)
         {
-            var range = RangeData.GetRangeFromImmutable(
+            var range = new ArrayFragment(
                 this.immutableArray,
                 start,
                 length);
@@ -59,7 +59,7 @@ namespace AudioClickRepair.Data
             return range.GetInternalArray();
         }
 
-        private void UpdateRange(RangeData range, IPatch patch)
+        private void UpdateRange(ArrayFragment range, AbstractPatch patch)
         {
             var start = Math.Max(patch.StartPosition, range.StartPosition);
             var end = Math.Min(patch.EndPosition, range.EndPosition);
@@ -70,7 +70,7 @@ namespace AudioClickRepair.Data
             }
         }
 
-        private IPatch[] GetPatchesForRange(RangeData range)
+        private AbstractPatch[] GetPatchesForRange(ArrayFragment range)
         {
             var patchesForRange = this.patchCollection.Where(
                 p => p?.StartPosition <= range.EndPosition &&

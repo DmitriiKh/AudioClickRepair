@@ -47,9 +47,9 @@ namespace AudioClickRepair.Data
             ? _leftChannel.GetNumberOfPatches()
             : _rightChannel.GetNumberOfPatches();
 
-        public override IPatch[] GetAllClicks()
+        public override AbstractPatch[] GetAllClicks()
         {
-            var allClicks = new List<IPatch>();
+            var allClicks = new List<AbstractPatch>();
             allClicks.AddRange(_leftChannel.GetAllPatches());
             allClicks.AddRange(_rightChannel.GetAllPatches());
 

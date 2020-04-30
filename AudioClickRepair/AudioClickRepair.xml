@@ -4,6 +4,63 @@
         <name>AudioClickRepair</name>
     </assembly>
     <members>
+        <member name="P:AudioClickRepair.Data.AbstractFragment.StartPosition">
+            <summary>
+            Gets or sets relative position of the first sample of fragment.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.AbstractFragment.EndPosition">
+            <summary>
+            Gets relative position of the last sample of fragment.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.AbstractFragment.Length">
+            <summary>
+            Gets length of fragment.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.AbstractFragment.SetValue(System.Int32,System.Double)">
+            <summary>
+            Sets value of internal array using relative position.
+            </summary>
+            <param name="position">Relative position.</param>
+            <param name="value">Value.</param>
+        </member>
+        <member name="M:AudioClickRepair.Data.AbstractFragment.GetValue(System.Int32)">
+            <summary>
+            Gets value from internal array using relative position.
+            </summary>
+            <param name="position">Relative position.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.AbstractFragment.GetInternalArray">
+            <summary>
+            Gets internal array of samples.
+            </summary>
+            <returns>Array of samples.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Data.ArrayFragment">
+            <summary>
+            Contains a sequence of samples from a larger array.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.ArrayFragment.#ctor(System.Double[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.ArrayFragment"/> class.
+            </summary>
+            <param name="internalArray">Contains short sequence of samples.</param>
+            <param name="startPosition">Relative position of the first sample.</param>
+        </member>
+        <member name="M:AudioClickRepair.Data.ArrayFragment.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.ArrayFragment"/> class
+            and copies samples from immutable array.
+            </summary>
+            <param name="immutableArray">Source of samples.</param>
+            <param name="rangeStart">Relative position of the first sample.</param>
+            <param name="rangeLength">Length of sequence to be copied.</param>
+            <returns>RangeData.</returns>
+        </member>
         <member name="T:AudioClickRepair.Data.ChannelType">
             <summary>
             Audio channel type (left or right).
@@ -18,33 +75,6 @@
             <summary>
             Right audio channel.
             </summary>
-        </member>
-        <member name="T:AudioClickRepair.Data.IPatch">
-            <summary>
-            IPatch interface.
-            </summary>
-        </member>
-        <member name="P:AudioClickRepair.Data.IPatch.StartPosition">
-            <summary>
-            Gets relative position of the first sample of patch.
-            </summary>
-        </member>
-        <member name="P:AudioClickRepair.Data.IPatch.EndPosition">
-            <summary>
-            Gets relative position of the last sample of patch.
-            </summary>
-        </member>
-        <member name="P:AudioClickRepair.Data.IPatch.MinimalPredictionError">
-            <summary>
-            Gets minimal allowed value of prediction error.
-            </summary>
-        </member>
-        <member name="M:AudioClickRepair.Data.IPatch.GetOutputSample(System.Int32)">
-            <summary>
-            Returns patched value for relative position.
-            </summary>
-            <returns>Patched value (double).</returns>
-            <param name="position">Relative position.</param>
         </member>
         <member name="T:AudioClickRepair.Data.Mono">
             <summary>
@@ -84,7 +114,7 @@
             Replaces samples from immutable array that were patched using update function.
             </summary>
         </member>
-        <member name="M:AudioClickRepair.Data.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{AudioClickRepair.Data.IPatch},System.Func{AudioClickRepair.Data.IPatch,System.Int32,System.Double})">
+        <member name="M:AudioClickRepair.Data.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{AudioClickRepair.Data.AbstractPatch},System.Func{AudioClickRepair.Data.AbstractPatch,System.Int32,System.Double})">
             <summary>
             Initializes a new instance of the <see cref="T:AudioClickRepair.Data.Patcher"/> class.
             </summary>
@@ -101,58 +131,6 @@
             <param name="start">Start position of range.</param>
             <param name="length">Length of range.</param>
             <returns>Array of patched samples.</returns>
-        </member>
-        <member name="T:AudioClickRepair.Data.RangeData">
-            <summary>
-            Contains a sequence of samples from a larger array.
-            </summary>
-        </member>
-        <member name="M:AudioClickRepair.Data.RangeData.#ctor(System.Double[],System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.RangeData"/> class.
-            </summary>
-            <param name="internalArray">Contains short sequence of samples.</param>
-            <param name="startPosition">Relative position of the first sample.</param>
-        </member>
-        <member name="P:AudioClickRepair.Data.RangeData.StartPosition">
-            <summary>
-            Gets relative position of the first sample of range.
-            </summary>
-        </member>
-        <member name="P:AudioClickRepair.Data.RangeData.EndPosition">
-            <summary>
-            Gets relative position of the last sample of range.
-            </summary>
-        </member>
-        <member name="M:AudioClickRepair.Data.RangeData.GetRangeFromImmutable(System.Collections.Immutable.ImmutableArray{System.Double},System.Int32,System.Int32)">
-            <summary>
-            Creates a new instance of the <see cref="T:AudioClickRepair.Data.RangeData"/> class
-            by copying samples from immutable array.
-            </summary>
-            <param name="immutableArray">Source of samples.</param>
-            <param name="rangeStart">Relative position of the first sample.</param>
-            <param name="rangeLength">Length of sequence to be copied.</param>
-            <returns>RangeData.</returns>
-        </member>
-        <member name="M:AudioClickRepair.Data.RangeData.SetValue(System.Int32,System.Double)">
-            <summary>
-            Sets value of internal array using relative position.
-            </summary>
-            <param name="position">Relative position.</param>
-            <param name="value">Value.</param>
-        </member>
-        <member name="M:AudioClickRepair.Data.RangeData.GetValue(System.Int32)">
-            <summary>
-            Gets value from internal array using relative position.
-            </summary>
-            <param name="position">Relative position.</param>
-            <returns>Value.</returns>
-        </member>
-        <member name="M:AudioClickRepair.Data.RangeData.GetInternalArray">
-            <summary>
-            Gets internal array of samples.
-            </summary>
-            <returns>Array of samples.</returns>
         </member>
         <member name="T:AudioClickRepair.Data.Stereo">
             <summary>

@@ -6,17 +6,10 @@ namespace AudioClickRepair.Data
     /// <summary>
     /// Contains information on sequences of damaged samples.
     /// </summary>
-    public sealed class Patch : IPatch, IComparable<Patch>
+    public sealed class Patch : AbstractPatch, IComparable<Patch>
     {
         private readonly AudioData _audioDataOwningThisPatch;
         private double[] _output;
-
-        public const double MinimalPredictionError = 0.001f;
-
-        public int EndPosition => StartPosition + Length - 1;
-
-        public void SetOutputSample(int position, double value) =>
-            _output[position - StartPosition] = value;
 
         internal bool BetterThan(Patch anotherClick)
         {
@@ -48,7 +41,7 @@ namespace AudioClickRepair.Data
             ChannelType fromChannel)
         {
             StartPosition = position;
-            Length = length;
+            //Length = length;
             ErrorLevelDetected = errorLevelDetected;
             _audioDataOwningThisPatch = audioData;
             FromChannel = fromChannel;
@@ -57,8 +50,6 @@ namespace AudioClickRepair.Data
             UpdateOutput();
         }
 
-        public int StartPosition { get; private set; }
-        public int Length { get; private set; }
         public double ErrorLevelDetected { get; private set; }
 
         public double GetErrorLevelAtStartPosition() => 0;
@@ -68,6 +59,7 @@ namespace AudioClickRepair.Data
         //    StartPosition);
 
         public bool Aproved { get; private set; }
+
         public ChannelType FromChannel { get; }
 
         /// <summary>
@@ -172,42 +164,29 @@ namespace AudioClickRepair.Data
             Aproved = !Aproved;
         }
 
-        public double GetInputSample(int position) =>
-            _audioDataOwningThisPatch.GetInputSample(FromChannel, position);
-
-        public double GetOutputSample(int position)
-        {
-            if (position < StartPosition)
-                return _audioDataOwningThisPatch.GetOutputSample(FromChannel, position);
-            else if (position <= EndPosition)
-                return _output[position - StartPosition];
-            else
-                return _audioDataOwningThisPatch.GetOutputSample(FromChannel, position);
-        }
-
         public void ExpandLeft()
         {
             StartPosition--;
-            Length++;
+            //Length++;
             UpdateOutput();
         }
 
         public void ShrinkLeft()
         {
             StartPosition++;
-            Length--;
+            //Length--;
             UpdateOutput();
         }
 
         public void ShrinkRight()
         {
-            Length--;
+            //Length--;
             UpdateOutput();
         }
 
         public void ExpandRight()
         {
-            Length++;
+            //Length++;
             UpdateOutput();
         }
 

@@ -10,7 +10,7 @@ namespace NUnitTests
     {
         private const int _testArrayLength = 1000;
         private ImmutableArray<double> _arrayValueEqualsIndex;
-        private BlockingCollection<IPatch> _patchCollection;
+        private BlockingCollection<AbstractPatch> _patchCollection;
         private Patcher _patcher;
 
         [SetUp]
@@ -20,12 +20,12 @@ namespace NUnitTests
                 .Select(i => (double)i)
                 .ToImmutableArray();
 
-            _patchCollection = new BlockingCollection<IPatch>();
+            _patchCollection = new BlockingCollection<AbstractPatch>();
 
             _patcher = new Patcher(
                 _arrayValueEqualsIndex,
                 _patchCollection,
-                (patch, position) => patch.GetOutputSample(position));
+                (patch, position) => patch.GetValue(position));
         }
 
         [TestCase(100, 100, 45, 10)] // patch outside of range (left)
@@ -99,34 +99,18 @@ namespace NUnitTests
                 position <= patch.EndPosition;
                 position++)
                 // Change sign to opposite
-                patch.SetOutputSample(position, -_arrayValueEqualsIndex[position]);
+                patch.SetValue(position, -_arrayValueEqualsIndex[position]);
 
             return patch;
         }
 
-        private class PatchForTest : IPatch
+        private class PatchForTest : AbstractPatch
         {
-            private readonly double[] _output;
-
             public PatchForTest(int patchStart, int patchLength)
             {
                 StartPosition = patchStart;
-                Length = patchLength;
-
-                _output = new double[patchLength];
+                internalArray = new double[patchLength];
             }
-
-            public int StartPosition { get; private set; }
-
-            public int Length { get; private set; }
-
-            public int EndPosition => StartPosition + Length - 1;
-
-            public double GetOutputSample(int position) =>
-                _output[position - StartPosition];
-
-            public void SetOutputSample(int position, double value) =>
-                _output[position - StartPosition] = value;
         }
     }
 }

@@ -14,7 +14,7 @@
 
         public abstract int GetNumberOfClicksIn(ChannelType channelType);
 
-        public abstract IPatch[] GetAllClicks();
+        public abstract AbstractPatch[] GetAllClicks();
 
         public abstract double GetInputSample(ChannelType channelType, int position);
 
