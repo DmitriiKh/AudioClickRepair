@@ -9,7 +9,6 @@ namespace AudioClickRepair.Data
     public sealed class Patch : AbstractPatch, IComparable<Patch>
     {
         private readonly AudioData _audioDataOwningThisPatch;
-        private double[] _output;
 
         internal bool BetterThan(Patch anotherClick)
         {
@@ -24,13 +23,13 @@ namespace AudioClickRepair.Data
         /// Creates new object containing information on sequence of damaged
         /// samples such as position, length etc 
         /// </summary>
-        /// <param name="position"> Position of begining of a sequence of
+        /// <param name="position"> Position of beginning of a sequence of
         /// damaged samples in the input audio data </param>
-        /// <param name="length"> Length of sequence of damaged samles </param>
+        /// <param name="length"> Length of sequence of damaged samples </param>
         /// <param name="errorLevelDetected"> Prediction error to average
         /// error ratio </param>
         /// <param name="audioData"> Object of type of AudioData containing
-        /// audio containig this sequence of damaged samples</param>
+        /// audio containing this sequence of damaged samples</param>
         /// <param name="fromChannel"> The channel (left, right) containing
         /// this sequence of damaged samples</param>
         public Patch(
@@ -42,7 +41,7 @@ namespace AudioClickRepair.Data
         {
             StartPosition = position;
             //Length = length;
-            ErrorLevelDetected = errorLevelDetected;
+            this.ErrorLevelAtDetection = errorLevelDetected;
             _audioDataOwningThisPatch = audioData;
             FromChannel = fromChannel;
             Aproved = true;
@@ -50,7 +49,7 @@ namespace AudioClickRepair.Data
             UpdateOutput();
         }
 
-        public double ErrorLevelDetected { get; private set; }
+        public double ErrorLevelAtDetection { get; }
 
         public double GetErrorLevelAtStartPosition() => 0;
         //HelperCalculator.CalculateDetectionLevel(
@@ -63,7 +62,7 @@ namespace AudioClickRepair.Data
         public ChannelType FromChannel { get; }
 
         /// <summary>
-        /// Comparision by position 
+        /// Comparison by position 
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -113,7 +112,7 @@ namespace AudioClickRepair.Data
             new Patch(
                 StartPosition,
                 Length,
-                ErrorLevelDetected,
+                ErrorLevelAtDetection,
                 _audioDataOwningThisPatch,
                 FromChannel);
 
@@ -192,10 +191,10 @@ namespace AudioClickRepair.Data
 
         private void UpdateOutput()
         {
-            _output = new double[Length];
+            internalArray = new double[Length];
 
             for (var index = StartPosition; index < EndPosition; index++)
-                _output[index - StartPosition] =
+                internalArray[index - StartPosition] =
                     _audioDataOwningThisPatch.GetInputSample(FromChannel, index);
 
             //ClickRepairer.Repair(this, _audioDataOwningThisClick);
