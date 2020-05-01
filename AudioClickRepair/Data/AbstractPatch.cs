@@ -19,18 +19,27 @@ namespace AudioClickRepair.Data
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractPatch"/> class.
         /// </summary>
-        /// <param name="startPosition"> Position of beginning of a sequence of
-        /// damaged samples in the input audio data.</param>
-        /// <param name="errorLevelDetected"> Prediction error to average
+        /// <param name="patchedSamples">Array of corrected samples.</param>
+        /// <param name="startPosition">Relative position of beginning of a sequence of
+        /// samples in the input audio data.</param>
+        /// <param name="errorLevelAtDetection">Prediction error to average
         /// error ratio.</param>
         public AbstractPatch(
+            double[] patchedSamples,
             int startPosition,
-            double errorLevelDetected)
+            double errorLevelAtDetection)
         {
+            this.internalArray = patchedSamples;
             this.StartPosition = startPosition;
-            this.ErrorLevelAtDetection = errorLevelDetected;
-            this.Aproved = true;
+            this.ErrorLevelAtDetection = errorLevelAtDetection;
+            this.CurrentErrorLevel = errorLevelAtDetection;
+            this.Approved = true;
         }
+
+        /// <summary>
+        /// Updater that called when patch needs updating.
+        /// </summary>
+        public event EventHandler<PatchEventArgs> Updater;
 
         /// <summary>
         /// Gets error level at the start position that was found at detection process.
@@ -38,9 +47,14 @@ namespace AudioClickRepair.Data
         public double ErrorLevelAtDetection { get; }
 
         /// <summary>
+        /// Gets current error level.
+        /// </summary>
+        public double CurrentErrorLevel { get; private set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether patch was approved by user.
         /// </summary>
-        public bool Aproved { get; set; }
+        public bool Approved { get; set; }
 
         /// <summary>
         /// Compares start positions and lengths of operands.
@@ -121,5 +135,23 @@ namespace AudioClickRepair.Data
         public override int GetHashCode() =>
             this.StartPosition.GetHashCode() ^
                    this.Length.GetHashCode();
+
+        /// <summary>
+        /// Invokes Updater method and then updates internal array,
+        /// start position and current error level.
+        /// </summary>
+        /// <param name="args">Arguments (input and output).</param>
+        protected virtual void OnChange(PatchEventArgs args)
+        {
+            this.Updater?.Invoke(this, args);
+            this.internalArray = args.Patched.GetInternalArray();
+            this.StartPosition = args.Patched.StartPosition;
+            this.CurrentErrorLevel = args.NewErrorLevelAtStart;
+        }
+
+        /// <summary>
+        /// Toggles approved state.
+        /// </summary>
+        public void ChangeApproved() => this.Approved = !this.Approved;
     }
 }

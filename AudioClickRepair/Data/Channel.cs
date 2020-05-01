@@ -86,6 +86,21 @@ namespace AudioClickRepair.Data
             return patchList.ToArray();
         }
 
+        private void RegisterPatch(AbstractPatch patch)
+        {
+            _patchCollection.Add(patch);
+            patch.Updater += this.PatchUpdater;
+        }
+
+        private void PatchUpdater(object sender, PatchEventArgs e)
+        {
+            // remove sender from the patch collection
+            // update array
+            // update current error level
+            // add the sender back to the patch collection
+            throw new NotImplementedException();
+        }
+
         private double GetPredictionErrNorm(int position, IAnalyzer normCalculator)
         {
             var startIndex = position - normCalculator.GetInputDataSize();
