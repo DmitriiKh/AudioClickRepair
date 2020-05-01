@@ -53,7 +53,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="AudioClickRepair.Data.Patcher" Collapsed="true">
-    <Position X="6.25" Y="5.5" Width="1.5" />
+    <Position X="0.5" Y="7" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAQkAQAAAAgA=</HashCode>
       <FileName>Data\Patcher.cs</FileName>
@@ -66,19 +66,33 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="AudioClickRepair.Data.ArrayFragment" Collapsed="true">
-    <Position X="3" Y="8" Width="1.5" />
+    <Position X="7.25" Y="5.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\ArrayFragment.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AudioClickRepair.Data.Patch" Collapsed="true">
-    <Position X="3.75" Y="5.5" Width="1.5" />
+    <Position X="4.5" Y="7" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAQMEAAAA4JhgSICgBIIBCIAIIAAAAAAAAARyA=</HashCode>
+      <HashCode>AAAAAAAAAEAAAA4JhgSACgAAIACIAIIAAAAAAAAARyA=</HashCode>
       <FileName>Data\Patch.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AudioClickRepair.Data.AbstractPatch" Collapsed="true">
+    <Position X="4.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\AbstractPatch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioClickRepair.Data.AbstractFragment" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQMAAAAgAAAAAEAABAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\AbstractFragment.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

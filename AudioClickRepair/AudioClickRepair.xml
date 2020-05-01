@@ -39,6 +39,28 @@
             </summary>
             <returns>Array of samples.</returns>
         </member>
+        <member name="M:AudioClickRepair.Data.AbstractPatch.#ctor(System.Int32,System.Double)">
+            <summary>
+            Creates new object containing information on sequence of damaged
+            samples such as position, length etc 
+            </summary>
+            <param name="startPosition"> Position of beginning of a sequence of
+            damaged samples in the input audio data </param>
+            <param name="length"> Length of sequence of damaged samples </param>
+            <param name="errorLevelDetected"> Prediction error to average
+            error ratio </param>
+            <param name="audioData"> Object of type of AudioData containing
+            audio containing this sequence of damaged samples</param>
+            <param name="fromChannel"> The channel (left, right) containing
+            this sequence of damaged samples</param>
+        </member>
+        <member name="M:AudioClickRepair.Data.AbstractPatch.CompareTo(AudioClickRepair.Data.Patch)">
+            <summary>
+            Compares by position.
+            </summary>
+            <param name="otherPatch">Other instance.</param>
+            <returns>Result of CompareTo of StartPosition.</returns>
+        </member>
         <member name="T:AudioClickRepair.Data.ArrayFragment">
             <summary>
             Contains a sequence of samples from a larger array.
@@ -87,27 +109,20 @@
             Contains information on sequences of damaged samples.
             </summary>
         </member>
-        <member name="M:AudioClickRepair.Data.Patch.#ctor(System.Int32,System.Int32,System.Double,AudioClickRepair.Data.AudioData,AudioClickRepair.Data.ChannelType)">
+        <member name="M:AudioClickRepair.Data.Patch.#ctor(System.Int32,System.Int32,System.Double,AudioClickRepair.Data.AudioData)">
             <summary>
             Creates new object containing information on sequence of damaged
             samples such as position, length etc 
             </summary>
-            <param name="position"> Position of begining of a sequence of
+            <param name="position"> Position of beginning of a sequence of
             damaged samples in the input audio data </param>
-            <param name="length"> Length of sequence of damaged samles </param>
+            <param name="length"> Length of sequence of damaged samples </param>
             <param name="errorLevelDetected"> Prediction error to average
             error ratio </param>
             <param name="audioData"> Object of type of AudioData containing
-            audio containig this sequence of damaged samples</param>
+            audio containing this sequence of damaged samples</param>
             <param name="fromChannel"> The channel (left, right) containing
             this sequence of damaged samples</param>
-        </member>
-        <member name="M:AudioClickRepair.Data.Patch.CompareTo(AudioClickRepair.Data.Patch)">
-            <summary>
-            Comparision by position 
-            </summary>
-            <param name="other"></param>
-            <returns></returns>
         </member>
         <member name="T:AudioClickRepair.Data.Patcher">
             <summary>

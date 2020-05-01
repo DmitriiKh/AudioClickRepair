@@ -107,6 +107,7 @@ namespace NUnitTests
         private class PatchForTest : AbstractPatch
         {
             public PatchForTest(int patchStart, int patchLength)
+                : base(patchStart, 3.0d)
             {
                 StartPosition = patchStart;
                 internalArray = new double[patchLength];
