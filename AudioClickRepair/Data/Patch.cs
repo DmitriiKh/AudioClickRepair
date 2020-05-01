@@ -5,7 +5,7 @@ namespace AudioClickRepair.Data
     /// <summary>
     /// Contains information on sequences of damaged samples.
     /// </summary>
-    public sealed class Patch : AbstractPatch, IComparable<Patch>
+    public sealed class Patch : AbstractPatch
     {
         private readonly AudioData _audioDataOwningThisPatch;
 
@@ -29,8 +29,6 @@ namespace AudioClickRepair.Data
         /// error ratio </param>
         /// <param name="audioData"> Object of type of AudioData containing
         /// audio containing this sequence of damaged samples</param>
-        /// <param name="fromChannel"> The channel (left, right) containing
-        /// this sequence of damaged samples</param>
         public Patch(
             int position,
             int length,
