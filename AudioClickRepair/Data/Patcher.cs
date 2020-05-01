@@ -59,7 +59,16 @@ namespace AudioClickRepair.Data
             return range.GetInternalArray();
         }
 
-        private void UpdateRange(ArrayFragment range, AbstractPatch patch)
+        public double GetValue(int position)
+        {
+            var patchForPosition = this.PatchForPosition(position);
+
+            return patchForPosition is null
+                ? this.immutableArray[position]
+                : this.updateFunc(patchForPosition, position);
+        }
+
+        private void UpdateRange(AbstractFragment range, AbstractPatch patch)
         {
             var start = Math.Max(patch.StartPosition, range.StartPosition);
             var end = Math.Min(patch.EndPosition, range.EndPosition);
@@ -70,7 +79,7 @@ namespace AudioClickRepair.Data
             }
         }
 
-        private AbstractPatch[] GetPatchesForRange(ArrayFragment range)
+        private AbstractPatch[] GetPatchesForRange(AbstractFragment range)
         {
             var patchesForRange = this.patchCollection.Where(
                 p => p?.StartPosition <= range.EndPosition &&
@@ -78,5 +87,10 @@ namespace AudioClickRepair.Data
 
             return patchesForRange.ToArray();
         }
+
+        private AbstractPatch PatchForPosition(int position) =>
+            this.patchCollection.FirstOrDefault(
+                p => p?.StartPosition <= position &&
+                p?.EndPosition >= position);
     }
 }

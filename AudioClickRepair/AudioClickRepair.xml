@@ -59,9 +59,19 @@
             <param name="errorLevelAtDetection">Prediction error to average
             error ratio.</param>
         </member>
+        <member name="E:AudioClickRepair.Data.AbstractPatch.Updater">
+            <summary>
+            Updater that called when patch needs updating.
+            </summary>
+        </member>
         <member name="P:AudioClickRepair.Data.AbstractPatch.ErrorLevelAtDetection">
             <summary>
             Gets error level at the start position that was found at detection process.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.AbstractPatch.CurrentErrorLevel">
+            <summary>
+            Gets current error level.
             </summary>
         </member>
         <member name="P:AudioClickRepair.Data.AbstractPatch.Approved">
@@ -137,6 +147,13 @@
             </summary>
             <returns>Returns hash code.</returns>
         </member>
+        <member name="M:AudioClickRepair.Data.AbstractPatch.OnChange(AudioClickRepair.Data.PatchEventArgs)">
+            <summary>
+            Invokes Updater method and then updates internal array,
+            start position and current error level.
+            </summary>
+            <param name="args">Arguments (input and output).</param>
+        </member>
         <member name="M:AudioClickRepair.Data.AbstractPatch.ChangeApproved">
             <summary>
             Toggles approved state.
@@ -200,6 +217,26 @@
             <param name="errorLevelAtDetection">Prediction error to average
             error ratio.</param>
         </member>
+        <member name="M:AudioClickRepair.Data.Patch.ExpandLeft">
+            <summary>
+            Expands patch on beginning.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patch.ShrinkLeft">
+            <summary>
+            Shortens patch on beginning.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patch.ShrinkRight">
+            <summary>
+            Shortens patch on end.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Patch.ExpandRight">
+            <summary>
+            Expands patch on end.
+            </summary>
+        </member>
         <member name="T:AudioClickRepair.Data.Patcher">
             <summary>
             Replaces samples from immutable array that were patched using update function.
@@ -222,6 +259,28 @@
             <param name="start">Start position of range.</param>
             <param name="length">Length of range.</param>
             <returns>Array of patched samples.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Data.PatchEventArgs">
+            <summary>
+            Arguments for calling event handler.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.PatchEventArgs.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.PatchEventArgs"/> class.
+            </summary>
+            <param name="newStartPosition">Start position of fragment.</param>
+            <param name="newLength">Length of fragment.</param>
+        </member>
+        <member name="P:AudioClickRepair.Data.PatchEventArgs.Patched">
+            <summary>
+            Gets fragment. Needs to be updated by event handler.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.PatchEventArgs.NewErrorLevelAtStart">
+            <summary>
+            Gets error level. Needs to be updated by event handler.
+            </summary>
         </member>
         <member name="T:AudioClickRepair.Data.Stereo">
             <summary>

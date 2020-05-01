@@ -1,94 +1,85 @@
-﻿using AudioClickRepair.Processing;
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Immutable;
-using System.Linq;
+﻿// <copyright file="Channel.cs" company="Dmitrii Khrustalev">
+// Copyright (c) Dmitrii Khrustalev. All rights reserved.
+// </copyright>
 
 namespace AudioClickRepair.Data
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Immutable;
+    using System.Linq;
+    using AudioClickRepair.Processing;
+
     internal class Channel
     {
-        private readonly BlockingCollection<AbstractPatch> _patchCollection;
-        private readonly ImmutableArray<double> _input;
-        private readonly ImmutableArray<double> _predictionErr;
-        private readonly IPatcher _inputPatcher;
-        private readonly IPatcher _predictionErrPatcher;
+        private readonly BlockingCollection<AbstractPatch> patchCollection;
+        private readonly ImmutableArray<double> input;
+        private readonly ImmutableArray<double> predictionErr;
+        private readonly IPatcher inputPatcher;
+        private readonly IPatcher predictionErrPatcher;
+        private readonly IAnalyzer normCalculator;
 
         internal Channel(double[] inputSamples)
         {
             if (inputSamples is null)
+            {
                 throw new ArgumentNullException(nameof(inputSamples));
+            }
 
-            _patchCollection = new BlockingCollection<AbstractPatch>();
+            this.patchCollection = new BlockingCollection<AbstractPatch>();
 
-            _input = ImmutableArray.Create(inputSamples);
-            _inputPatcher = new Patcher(
-                _input,
-                _patchCollection,
+            this.input = ImmutableArray.Create(inputSamples);
+            this.inputPatcher = new Patcher(
+                this.input,
+                this.patchCollection,
                 (patch, position) => patch.GetValue(position));
 
-            _predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
-            _predictionErrPatcher = new Patcher(
-                _predictionErr,
-                _patchCollection,
+            this.predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
+            this.predictionErrPatcher = new Patcher(
+                this.predictionErr,
+                this.patchCollection,
                 (_, __) => AbstractPatch.MinimalPredictionError);
 
-            IsReadyForScan = false;
+            this.IsReadyForScan = false;
         }
 
         internal void GetReadyForScan()
         {
-
-            IsReadyForScan = true;
+            // calculate prediction errors
+            this.IsReadyForScan = true;
         }
 
         internal bool IsReadyForScan { get; private set; }
 
-        internal int LengthSamples() => _input.Length;
+        internal int LengthSamples() => this.input.Length;
 
-        internal double GetInputSample(int position) => _input[position];
+        internal double GetInputSample(int position) => this.input[position];
 
-        internal double GetOutputSample(int position)
-        {
-            var patch = GetPatchOrNullAt(position);
+        internal double GetOutputSample(int position) =>
+            this.inputPatcher.GetValue(position);
 
-            return patch is null
-                ? _input[position]
-                : patch.GetValue(position);
-        }
+        internal double GetPredictionErr(int position) =>
+            this.predictionErrPatcher.GetValue(position);
 
-        internal double GetPredictionErr(int position)
-        {
-            var patch = GetPatchOrNullAt(position);
-
-            return patch is null
-                ? _predictionErr[position]
-                // TODO return zero in this case
-                : AbstractPatch.MinimalPredictionError;
-        }
-
-        private AbstractPatch GetPatchOrNullAt(int position) =>
-            _patchCollection.FirstOrDefault(
-                c => c.StartPosition <= position
-                    && c.EndPosition >= position);
-
-        internal int GetNumberOfPatches() => _patchCollection.Count;
+        internal int GetNumberOfPatches() => this.patchCollection.Count;
 
         private void RemoveAllPatches()
         {
-            while (_patchCollection.TryTake(out _)) { };
+            while (this.patchCollection.TryTake(out _))
+            {
+            }
         }
 
         internal AbstractPatch[] GetAllPatches()
         {
-            var patchList = _patchCollection.ToList();
+            var patchList = this.patchCollection.ToList();
             patchList.Sort();
             return patchList.ToArray();
         }
 
         private void RegisterPatch(AbstractPatch patch)
         {
-            _patchCollection.Add(patch);
+            this.patchCollection.Add(patch);
             patch.Updater += this.PatchUpdater;
         }
 
@@ -101,18 +92,20 @@ namespace AudioClickRepair.Data
             throw new NotImplementedException();
         }
 
-        private double GetPredictionErrNorm(int position, IAnalyzer normCalculator)
+        private double GetPredictionErrNorm(int position)
         {
-            var startIndex = position - normCalculator.GetInputDataSize();
+            var startIndex = position - this.normCalculator.GetInputDataSize();
 
             // If there is not enough data to analyze
             if (startIndex < 0)
-                return normCalculator.GetDefaultResult();
+            {
+                return this.normCalculator.GetDefaultResult();
+            }
 
-            return normCalculator.GetResult(
-                _predictionErrPatcher.GetRange(
-                    position - normCalculator.GetInputDataSize(),
-                    normCalculator.GetInputDataSize()));
+            return this.normCalculator.GetResult(
+                this.predictionErrPatcher.GetRange(
+                    position - this.normCalculator.GetInputDataSize(),
+                    this.normCalculator.GetInputDataSize()));
         }
     }
 }
