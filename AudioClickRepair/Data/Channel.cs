@@ -18,6 +18,8 @@ namespace AudioClickRepair.Data
         private readonly IPatcher inputPatcher;
         private readonly IPatcher predictionErrPatcher;
         private readonly IAnalyzer normCalculator;
+        private readonly IRegenerator regenerarator;
+        private readonly IPredictor predictor;
 
         internal Channel(double[] inputSamples)
         {
@@ -39,6 +41,10 @@ namespace AudioClickRepair.Data
                 this.predictionErr,
                 this.patchCollection,
                 (_, __) => AbstractPatch.MinimalPredictionError);
+
+            this.predictor = new PredictorFastBurg();
+
+            this.regenerarator = new Regenerator(this.inputPatcher, this.predictor);
 
             this.IsReadyForScan = false;
         }
@@ -85,6 +91,7 @@ namespace AudioClickRepair.Data
 
         private void PatchUpdater(object sender, PatchEventArgs e)
         {
+            this.regenerarator.RestoreFragment(e.Patched);
             // remove sender from the patch collection
             // update array
             // update current error level

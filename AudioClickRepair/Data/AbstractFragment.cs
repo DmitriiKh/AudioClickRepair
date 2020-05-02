@@ -1,4 +1,6 @@
-﻿namespace AudioClickRepair.Data
+﻿using System;
+
+namespace AudioClickRepair.Data
 {
     public abstract class AbstractFragment
     {
@@ -40,5 +42,21 @@
         /// </summary>
         /// <returns>Array of samples.</returns>
         public double[] GetInternalArray() => this.internalArray;
+
+        /// <summary>
+        /// Replaces internal array.
+        /// </summary>
+        /// <param name="replacementArray">New internal array.</param>
+        internal void SetInternalArray(double[] replacementArray)
+        {
+            if (replacementArray is null 
+                || replacementArray.Length != this.internalArray.Length)
+            {
+                throw new ArgumentException(
+                    nameof(replacementArray) + " is null, longer or shorter.");
+            }
+
+            this.internalArray = replacementArray;
+        }
     }
 }

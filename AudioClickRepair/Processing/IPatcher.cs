@@ -1,4 +1,4 @@
-﻿namespace AudioClickRepair.Data
+﻿namespace AudioClickRepair.Processing
 {
     internal interface IPatcher
     {

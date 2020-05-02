@@ -2,7 +2,7 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Data
+namespace AudioClickRepair.Processing
 {
     using System;
     using System.Collections.Concurrent;
