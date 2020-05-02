@@ -4,9 +4,9 @@
 
 namespace AudioClickRepair.Processing
 {
-    internal class PredictorFastBurg : IPredictor
+    internal class FastBurgPredictor : IPredictor
     {
-        public PredictorFastBurg()
+        public FastBurgPredictor()
         {
         }
 

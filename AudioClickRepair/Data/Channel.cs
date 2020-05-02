@@ -42,7 +42,7 @@ namespace AudioClickRepair.Data
                 this.patchCollection,
                 (_, __) => AbstractPatch.MinimalPredictionError);
 
-            this.predictor = new PredictorFastBurg();
+            this.predictor = new FastBurgPredictor();
 
             this.regenerarator = new Regenerator(this.inputPatcher, this.predictor);
 
