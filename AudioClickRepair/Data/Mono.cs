@@ -20,7 +20,7 @@
 
         public override int GetTotalNumberOfClicks()
         {
-            return _monoChannel.GetNumberOfPatches();
+            return _monoChannel.NumberOfPatches;
         }
 
         public override bool ChannelIsPreprocessed(ChannelType channelType)
@@ -32,10 +32,10 @@
         public override double GetPredictionErr(ChannelType channelType, int index)
             => _monoChannel.GetPredictionErr(index);
 
-        public override int LengthSamples() => _monoChannel.LengthSamples();
+        public override int LengthSamples() => _monoChannel.Length;
 
         public override int GetNumberOfClicksIn(ChannelType channelType) =>
-            _monoChannel.GetNumberOfPatches();
+            _monoChannel.NumberOfPatches;
 
         public override AbstractPatch[] GetAllClicks() => _monoChannel.GetAllPatches();
 

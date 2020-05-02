@@ -24,7 +24,7 @@ namespace AudioClickRepair.Data
 
         public override int GetTotalNumberOfClicks()
         {
-            return _leftChannel.GetNumberOfPatches() + _rightChannel.GetNumberOfPatches();
+            return _leftChannel.NumberOfPatches + _rightChannel.NumberOfPatches;
         }
 
         public override bool ChannelIsPreprocessed(ChannelType channelType)
@@ -42,12 +42,12 @@ namespace AudioClickRepair.Data
             ? _leftChannel.GetPredictionErr(index)
             : _rightChannel.GetPredictionErr(index);
 
-        public override int LengthSamples() => _leftChannel.LengthSamples();
+        public override int LengthSamples() => _leftChannel.Length;
 
         public override int GetNumberOfClicksIn(ChannelType channelType) =>
             channelType == ChannelType.Left
-            ? _leftChannel.GetNumberOfPatches()
-            : _rightChannel.GetNumberOfPatches();
+            ? _leftChannel.NumberOfPatches
+            : _rightChannel.NumberOfPatches;
 
         public override AbstractPatch[] GetAllClicks()
         {

@@ -14,12 +14,12 @@ namespace AudioClickRepair.Data
     {
         private readonly BlockingCollection<AbstractPatch> patchCollection;
         private readonly ImmutableArray<double> input;
-        private readonly ImmutableArray<double> predictionErr;
         private readonly IPatcher inputPatcher;
         private readonly IPatcher predictionErrPatcher;
         private readonly IAnalyzer normCalculator;
         private readonly IRegenerator regenerarator;
         private readonly IPredictor predictor;
+        private ImmutableArray<double> predictionErr;
 
         internal Channel(double[] inputSamples, IAudioProcessingSettings settings)
         {
@@ -36,6 +36,7 @@ namespace AudioClickRepair.Data
                 this.patchCollection,
                 (patch, position) => patch.GetValue(position));
 
+            // Create empty immutable array for errors. It will be replaced later
             this.predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
             this.predictionErrPatcher = new Patcher(
                 this.predictionErr,
@@ -53,13 +54,31 @@ namespace AudioClickRepair.Data
 
         internal void GetReadyForScan()
         {
-            // calculate prediction errors
+            var inputDataSize = this.predictor.InputDataSize;
+            var errors = new double[this.Length];
+
+            for (var position = inputDataSize; position < this.Length; position++)
+            {
+                var inputDataStart = position - inputDataSize;
+                errors[position] = this.input[position]
+                    - this.predictor.GetForward(
+                        this.inputPatcher.GetRange(inputDataStart, inputDataSize),
+                        position);
+            }
+
+            this.predictionErr = ImmutableArray.Create(errors);
+
             this.IsReadyForScan = true;
+        }
+
+        internal void Scan()
+        {
+            // TODO Scan
         }
 
         internal bool IsReadyForScan { get; private set; }
 
-        internal int LengthSamples() => this.input.Length;
+        internal int Length => this.input.Length;
 
         internal double GetInputSample(int position) => this.input[position];
 
@@ -69,7 +88,7 @@ namespace AudioClickRepair.Data
         internal double GetPredictionErr(int position) =>
             this.predictionErrPatcher.GetValue(position);
 
-        internal int GetNumberOfPatches() => this.patchCollection.Count;
+        internal int NumberOfPatches => this.patchCollection.Count;
 
         private void RemoveAllPatches()
         {
