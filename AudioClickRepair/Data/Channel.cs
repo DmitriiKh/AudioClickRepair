@@ -94,11 +94,8 @@ namespace AudioClickRepair.Data
         private void PatchUpdater(object sender, PatchEventArgs e)
         {
             this.regenerarator.RestoreFragment(e.Patched);
-            // remove sender from the patch collection
-            // update array
-            // update current error level
-            // add the sender back to the patch collection
-            throw new NotImplementedException();
+            e.NewErrorLevelAtStart = this.predictionErr[e.Patched.StartPosition]
+                / this.GetPredictionErrNorm(e.Patched.StartPosition);
         }
 
         private double GetPredictionErrNorm(int position)
