@@ -39,6 +39,12 @@
             </summary>
             <returns>Array of samples.</returns>
         </member>
+        <member name="M:AudioClickRepair.Data.AbstractFragment.SetInternalArray(System.Double[])">
+            <summary>
+            Replaces internal array.
+            </summary>
+            <param name="replacementArray">New internal array.</param>
+        </member>
         <member name="T:AudioClickRepair.Data.AbstractPatch">
             <summary>
             Basic behavior for Patch class.
@@ -237,29 +243,6 @@
             Expands patch on end.
             </summary>
         </member>
-        <member name="T:AudioClickRepair.Data.Patcher">
-            <summary>
-            Replaces samples from immutable array that were patched using update function.
-            </summary>
-        </member>
-        <member name="M:AudioClickRepair.Data.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{AudioClickRepair.Data.AbstractPatch},System.Func{AudioClickRepair.Data.AbstractPatch,System.Int32,System.Double})">
-            <summary>
-            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.Patcher"/> class.
-            </summary>
-            <param name="immutableArray">Immutable array of samples.</param>
-            <param name="patchCollection">Collection of patches.</param>
-            <param name="updateFunc">Function to call to get the patched value.
-            Example: (patch, position) => patch.GetOutputSample(position).</param>
-        </member>
-        <member name="M:AudioClickRepair.Data.Patcher.GetRange(System.Int32,System.Int32)">
-            <summary>
-            Gets array containing sequence of patched samples of specified length
-            starting from the specified position.
-            </summary>
-            <param name="start">Start position of range.</param>
-            <param name="length">Length of range.</param>
-            <returns>Array of patched samples.</returns>
-        </member>
         <member name="T:AudioClickRepair.Data.PatchEventArgs">
             <summary>
             Arguments for calling event handler.
@@ -433,6 +416,29 @@
             </summary>
             <param name="inputData">Input data.</param>
             <returns>Result.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Processing.Patcher">
+            <summary>
+            Replaces samples from immutable array that were patched using update function.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{AudioClickRepair.Data.AbstractPatch},System.Func{AudioClickRepair.Data.AbstractPatch,System.Int32,System.Double})">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Processing.Patcher"/> class.
+            </summary>
+            <param name="immutableArray">Immutable array of samples.</param>
+            <param name="patchCollection">Collection of patches.</param>
+            <param name="updateFunc">Function to call to get the patched value.
+            Example: (patch, position) => patch.GetOutputSample(position).</param>
+        </member>
+        <member name="M:AudioClickRepair.Processing.Patcher.GetRange(System.Int32,System.Int32)">
+            <summary>
+            Gets array containing sequence of patched samples of specified length
+            starting from the specified position.
+            </summary>
+            <param name="start">Start position of range.</param>
+            <param name="length">Length of range.</param>
+            <returns>Array of patched samples.</returns>
         </member>
     </members>
 </doc>

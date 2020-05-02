@@ -8,6 +8,7 @@ namespace AudioClickRepair.Processing
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
     using System.Linq;
+    using AudioClickRepair.Data;
 
     /// <summary>
     /// Replaces samples from immutable array that were patched using update function.

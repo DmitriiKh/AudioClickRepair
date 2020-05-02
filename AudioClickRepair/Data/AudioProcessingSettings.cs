@@ -11,9 +11,13 @@
         }
 
         public int HistoryLengthSamples { get; }
+
         public int CoefficientsNumber { get; }
+
         public float ThresholdForDetection { get; set; }
+
         public int MaxLengthOfCorrection { get; set; }
+
         public int SampleRate { get; set; } = -1;
     }
 }

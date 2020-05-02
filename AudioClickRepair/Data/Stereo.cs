@@ -10,12 +10,14 @@ namespace AudioClickRepair.Data
     {
         private readonly Channel _leftChannel;
         private readonly Channel _rightChannel;
+        private readonly IAudioProcessingSettings settings;
 
-        public Stereo(double[] leftChannelSamples, double[] rightChannelSamples)
+        public Stereo(double[] leftChannelSamples, double[] rightChannelSamples, AudioProcessingSettings settings)
         {
             IsStereo = true;
-            _leftChannel = new Channel(leftChannelSamples);
-            _rightChannel = new Channel(rightChannelSamples);
+            this.settings = settings;
+            _leftChannel = new Channel(leftChannelSamples, settings);
+            _rightChannel = new Channel(rightChannelSamples, settings);
 
             AudioProcessingSettings = new AudioProcessingSettings();
         }

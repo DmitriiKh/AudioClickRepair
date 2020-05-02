@@ -21,7 +21,7 @@ namespace AudioClickRepair.Data
         private readonly IRegenerator regenerarator;
         private readonly IPredictor predictor;
 
-        internal Channel(double[] inputSamples)
+        internal Channel(double[] inputSamples, IAudioProcessingSettings settings)
         {
             if (inputSamples is null)
             {
@@ -42,7 +42,9 @@ namespace AudioClickRepair.Data
                 this.patchCollection,
                 (_, __) => AbstractPatch.MinimalPredictionError);
 
-            this.predictor = new FastBurgPredictor();
+            this.predictor = new FastBurgPredictor(
+                settings.CoefficientsNumber,
+                settings.HistoryLengthSamples);
 
             this.regenerarator = new Regenerator(this.inputPatcher, this.predictor);
 

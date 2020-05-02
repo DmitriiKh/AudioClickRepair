@@ -7,11 +7,13 @@
     public class Mono : AudioData
     {
         private readonly Channel _monoChannel;
+        private readonly IAudioProcessingSettings settings;
 
-        public Mono(double[] samples)
+        public Mono(double[] samples, IAudioProcessingSettings settings)
         {
             IsStereo = false;
-            _monoChannel = new Channel(samples);
+            this.settings = settings;
+            _monoChannel = new Channel(samples, settings);
 
             AudioProcessingSettings = new AudioProcessingSettings();
         }

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Linq;
+using AudioClickRepair.Processing;
 
 namespace NUnitTests
 {
