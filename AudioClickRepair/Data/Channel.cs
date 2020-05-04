@@ -49,6 +49,8 @@ namespace AudioClickRepair.Data
                 settings.CoefficientsNumber,
                 settings.HistoryLengthSamples);
 
+            this.normCalculator = new AveragedMaxErrorAnalyzer();
+
             this.regenerarator = new Regenerator(this.inputPatcher, this.predictor);
 
             this.patchMaker = new PatchMaker(this.regenerarator);
