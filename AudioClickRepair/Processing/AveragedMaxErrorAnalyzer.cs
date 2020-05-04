@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace AudioClickRepair.Processing
+﻿namespace AudioClickRepair.Processing
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class AveragedMaxErrorAnalyzer : IAnalyzer
     {
         private const int _blockSize = 16;
         private const int _blocksNumber = 16;
 
-        public int GetInputDataSize() => _blockSize * _blocksNumber;
+        public int InputDataSize => _blockSize * _blocksNumber;
 
-        public double GetDefaultResult() => 0;
+        public double DefaultResult => 0;
 
         public double GetResult(double[] errors)
         {
-            if (errors.Length != GetInputDataSize())
+            if (errors.Length != InputDataSize)
                 throw new ArgumentException("Not correct length of " + nameof(errors));
 
             return Slice(errors)

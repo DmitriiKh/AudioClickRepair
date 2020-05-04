@@ -398,15 +398,15 @@
             IAnalyzer interface.
             </summary>
         </member>
-        <member name="M:AudioClickRepair.Processing.IAnalyzer.GetInputDataSize">
+        <member name="P:AudioClickRepair.Processing.IAnalyzer.InputDataSize">
             <summary>
-            Returns size of input data array needed to perform calculations.
+            Gets size of input data array needed to perform calculations.
             </summary>
             <returns>Size.</returns>
         </member>
-        <member name="M:AudioClickRepair.Processing.IAnalyzer.GetDefaultResult">
+        <member name="P:AudioClickRepair.Processing.IAnalyzer.DefaultResult">
             <summary>
-            Returns default result. Can be used if calculation can not be done.
+            Gets default result. Can be used if calculation can not be done.
             </summary>
             <returns>Default result.</returns>
         </member>

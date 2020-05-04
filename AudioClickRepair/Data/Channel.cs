@@ -152,18 +152,18 @@ namespace AudioClickRepair.Data
 
         private double GetPredictionErrNorm(int position)
         {
-            var startIndex = position - this.normCalculator.GetInputDataSize();
+            var startIndex = position - this.normCalculator.InputDataSize;
 
             // If there is not enough data to analyze
             if (startIndex < 0)
             {
-                return this.normCalculator.GetDefaultResult();
+                return this.normCalculator.DefaultResult;
             }
 
             return this.normCalculator.GetResult(
                 this.predictionErrPatcher.GetRange(
-                    position - this.normCalculator.GetInputDataSize(),
-                    this.normCalculator.GetInputDataSize()));
+                    position - this.normCalculator.InputDataSize,
+                    this.normCalculator.InputDataSize));
         }
     }
 }

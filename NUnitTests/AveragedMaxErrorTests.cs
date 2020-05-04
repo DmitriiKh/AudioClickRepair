@@ -18,16 +18,16 @@ namespace NUnitTests
         [Test]
         public void Analyzer_GetsZeros_ReturnsDefaultValue()
         {
-            var zeros = new double[_analyzer.GetInputDataSize()];
+            var zeros = new double[_analyzer.InputDataSize];
             var result = _analyzer.GetResult(zeros);
 
-            Assert.AreEqual(_analyzer.GetDefaultResult(), result);
+            Assert.AreEqual(_analyzer.DefaultResult, result);
         }
 
         [Test]
         public void Analyzer_GetsOnes_ReturnsOne()
         {
-            var ones = Enumerable.Repeat(1.0d, _analyzer.GetInputDataSize())
+            var ones = Enumerable.Repeat(1.0d, _analyzer.InputDataSize)
                 .ToArray();
             var result = _analyzer.GetResult(ones);
 
@@ -39,7 +39,7 @@ namespace NUnitTests
         {
             // Input is 1 to 256 for _blockSize = 16 and _blocksNumber = 16
             var startValue = 1;
-            var errors = Enumerable.Range(startValue, _analyzer.GetInputDataSize())
+            var errors = Enumerable.Range(startValue, _analyzer.InputDataSize)
                 .Select(i => (double)i)
                 .ToArray();
             var result = _analyzer.GetResult(errors);
@@ -57,8 +57,8 @@ namespace NUnitTests
         {
             // Make a half of input values negative
             // Input is -128 to 127 for _blockSize = 16 and _blocksNumber = 16
-            var startValue = -_analyzer.GetInputDataSize() / 2;
-            var errors = Enumerable.Range(startValue, _analyzer.GetInputDataSize())
+            var startValue = -_analyzer.InputDataSize / 2;
+            var errors = Enumerable.Range(startValue, _analyzer.InputDataSize)
                 .Select(i => (double)i)
                 .ToArray();
             var result = _analyzer.GetResult(errors);
@@ -74,7 +74,7 @@ namespace NUnitTests
         [Test]
         public void Analyzer_GetsSmallerInput_Throws()
         {
-            var smallerArray = Enumerable.Repeat(0d, _analyzer.GetInputDataSize() - 1)
+            var smallerArray = Enumerable.Repeat(0d, _analyzer.InputDataSize - 1)
                 .ToArray();
 
             Assert.Throws<ArgumentException>(() => _analyzer.GetResult(smallerArray));
@@ -83,7 +83,7 @@ namespace NUnitTests
         [Test]
         public void Analyzer_GetsLargerInput_Throws()
         {
-            var largerArray = Enumerable.Repeat(0d, _analyzer.GetInputDataSize() + 1)
+            var largerArray = Enumerable.Repeat(0d, _analyzer.InputDataSize + 1)
                 .ToArray();
 
             Assert.Throws<ArgumentException>(() => _analyzer.GetResult(largerArray));

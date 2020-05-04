@@ -10,16 +10,16 @@ namespace AudioClickRepair.Processing
     public interface IAnalyzer
     {
         /// <summary>
-        /// Returns size of input data array needed to perform calculations.
+        /// Gets size of input data array needed to perform calculations.
         /// </summary>
         /// <returns>Size.</returns>
-        int GetInputDataSize();
+        int InputDataSize { get; }
 
         /// <summary>
-        /// Returns default result. Can be used if calculation can not be done.
+        /// Gets default result. Can be used if calculation can not be done.
         /// </summary>
         /// <returns>Default result.</returns>
-        double GetDefaultResult();
+        double DefaultResult { get; }
 
         /// <summary>
         /// Returns result of calculation.
