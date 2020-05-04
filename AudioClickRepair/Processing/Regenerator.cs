@@ -5,6 +5,7 @@
 namespace AudioClickRepair.Processing
 {
     using AudioClickRepair.Data;
+    using System;
 
     internal class Regenerator : IRegenerator
     {
@@ -17,13 +18,20 @@ namespace AudioClickRepair.Processing
             this.predictor = predictor;
         }
 
-        public void RestoreFragment(AbstractFragment fragment)
+        public double RestoreFragment(AbstractFragment fragment)
         {
-            var backwardRestoredSamples = this.GetBackwardArray(fragment);
             var forwardRestoredSamples = this.GetForwardArray(fragment);
-            var joinedRestoredSamples = this.ApplyWindowFunction(forwardRestoredSamples, backwardRestoredSamples);
+            var backwardRestoredSamples = this.GetBackwardArray(fragment);
+            var joinedRestoredSamples = this.ApplyWindowFunction(
+                forwardRestoredSamples,
+                backwardRestoredSamples);
 
             fragment.SetInternalArray(joinedRestoredSamples);
+
+            var middleIndex = forwardRestoredSamples.Length / 2;
+
+            return Math.Abs(forwardRestoredSamples[middleIndex]
+                - backwardRestoredSamples[middleIndex]);
         }
 
         private double[] ApplyWindowFunction(

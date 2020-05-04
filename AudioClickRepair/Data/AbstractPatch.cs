@@ -55,6 +55,7 @@ namespace AudioClickRepair.Data
         /// Gets or sets a value indicating whether patch was approved by user.
         /// </summary>
         public bool Approved { get; set; }
+        public double ConnectionError { get; internal set; }
 
         /// <summary>
         /// Compares start positions and lengths of operands.

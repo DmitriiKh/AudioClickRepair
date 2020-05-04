@@ -11,5 +11,6 @@
         public int MaxLengthOfCorrection { get; }
 
         public int SampleRate { get; }
+        double MaxConnectionError { get; }
     }
 }

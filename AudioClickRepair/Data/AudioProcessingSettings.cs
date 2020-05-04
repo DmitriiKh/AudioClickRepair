@@ -19,5 +19,7 @@
         public int MaxLengthOfCorrection { get; set; }
 
         public int SampleRate { get; set; } = -1;
+
+        public double MaxConnectionError => 0.1;
     }
 }

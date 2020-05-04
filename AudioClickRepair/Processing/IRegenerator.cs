@@ -7,6 +7,6 @@ namespace AudioClickRepair.Processing
 {
     interface IRegenerator
     {
-        void RestoreFragment(AbstractFragment patched);
+        double RestoreFragment(AbstractFragment patched);
     }
 }
