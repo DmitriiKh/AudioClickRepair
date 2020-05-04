@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace NUnitTests
 {
-    public class RangeDataTests
+    public class ArrayFragmentTests
     {
         private const int _testArrayLength = 1000;
         private ImmutableArray<double> _arrayValueEqualsIndex;
@@ -20,7 +20,7 @@ namespace NUnitTests
 
         [TestCase(0, 100)] // Beginning
         [TestCase(_testArrayLength - 100, 100)] // End
-        public void RangeData_Converts_ReturnsCorrectArray(
+        public void ArrayFragment_Converts_ReturnsCorrectArray(
             int rangeStart,
             int rangeLength)
         {
@@ -35,7 +35,7 @@ namespace NUnitTests
         }
 
         [Test]
-        public void RangeData_OneElementLength_WorkCorrectly()
+        public void ArrayFragment_OneElementLength_WorkCorrectly()
         {
             const int rangeStart = 100;
             var range = new ArrayFragment(
@@ -49,7 +49,7 @@ namespace NUnitTests
         }
 
         [Test]
-        public void RangeData_SetGet_WorkCorrectly()
+        public void ArrayFragment_SetGet_WorkCorrectly()
         {
             const int position = 100;
             var range = new ArrayFragment(
