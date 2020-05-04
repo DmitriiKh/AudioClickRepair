@@ -84,6 +84,8 @@ namespace AudioClickRepair.Data
                 this.GetReadyForScan();
             }
 
+            this.RemoveAllPatches();
+
             for (var position = 0; position < this.Length; position++)
             {
                 var errorLevelAtDetection = this.GetErrorLevel(position);
