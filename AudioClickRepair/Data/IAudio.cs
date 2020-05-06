@@ -14,7 +14,7 @@
 
         public int GetNumberOfPatches(ChannelType channelType);
 
-        public AbstractPatch[] GetAllPatches();
+        public AbstractPatch[] GetPatches(ChannelType channelType);
 
         public bool ChannelIsPreprocessed(ChannelType channelType);
 

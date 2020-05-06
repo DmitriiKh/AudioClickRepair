@@ -28,18 +28,19 @@
         public int GetNumberOfPatches(ChannelType channelType) =>
             _monoChannel.NumberOfPatches;
 
-        public AbstractPatch[] GetAllPatches() => _monoChannel.GetAllPatches();
+        public AbstractPatch[] GetPatches(ChannelType channelType) =>
+            _monoChannel.GetAllPatches();
 
-        public bool ChannelIsPreprocessed(ChannelType channelType)
-            => _monoChannel.IsReadyForScan;
+        public bool ChannelIsPreprocessed(ChannelType channelType) =>
+            _monoChannel.IsReadyForScan;
 
-        public double GetInputSample(ChannelType channelType, int index)
-            => _monoChannel.GetInputSample(index);
+        public double GetInputSample(ChannelType channelType, int index) =>
+            _monoChannel.GetInputSample(index);
 
         public double GetOutputSample(ChannelType channelType, int position) =>
             _monoChannel.GetOutputSample(position);
 
-        public double GetPredictionErr(ChannelType channelType, int index)
-            => _monoChannel.GetPredictionErr(index);
+        public double GetPredictionErr(ChannelType channelType, int index) =>
+            _monoChannel.GetPredictionErr(index);
     }
 }
