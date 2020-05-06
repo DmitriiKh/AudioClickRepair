@@ -129,11 +129,11 @@ namespace AudioClickRepair.Data
             }
         }
 
-        internal AbstractPatch[] GetAllPatches()
+        internal Patch[] GetAllPatches()
         {
             var patchList = this.patchCollection.ToList();
             patchList.Sort();
-            return patchList.ToArray();
+            return patchList.Select(p => p as Patch).ToArray();
         }
 
         private void RegisterPatch(AbstractPatch patch)

@@ -1,6 +1,7 @@
 ﻿namespace AudioClickRepair.Data
 {
     using System;
+    using System.Linq;
 
     /// <summary>
     ///     Represents mono audio samples and includes information
@@ -35,7 +36,7 @@
         public int GetNumberOfPatches(ChannelType channelType) =>
             this.monoChannel.NumberOfPatches;
 
-        public AbstractPatch[] GetPatches(ChannelType channelType) =>
+        public Patch[] GetPatches(ChannelType channelType) =>
             this.monoChannel.GetAllPatches();
 
         public bool ChannelIsPreprocessed(ChannelType channelType) =>

@@ -46,7 +46,7 @@
             ? this.leftChannel.NumberOfPatches
             : this.rightChannel.NumberOfPatches;
 
-        public AbstractPatch[] GetPatches(ChannelType channelType) =>
+        public Patch[] GetPatches(ChannelType channelType) =>
             channelType == ChannelType.Left
             ? this.leftChannel.GetAllPatches()
             : this.rightChannel.GetAllPatches();
