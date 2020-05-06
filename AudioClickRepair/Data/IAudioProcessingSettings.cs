@@ -2,15 +2,16 @@
 {
     public interface IAudioProcessingSettings
     {
-        public int HistoryLengthSamples { get; }
+        public int HistoryLengthSamples { get; set; }
 
-        public int CoefficientsNumber { get; }
+        public int CoefficientsNumber { get; set; }
 
-        public float ThresholdForDetection { get; }
+        public double ThresholdForDetection { get; set; }
 
-        public int MaxLengthOfCorrection { get; }
+        public int MaxLengthOfCorrection { get; set; }
 
-        public int SampleRate { get; }
-        double MaxConnectionError { get; }
+        public int SampleRate { get; set; }
+
+        double MaxConnectionError { get; set; }
     }
 }

@@ -205,7 +205,7 @@
         <member name="T:AudioClickRepair.Data.Mono">
             <summary>
                 Represents mono audio samples and includes information
-                about damaged samples
+                about damaged samples.
             </summary>
         </member>
         <member name="T:AudioClickRepair.Data.Patch">
@@ -268,7 +268,7 @@
         <member name="T:AudioClickRepair.Data.Stereo">
             <summary>
                 Represents stereo audio samples and includes information
-                about damaged samples
+                about damaged samples.
             </summary>
         </member>
         <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64">

@@ -10,16 +10,16 @@
             MaxLengthOfCorrection = 250;
         }
 
-        public int HistoryLengthSamples { get; }
+        public int HistoryLengthSamples { get; set; }
 
-        public int CoefficientsNumber { get; }
+        public int CoefficientsNumber { get; set; }
 
-        public float ThresholdForDetection { get; set; }
+        public double ThresholdForDetection { get; set; }
 
         public int MaxLengthOfCorrection { get; set; }
 
         public int SampleRate { get; set; } = -1;
 
-        public double MaxConnectionError => 0.1;
+        public double MaxConnectionError { get; set; } = 0.1;
     }
 }
