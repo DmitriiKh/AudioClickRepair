@@ -1,46 +1,53 @@
 ﻿namespace AudioClickRepair.Data
 {
+    using System;
+
     /// <summary>
     ///     Represents mono audio samples and includes information
-    ///     about damaged samples
+    ///     about damaged samples.
     /// </summary>
     public class Mono : IAudio
     {
-        private readonly Channel _monoChannel;
+        private readonly Channel monoChannel;
 
         public Mono(double[] samples, IAudioProcessingSettings settings)
         {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
             this.AudioProcessingSettings = settings;
-            _monoChannel = new Channel(samples, settings);
+            this.monoChannel = new Channel(samples, settings);
         }
 
         public bool IsStereo => false;
 
-        public int LengthSamples => _monoChannel.Length;
+        public int LengthSamples => this.monoChannel.Length;
 
         public IAudioProcessingSettings AudioProcessingSettings { get; }
 
-        public void Scan() => _monoChannel.Scan();
+        public void Scan() => this.monoChannel.Scan();
 
         public int GetTotalNumberOfPatches() =>
-            _monoChannel.NumberOfPatches;
+            this.monoChannel.NumberOfPatches;
 
         public int GetNumberOfPatches(ChannelType channelType) =>
-            _monoChannel.NumberOfPatches;
+            this.monoChannel.NumberOfPatches;
 
         public AbstractPatch[] GetPatches(ChannelType channelType) =>
-            _monoChannel.GetAllPatches();
+            this.monoChannel.GetAllPatches();
 
         public bool ChannelIsPreprocessed(ChannelType channelType) =>
-            _monoChannel.IsReadyForScan;
+            this.monoChannel.IsReadyForScan;
 
         public double GetInputSample(ChannelType channelType, int index) =>
-            _monoChannel.GetInputSample(index);
+            this.monoChannel.GetInputSample(index);
 
         public double GetOutputSample(ChannelType channelType, int position) =>
-            _monoChannel.GetOutputSample(position);
+            this.monoChannel.GetOutputSample(position);
 
         public double GetPredictionErr(ChannelType channelType, int index) =>
-            _monoChannel.GetPredictionErr(index);
+            this.monoChannel.GetPredictionErr(index);
     }
 }

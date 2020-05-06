@@ -1,69 +1,74 @@
 ﻿namespace AudioClickRepair.Data
 {
-    using System.Collections.Generic;
+    using System;
 
     /// <summary>
     ///     Represents stereo audio samples and includes information
-    ///     about damaged samples
+    ///     about damaged samples.
     /// </summary>
     public class Stereo : IAudio
     {
-        private readonly Channel _leftChannel;
-        private readonly Channel _rightChannel;
+        private readonly Channel leftChannel;
+        private readonly Channel rightChannel;
 
         public Stereo(
             double[] leftChannelSamples,
             double[] rightChannelSamples,
             IAudioProcessingSettings settings)
         {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
             this.AudioProcessingSettings = settings;
-            _leftChannel = new Channel(leftChannelSamples, settings);
-            _rightChannel = new Channel(rightChannelSamples, settings);
+            this.leftChannel = new Channel(leftChannelSamples, settings);
+            this.rightChannel = new Channel(rightChannelSamples, settings);
         }
 
         public bool IsStereo => true;
 
-        public int LengthSamples => _leftChannel.Length;
+        public int LengthSamples => this.leftChannel.Length;
 
         public IAudioProcessingSettings AudioProcessingSettings { get; }
 
         public void Scan()
         {
-            _leftChannel.Scan();
-            _rightChannel.Scan();
+            this.leftChannel.Scan();
+            this.rightChannel.Scan();
         }
 
         public int GetTotalNumberOfPatches() =>
-            _leftChannel.NumberOfPatches + _rightChannel.NumberOfPatches;
+            this.leftChannel.NumberOfPatches + this.rightChannel.NumberOfPatches;
 
         public int GetNumberOfPatches(ChannelType channelType) =>
             channelType == ChannelType.Left
-            ? _leftChannel.NumberOfPatches
-            : _rightChannel.NumberOfPatches;
+            ? this.leftChannel.NumberOfPatches
+            : this.rightChannel.NumberOfPatches;
 
         public AbstractPatch[] GetPatches(ChannelType channelType) =>
             channelType == ChannelType.Left
-            ? _leftChannel.GetAllPatches()
-            : _rightChannel.GetAllPatches();
+            ? this.leftChannel.GetAllPatches()
+            : this.rightChannel.GetAllPatches();
 
         public bool ChannelIsPreprocessed(ChannelType channelType) =>
             channelType == ChannelType.Left
-            ? _leftChannel.IsReadyForScan
-            : _rightChannel.IsReadyForScan;
+            ? this.leftChannel.IsReadyForScan
+            : this.rightChannel.IsReadyForScan;
 
         public double GetInputSample(ChannelType channelType, int index) =>
             channelType == ChannelType.Left
-            ? _leftChannel.GetInputSample(index)
-            : _rightChannel.GetInputSample(index);
+            ? this.leftChannel.GetInputSample(index)
+            : this.rightChannel.GetInputSample(index);
 
         public double GetOutputSample(ChannelType channelType, int position) =>
             channelType == ChannelType.Left
-            ? _leftChannel.GetOutputSample(position)
-            : _rightChannel.GetOutputSample(position);
+            ? this.leftChannel.GetOutputSample(position)
+            : this.rightChannel.GetOutputSample(position);
 
         public double GetPredictionErr(ChannelType channelType, int index) =>
             channelType == ChannelType.Left
-            ? _leftChannel.GetPredictionErr(index)
-            : _rightChannel.GetPredictionErr(index);
+            ? this.leftChannel.GetPredictionErr(index)
+            : this.rightChannel.GetPredictionErr(index);
     }
 }
