@@ -4,42 +4,42 @@
     ///     Represents mono audio samples and includes information
     ///     about damaged samples
     /// </summary>
-    public class Mono : AudioData
+    public class Mono : IAudio
     {
         private readonly Channel _monoChannel;
-        private readonly IAudioProcessingSettings settings;
 
         public Mono(double[] samples, IAudioProcessingSettings settings)
         {
-            IsStereo = false;
-            this.settings = settings;
+            this.AudioProcessingSettings = settings;
             _monoChannel = new Channel(samples, settings);
-
-            AudioProcessingSettings = new AudioProcessingSettings();
         }
 
-        public override int GetTotalNumberOfClicks()
-        {
-            return _monoChannel.NumberOfPatches;
-        }
+        public bool IsStereo => false;
 
-        public override bool ChannelIsPreprocessed(ChannelType channelType)
-            => _monoChannel.IsReadyForScan;
+        public int LengthSamples => _monoChannel.Length;
 
-        public override double GetInputSample(ChannelType channelType, int index)
-            => _monoChannel.GetInputSample(index);
+        public IAudioProcessingSettings AudioProcessingSettings { get; }
 
-        public override double GetPredictionErr(ChannelType channelType, int index)
-            => _monoChannel.GetPredictionErr(index);
+        public void Scan() => _monoChannel.Scan();
 
-        public override int LengthSamples() => _monoChannel.Length;
-
-        public override int GetNumberOfClicksIn(ChannelType channelType) =>
+        public int GetTotalNumberOfPatches() =>
             _monoChannel.NumberOfPatches;
 
-        public override AbstractPatch[] GetAllClicks() => _monoChannel.GetAllPatches();
+        public int GetNumberOfPatches(ChannelType channelType) =>
+            _monoChannel.NumberOfPatches;
 
-        public override double GetOutputSample(ChannelType channelType, int position) =>
+        public AbstractPatch[] GetAllPatches() => _monoChannel.GetAllPatches();
+
+        public bool ChannelIsPreprocessed(ChannelType channelType)
+            => _monoChannel.IsReadyForScan;
+
+        public double GetInputSample(ChannelType channelType, int index)
+            => _monoChannel.GetInputSample(index);
+
+        public double GetOutputSample(ChannelType channelType, int position) =>
             _monoChannel.GetOutputSample(position);
+
+        public double GetPredictionErr(ChannelType channelType, int index)
+            => _monoChannel.GetPredictionErr(index);
     }
 }

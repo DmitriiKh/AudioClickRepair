@@ -1,55 +1,44 @@
-﻿using System.Collections.Generic;
-
-namespace AudioClickRepair.Data
+﻿namespace AudioClickRepair.Data
 {
+    using System.Collections.Generic;
+
     /// <summary>
     ///     Represents stereo audio samples and includes information
     ///     about damaged samples
     /// </summary>
-    public class Stereo : AudioData
+    public class Stereo : IAudio
     {
         private readonly Channel _leftChannel;
         private readonly Channel _rightChannel;
-        private readonly IAudioProcessingSettings settings;
 
         public Stereo(double[] leftChannelSamples, double[] rightChannelSamples, AudioProcessingSettings settings)
         {
-            IsStereo = true;
-            this.settings = settings;
+            this.AudioProcessingSettings = settings;
             _leftChannel = new Channel(leftChannelSamples, settings);
             _rightChannel = new Channel(rightChannelSamples, settings);
-
-            AudioProcessingSettings = new AudioProcessingSettings();
         }
 
-        public override int GetTotalNumberOfClicks()
+        public bool IsStereo => true;
+
+        public int LengthSamples => _leftChannel.Length;
+
+        public IAudioProcessingSettings AudioProcessingSettings { get; }
+
+        public void Scan()
         {
-            return _leftChannel.NumberOfPatches + _rightChannel.NumberOfPatches;
+            _leftChannel.Scan();
+            _rightChannel.Scan();
         }
 
-        public override bool ChannelIsPreprocessed(ChannelType channelType)
-            => channelType == ChannelType.Left
-            ? _leftChannel.IsReadyForScan
-            : _rightChannel.IsReadyForScan;
+        public int GetTotalNumberOfPatches() =>
+            _leftChannel.NumberOfPatches + _rightChannel.NumberOfPatches;
 
-        public override double GetInputSample(ChannelType channelType, int index)
-            => channelType == ChannelType.Left
-            ? _leftChannel.GetInputSample(index)
-            : _rightChannel.GetInputSample(index);
-
-        public override double GetPredictionErr(ChannelType channelType, int index)
-            => channelType == ChannelType.Left
-            ? _leftChannel.GetPredictionErr(index)
-            : _rightChannel.GetPredictionErr(index);
-
-        public override int LengthSamples() => _leftChannel.Length;
-
-        public override int GetNumberOfClicksIn(ChannelType channelType) =>
+        public int GetNumberOfPatches(ChannelType channelType) =>
             channelType == ChannelType.Left
             ? _leftChannel.NumberOfPatches
             : _rightChannel.NumberOfPatches;
 
-        public override AbstractPatch[] GetAllClicks()
+        public AbstractPatch[] GetAllPatches()
         {
             var allClicks = new List<AbstractPatch>();
             allClicks.AddRange(_leftChannel.GetAllPatches());
@@ -58,9 +47,24 @@ namespace AudioClickRepair.Data
             return allClicks.ToArray();
         }
 
-        public override double GetOutputSample(ChannelType channelType, int position)
+        public bool ChannelIsPreprocessed(ChannelType channelType)
+            => channelType == ChannelType.Left
+            ? _leftChannel.IsReadyForScan
+            : _rightChannel.IsReadyForScan;
+
+        public double GetInputSample(ChannelType channelType, int index)
+            => channelType == ChannelType.Left
+            ? _leftChannel.GetInputSample(index)
+            : _rightChannel.GetInputSample(index);
+
+        public double GetOutputSample(ChannelType channelType, int position)
             => channelType == ChannelType.Left
             ? _leftChannel.GetOutputSample(position)
             : _rightChannel.GetOutputSample(position);
+
+        public double GetPredictionErr(ChannelType channelType, int index)
+            => channelType == ChannelType.Left
+            ? _leftChannel.GetPredictionErr(index)
+            : _rightChannel.GetPredictionErr(index);
     }
 }
