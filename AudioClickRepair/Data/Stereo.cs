@@ -21,7 +21,7 @@
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            this.AudioProcessingSettings = settings;
+            this.Settings = settings;
             this.leftChannel = new Channel(leftChannelSamples, settings);
             this.rightChannel = new Channel(rightChannelSamples, settings);
         }
@@ -30,7 +30,7 @@
 
         public int LengthSamples => this.leftChannel.Length;
 
-        public IAudioProcessingSettings AudioProcessingSettings { get; }
+        public IAudioProcessingSettings Settings { get; }
 
         public void Scan()
         {

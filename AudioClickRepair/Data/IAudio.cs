@@ -6,7 +6,7 @@
 
         public int LengthSamples { get; }
 
-        public IAudioProcessingSettings AudioProcessingSettings { get; }
+        public IAudioProcessingSettings Settings { get; }
 
         public void Scan();
 

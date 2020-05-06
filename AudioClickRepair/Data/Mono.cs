@@ -18,7 +18,7 @@
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            this.AudioProcessingSettings = settings;
+            this.Settings = settings;
             this.monoChannel = new Channel(samples, settings);
         }
 
@@ -26,7 +26,7 @@
 
         public int LengthSamples => this.monoChannel.Length;
 
-        public IAudioProcessingSettings AudioProcessingSettings { get; }
+        public IAudioProcessingSettings Settings { get; }
 
         public void Scan() => this.monoChannel.Scan();
 
