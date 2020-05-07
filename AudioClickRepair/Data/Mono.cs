@@ -1,7 +1,6 @@
 ﻿namespace AudioClickRepair.Data
 {
     using System;
-    using System.Linq;
 
     /// <summary>
     ///     Represents mono audio samples and includes information
@@ -50,5 +49,17 @@
 
         public double GetPredictionErr(ChannelType channelType, int index) =>
             this.monoChannel.GetPredictionErr(index);
+
+        public double[] GetOutputArray(ChannelType channelType)
+        {
+            var array = new double[this.LengthSamples];
+
+            for (var index = 0; index < array.Length; index++)
+            {
+                array[index] = this.GetOutputSample(channelType, index);
+            }
+
+            return array;
+        }
     }
 }

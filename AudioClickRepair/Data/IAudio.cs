@@ -23,5 +23,7 @@
         public double GetOutputSample(ChannelType channelType, int position);
 
         public double GetPredictionErr(ChannelType channelType, int position);
+
+        public double[] GetOutputArray(ChannelType channelType);
     }
 }
