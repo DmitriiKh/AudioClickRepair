@@ -1,10 +1,7 @@
-﻿using AudioClickRepair.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AudioClickRepair.Processing
+﻿namespace AudioClickRepair.Processing
 {
+    using AudioClickRepair.Data;
+
     interface IRegenerator
     {
         double RestoreFragment(AbstractFragment patched);

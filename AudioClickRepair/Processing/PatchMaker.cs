@@ -21,7 +21,10 @@
 
             for (var leftShift = 0; leftShift <= MaxLeftShift; leftShift++)
             {
-                var patch = this.FindOptimal(position - leftShift, maxLengthOfCorrection, errorLevelAtDetection);
+                var patch = this.FindOptimal(
+                    position - leftShift,
+                    maxLengthOfCorrection,
+                    errorLevelAtDetection);
 
                 if (bestPatch is null || patch.ConnectionError < bestPatch?.ConnectionError)
                 {
@@ -50,6 +53,8 @@
                         arrayFragment.GetInternalArray(),
                         start,
                         errorLevelAtDetection);
+
+                    bestPatch.ConnectionError = connectionError;
                 }
             }
 
