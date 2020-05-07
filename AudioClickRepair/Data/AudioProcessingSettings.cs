@@ -20,6 +20,6 @@
 
         public int SampleRate { get; set; } = -1;
 
-        public double MaxConnectionError { get; set; } = 0.1;
+        public double MaxRegenerationError { get; set; } = 0.1;
     }
 }
