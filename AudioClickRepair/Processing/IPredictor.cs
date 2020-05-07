@@ -4,8 +4,8 @@
     {
         int InputDataSize { get; }
 
-        double GetForward(double[] samples, int index);
+        double GetForward(double[] samples);
 
-        double GetBackward(double[] samples, int index);
+        double GetBackward(double[] samples);
     }
 }

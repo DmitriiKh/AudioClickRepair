@@ -81,7 +81,7 @@ namespace AudioClickRepair.Processing
 
             for (var index = expandSize; index < samples.Length; index++)
             {
-                samples[index] = this.predictor.GetForward(samples, index);
+                samples[index] = this.predictor.GetForward(samples);
             }
 
             return samples[expandSize..];
@@ -103,7 +103,7 @@ namespace AudioClickRepair.Processing
 
             for (var index = fragment.Length - 1; index >= 0; index--)
             {
-                samples[index] = this.predictor.GetBackward(samples, index);
+                samples[index] = this.predictor.GetBackward(samples);
             }
 
             return samples[..fragment.Length];

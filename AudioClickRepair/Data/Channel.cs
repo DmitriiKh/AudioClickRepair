@@ -70,8 +70,7 @@ namespace AudioClickRepair.Data
                 var inputDataStart = position - inputDataSize;
                 errors[position] = this.input[position]
                     - this.predictor.GetForward(
-                        this.inputPatcher.GetRange(inputDataStart, inputDataSize),
-                        position);
+                        this.inputPatcher.GetRange(inputDataStart, inputDataSize));
             }
 
             this.predictionErr = ImmutableArray.Create(errors);

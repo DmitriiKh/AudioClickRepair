@@ -17,18 +17,24 @@ namespace AudioClickRepair.Processing
             this.historyLength = historyLength;
         }
 
-        public double GetForward(double[] samples, int position)
+        public double GetForward(double[] samples)
         {
             var fastBurgAlgorithm = new FastBurgAlgorithm64(samples);
-            fastBurgAlgorithm.Train(position, this.coefficientsNumber, this.historyLength);
+            fastBurgAlgorithm.Train(
+                samples.Length,
+                this.coefficientsNumber,
+                this.historyLength);
 
             return fastBurgAlgorithm.GetForwardPrediction();
         }
 
-        public double GetBackward(double[] samples, int position)
+        public double GetBackward(double[] samples)
         {
             var fastBurgAlgorithm = new FastBurgAlgorithm64(samples);
-            fastBurgAlgorithm.Train(position, this.coefficientsNumber, this.historyLength);
+            fastBurgAlgorithm.Train(
+                samples.Length,
+                this.coefficientsNumber,
+                this.historyLength);
 
             return fastBurgAlgorithm.GetBackwardPrediction();
         }
