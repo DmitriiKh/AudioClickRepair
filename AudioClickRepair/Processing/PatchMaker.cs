@@ -23,7 +23,7 @@
             {
                 var patch = this.FindOptimal(position - leftShift, maxLengthOfCorrection, errorLevelAtDetection);
 
-                if (patch.ConnectionError < bestPatch?.ConnectionError)
+                if (bestPatch is null || patch.ConnectionError < bestPatch?.ConnectionError)
                 {
                     bestPatch = patch;
                 }
@@ -44,7 +44,7 @@
                 var arrayFragment = new ArrayFragment(new double[length], start);
                 var connectionError = this.regenerarator.RestoreFragment(arrayFragment);
 
-                if (connectionError < bestPatch?.ConnectionError)
+                if (bestPatch is null || connectionError < bestPatch.ConnectionError)
                 {
                     bestPatch = new Patch(
                         arrayFragment.GetInternalArray(),
