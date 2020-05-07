@@ -29,7 +29,7 @@
                     maxLengthOfCorrection,
                     errorLevelAtDetection);
 
-                if (bestPatch is null || patch.ConnectionError < bestPatch?.ConnectionError)
+                if (bestPatch is null || patch.RegenerationError < bestPatch?.RegenerationError)
                 {
                     bestPatch = patch;
                 }
@@ -50,14 +50,14 @@
                 var arrayFragment = new ArrayFragment(new double[length], start);
                 var connectionError = this.regenerarator.RestoreFragment(arrayFragment);
 
-                if (bestPatch is null || connectionError < bestPatch.ConnectionError)
+                if (bestPatch is null || connectionError < bestPatch.RegenerationError)
                 {
                     bestPatch = new Patch(
                         arrayFragment.GetInternalArray(),
                         start,
                         errorLevelAtDetection);
 
-                    bestPatch.ConnectionError = connectionError;
+                    bestPatch.RegenerationError = connectionError;
                 }
             }
 

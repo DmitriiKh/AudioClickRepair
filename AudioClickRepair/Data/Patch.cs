@@ -9,8 +9,6 @@ namespace AudioClickRepair.Data
     /// </summary>
     public class Patch : AbstractPatch
     {
-        public double ConnectionError { get; internal set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Patch"/> class.
         /// </summary>

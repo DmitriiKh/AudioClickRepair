@@ -102,7 +102,7 @@ namespace AudioClickRepair.Data
                         this.settings.MaxLengthOfCorrection,
                         errorLevelAtDetection);
 
-                    if (patch.ConnectionError < this.settings.MaxConnectionError)
+                    if (patch.RegenerationError < this.settings.MaxConnectionError)
                     {
                         this.RegisterPatch(patch);
                         position = patch.EndPosition + 1;

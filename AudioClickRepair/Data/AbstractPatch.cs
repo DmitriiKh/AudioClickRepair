@@ -56,7 +56,7 @@ namespace AudioClickRepair.Data
         /// </summary>
         public bool Approved { get; set; }
 
-        public double ConnectionError { get; internal set; }
+        public double RegenerationError { get; internal set; }
 
         /// <summary>
         /// Compares start positions and lengths of operands.
