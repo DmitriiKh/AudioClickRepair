@@ -9,6 +9,8 @@ namespace AudioClickRepair.Processing
         private readonly int coefficientsNumber;
         private readonly int historyLength;
 
+        public int InputDataSize => this.historyLength;
+
         public FastBurgPredictor(int coefficientsNumber, int historyLength)
         {
             this.coefficientsNumber = coefficientsNumber;

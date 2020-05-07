@@ -271,6 +271,128 @@
                 about damaged samples.
             </summary>
         </member>
+        <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64_copy">
+            <summary>
+                Fast implimentation of Burg algorithm for real signals.
+                For details see paper A Fast Implementation of Burg’s Method by Koen Vos.
+                FastBurgAlgorithm64 uses internal variables of type double
+            </summary>
+        </member>
+        <member name="F:AudioClickRepair.Processing.FastBurgAlgorithm64_copy._absolutePosition">
+            <summary>
+                Position in x_inputSignal that we need prediction for.
+            </summary>
+        </member>
+        <member name="F:AudioClickRepair.Processing.FastBurgAlgorithm64_copy._deltaRAndAProduct">
+            <summary>
+                Product of deltaR matrix and a_predictionCoefs
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.Train(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Calculates prediction coefficients for one sample using CPU
+            </summary>
+            <param name="position">
+                Position in inputSignal that we need
+                prediction for. Must be greater than historyLengthSamples
+            </param>
+            <param name="coefficientsNumber">
+                Number of prediction coefficients
+                that will be calculated. Greater number gives more accurate
+                prediction but takes more time to calculate
+            </param>
+            <param name="historyLengthSamples">
+                Number of samples that will
+                be used to calculate prediction coefficients
+            </param>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.CreateInternalVariables">
+            <summary>
+                Creates internal variables with desirable length
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.GetForwardPrediction">
+            <summary>
+                Returns forward prediction based on prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.GetBackwardPrediction">
+            <summary>
+                Returns backward prediction based on prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.GetPredictionCoefs">
+            <summary>
+                Returns prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.GetReflectionCoefs">
+            <summary>
+                Returns prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.UpdateG">
+            <summary>
+                Updates vector g. For details see step 7 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.ComputeDeltaRMultByA">
+            <summary>
+                Calculates vector deltaRAndAProduct. For details see step 6 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.UpdateR">
+            <summary>
+                Updates vector r. For details see step 5 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.UpdatePredictionCoefs">
+            <summary>
+                Updates vector of prediction coefficients. For details see step 2 of
+                algorithm on page 3 of A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.ComputeReflectionCoef">
+            <summary>
+                Computes vector of reflection coefficients. For details see step 1
+                of algorithm on page 3 of A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.JinversOrder(System.Int32,System.Int32)">
+            <summary>
+                Inverts index to flip a vector insted of multiplication with J matrix.
+                For details see (12) on page 2 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+            <param name="index">from 0 to max</param>
+            <param name="max">positive number</param>
+            <returns></returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.Initialization">
+            <summary>
+                Initializes i_iterationCounter and vectors. For details see step 0 of
+                algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64_copy.FindAutocorrelations">
+            <summary>
+                Calculates autocorrelations. For details see step 0 of
+                algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
         <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64">
             <summary>
                 Fast implimentation of Burg algorithm for real signals.
@@ -347,7 +469,8 @@
         </member>
         <member name="M:AudioClickRepair.Processing.FastBurgAlgorithm64.ComputeDeltaRMultByA">
             <summary>
-                Calculates vector deltaRAndAProduct. For details see step 6 of algorithm on page 3 of
+                Calculates vector deltaRAndAProduct. For details see step 6
+                of algorithm on page 3 of
                 A Fast Implementation of Burg’s Method by Koen Vos
             </summary>
         </member>

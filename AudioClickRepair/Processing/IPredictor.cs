@@ -2,9 +2,10 @@
 {
     public interface IPredictor
     {
-        int InputDataSize => 0;
+        int InputDataSize { get; }
 
         double GetForward(double[] samples, int index);
+
         double GetBackward(double[] samples, int index);
     }
 }
