@@ -15,13 +15,13 @@ namespace AudioClickRepair.Data
         private readonly BlockingCollection<AbstractPatch> patchCollection;
         private readonly ImmutableArray<double> input;
         private readonly IPatcher inputPatcher;
-        private readonly IPatcher predictionErrPatcher;
         private readonly IAnalyzer normCalculator;
         private readonly IRegenerator regenerarator;
         private readonly IAudioProcessingSettings settings;
         private readonly IPredictor predictor;
         private readonly IPatchMaker patchMaker;
         private ImmutableArray<double> predictionErr;
+        private IPatcher predictionErrPatcher;
 
         internal Channel(double[] inputSamples, IAudioProcessingSettings settings)
         {
@@ -37,13 +37,6 @@ namespace AudioClickRepair.Data
                 this.input,
                 this.patchCollection,
                 (patch, position) => patch.GetValue(position));
-
-            // Create empty immutable array for errors. It will be replaced later.
-            this.predictionErr = ImmutableArray.Create(new double[inputSamples.Length]);
-            this.predictionErrPatcher = new Patcher(
-                this.predictionErr,
-                this.patchCollection,
-                (_, __) => AbstractPatch.MinimalPredictionError);
 
             this.predictor = new FastBurgPredictor(
                 settings.CoefficientsNumber,
@@ -74,6 +67,10 @@ namespace AudioClickRepair.Data
             }
 
             this.predictionErr = ImmutableArray.Create(errors);
+            this.predictionErrPatcher = new Patcher(
+                this.predictionErr,
+                this.patchCollection,
+                (_, __) => AbstractPatch.MinimalPredictionError);
 
             this.IsReadyForScan = true;
         }
@@ -87,11 +84,13 @@ namespace AudioClickRepair.Data
 
             this.RemoveAllPatches();
 
-            var unprocessable = this.patchMaker.InputDataSize;
+            var start =
+                this.patchMaker.InputDataSize
+                + this.normCalculator.InputDataSize;
 
-            for (var position = unprocessable + 1;
-                position < this.Length - unprocessable;
-                position++)
+            var end = this.Length - this.patchMaker.InputDataSize;
+
+            for (var position = start; position < end; position++)
             {
                 var errorLevelAtDetection = this.GetErrorLevel(position);
 
