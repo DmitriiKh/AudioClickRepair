@@ -50,6 +50,15 @@ namespace AudioClickRepair.Processing
             */
 
             var length = forwardRestoredSamples.Length;
+
+            if (length == 1)
+            {
+                return new double[]
+                    {
+                        (forwardRestoredSamples[0] + backwardRestoredSamples[0]) / 2,
+                    };
+            }
+
             var increment = 1 / (length - 1);
             var outputArray = new double[length];
 
