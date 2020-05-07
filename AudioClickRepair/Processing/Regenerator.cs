@@ -4,13 +4,15 @@
 
 namespace AudioClickRepair.Processing
 {
-    using AudioClickRepair.Data;
     using System;
+    using AudioClickRepair.Data;
 
     internal class Regenerator : IRegenerator
     {
         private IPatcher inputSource;
         private IPredictor predictor;
+
+        public int InputDataSize => this.predictor.InputDataSize;
 
         public Regenerator(IPatcher inputSource, IPredictor predictor)
         {

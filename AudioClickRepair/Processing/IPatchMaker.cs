@@ -8,6 +8,12 @@ namespace AudioClickRepair.Processing
 
     internal interface IPatchMaker
     {
+        /// <summary>
+        /// Gets size of input data array needed to perform calculations.
+        /// </summary>
+        /// <returns>Size.</returns>
+        int InputDataSize { get; }
+
         AbstractPatch NewPatch(
             int position,
             int maxLengthOfCorrection,

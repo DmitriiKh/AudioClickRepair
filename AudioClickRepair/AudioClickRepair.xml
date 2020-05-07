@@ -418,6 +418,12 @@
             <param name="inputData">Input data.</param>
             <returns>Result.</returns>
         </member>
+        <member name="P:AudioClickRepair.Processing.IPatchMaker.InputDataSize">
+            <summary>
+            Gets size of input data array needed to perform calculations.
+            </summary>
+            <returns>Size.</returns>
+        </member>
         <member name="T:AudioClickRepair.Processing.Patcher">
             <summary>
             Replaces samples from immutable array that were patched using update function.

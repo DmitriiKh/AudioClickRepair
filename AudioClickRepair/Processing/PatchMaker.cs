@@ -12,6 +12,9 @@
             this.regenerarator = regenerarator;
         }
 
+        public int InputDataSize =>
+            this.regenerarator.InputDataSize + MaxLeftShift;
+
         public AbstractPatch NewPatch(
             int position,
             int maxLengthOfCorrection,

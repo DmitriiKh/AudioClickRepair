@@ -87,7 +87,11 @@ namespace AudioClickRepair.Data
 
             this.RemoveAllPatches();
 
-            for (var position = 0; position < this.Length; position++)
+            var unprocessable = this.patchMaker.InputDataSize;
+
+            for (var position = unprocessable + 1;
+                position < this.Length - unprocessable;
+                position++)
             {
                 var errorLevelAtDetection = this.GetErrorLevel(position);
 

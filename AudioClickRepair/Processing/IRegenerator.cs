@@ -4,6 +4,8 @@
 
     interface IRegenerator
     {
+        int InputDataSize { get; }
+
         double RestoreFragment(AbstractFragment patched);
     }
 }
