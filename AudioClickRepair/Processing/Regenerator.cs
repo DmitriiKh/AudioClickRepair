@@ -61,7 +61,7 @@ namespace AudioClickRepair.Processing
                     };
             }
 
-            var increment = 1 / (length - 1);
+            var increment = 1.0 / (length - 1);
             var outputArray = new double[length];
 
             for (var index = 0; index < length; index++)
@@ -84,19 +84,19 @@ namespace AudioClickRepair.Processing
              */
 
             var expandSize = this.predictor.InputDataSize;
+            var totalSize = expandSize + fragment.Length;
 
-            var output = new double[fragment.Length];
+            var samples = this.inputSource.GetRange(
+                fragment.StartPosition - expandSize,
+                totalSize);
 
-            for (var index = 0; index < output.Length; index++)
+            for (var index = expandSize; index < samples.Length; index++)
             {
-                var input = this.inputSource.GetRange(
-                    fragment.StartPosition - expandSize + index,
-                    expandSize);
-
-                output[index] = this.predictor.GetForward(input);
+                samples[index] = this.predictor.GetForward(
+                    samples[(index - expandSize) .. index]);
             }
 
-            return output;
+            return samples[expandSize..];
         }
 
         private double[] GetBackwardArray(AbstractFragment fragment)
@@ -107,19 +107,19 @@ namespace AudioClickRepair.Processing
              */
 
             var expandSize = this.predictor.InputDataSize;
+            var totalSize = expandSize + fragment.Length;
 
-            var output = new double[fragment.Length];
+            var samples = this.inputSource.GetRange(
+                fragment.StartPosition,
+                totalSize);
 
-            for (var index = 0; index < output.Length; index++)
+            for (var index = fragment.Length - 1; index >= 0; index--)
             {
-                var input = this.inputSource.GetRange(
-                    fragment.StartPosition + index + 1,
-                    expandSize);
-
-                output[index] = this.predictor.GetBackward(input);
+                samples[index] = this.predictor.GetBackward(
+                    samples[(index + 1) .. (index + expandSize + 1)]);
             }
 
-            return output;
+            return samples[..fragment.Length];
         }
     }
 }
