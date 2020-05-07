@@ -26,6 +26,7 @@
             {
                 var patch = this.FindOptimal(
                     position - leftShift,
+                    1 + leftShift,
                     maxLengthOfCorrection,
                     errorLevelAtDetection);
 
@@ -40,12 +41,15 @@
 
         private AbstractPatch FindOptimal(
             int start,
+            int minLengthOfCorrection,
             int maxLengthOfCorrection,
             double errorLevelAtDetection)
         {
             AbstractPatch bestPatch = null;
 
-            for (var length = 1; length <= maxLengthOfCorrection; length++)
+            for (var length = minLengthOfCorrection;
+                length <= maxLengthOfCorrection;
+                length++)
             {
                 var arrayFragment = new ArrayFragment(new double[length], start);
                 var connectionError = this.regenerarator.RestoreFragment(arrayFragment);
