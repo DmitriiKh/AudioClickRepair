@@ -84,18 +84,19 @@ namespace AudioClickRepair.Processing
              */
 
             var expandSize = this.predictor.InputDataSize;
-            var totalSize = expandSize + fragment.Length;
 
-            var samples = this.inputSource.GetRange(
-                fragment.StartPosition - expandSize,
-                totalSize);
+            var output = new double[fragment.Length];
 
-            for (var index = expandSize; index < samples.Length; index++)
+            for (var index = 0; index < output.Length; index++)
             {
-                samples[index] = this.predictor.GetForward(samples);
+                var input = this.inputSource.GetRange(
+                    fragment.StartPosition - expandSize + index,
+                    expandSize);
+
+                output[index] = this.predictor.GetForward(input);
             }
 
-            return samples[expandSize..];
+            return output;
         }
 
         private double[] GetBackwardArray(AbstractFragment fragment)
@@ -106,18 +107,19 @@ namespace AudioClickRepair.Processing
              */
 
             var expandSize = this.predictor.InputDataSize;
-            var totalSize = expandSize + fragment.Length;
 
-            var samples = this.inputSource.GetRange(
-                fragment.StartPosition,
-                totalSize);
+            var output = new double[fragment.Length];
 
-            for (var index = fragment.Length - 1; index >= 0; index--)
+            for (var index = 0; index < output.Length; index++)
             {
-                samples[index] = this.predictor.GetBackward(samples);
+                var input = this.inputSource.GetRange(
+                    fragment.StartPosition + index + 1,
+                    expandSize);
+
+                output[index] = this.predictor.GetBackward(input);
             }
 
-            return samples[..fragment.Length];
+            return output;
         }
     }
 }
