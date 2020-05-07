@@ -39,7 +39,7 @@
         {
             AbstractPatch bestPatch = null;
 
-            for (var length = 0; length <= maxLengthOfCorrection; length++)
+            for (var length = 1; length <= maxLengthOfCorrection; length++)
             {
                 var arrayFragment = new ArrayFragment(new double[length], start);
                 var connectionError = this.regenerarator.RestoreFragment(arrayFragment);
