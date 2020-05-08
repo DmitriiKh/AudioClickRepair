@@ -1,6 +1,9 @@
 ﻿namespace AudioClickRepair.Processing
 {
     using AudioClickRepair.Data;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     class PatchMaker : IPatchMaker
     {
@@ -30,7 +33,7 @@
                     maxLengthOfCorrection,
                     errorLevelAtDetection);
 
-                if (bestPatch is null || patch.RegenerationError < bestPatch?.RegenerationError)
+                if (bestPatch is null || patch.RegenerationError < bestPatch.RegenerationError)
                 {
                     bestPatch = patch;
                 }
@@ -46,26 +49,50 @@
             double errorLevelAtDetection)
         {
             AbstractPatch bestPatch = null;
+            var errorsSequence = new List<double>();
 
             for (var length = minLengthOfCorrection;
                 length <= maxLengthOfCorrection;
                 length++)
             {
                 var arrayFragment = new ArrayFragment(new double[length], start);
-                var connectionError = this.regenerarator.RestoreFragment(arrayFragment);
+                var regenerationError = this.regenerarator.RestoreFragment(arrayFragment);
 
-                if (bestPatch is null || connectionError < bestPatch.RegenerationError)
+                if (bestPatch is null || regenerationError < bestPatch.RegenerationError)
                 {
                     bestPatch = new Patch(
                         arrayFragment.GetInternalArray(),
                         start,
-                        errorLevelAtDetection);
+                        errorLevelAtDetection)
+                    {
+                        RegenerationError = regenerationError,
+                    };
+                }
 
-                    bestPatch.RegenerationError = connectionError;
+                errorsSequence.Add(regenerationError);
+
+                // Break the loop if too long and not converging
+                if (errorsSequence.Count > 10 && !this.IsConverging(errorsSequence))
+                {
+                    break;
                 }
             }
 
             return bestPatch;
+        }
+
+        private bool IsConverging(List<double> sequence)
+        {
+            var diff = new List<double>();
+            for (var index = 1; index < sequence.Count - 1; index++)
+            {
+                diff.Add(Math.Abs(sequence.ElementAt(index) - sequence.ElementAt(index + 1)));
+            }
+
+            var lastAv = diff.AsEnumerable().Reverse().Take(5).Average();
+            var preLastAv = diff.AsEnumerable().Reverse().Skip(5).Take(5).Average();
+
+            return lastAv < preLastAv;
         }
     }
 }
