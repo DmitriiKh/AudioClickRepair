@@ -43,7 +43,7 @@ namespace AudioClickRepair.Processing
         /// <param name="start">Start position of range.</param>
         /// <param name="length">Length of range.</param>
         /// <returns>Array of patched samples.</returns>
-        public double[] GetRange(int start, int length)
+        public double[] GetRange(int start, int length, AbstractPatch anotherPatch)
         {
             var range = new ArrayFragment(
                 this.immutableArray,
@@ -55,6 +55,11 @@ namespace AudioClickRepair.Processing
             foreach (var patch in patches)
             {
                 this.UpdateRange(range, patch);
+            }
+
+            if (anotherPatch != null)
+            {
+                this.UpdateRange(range, anotherPatch);
             }
 
             return range.GetInternalArray();

@@ -9,32 +9,62 @@ namespace AudioClickRepair.Processing
 
     internal class Regenerator : IRegenerator
     {
-        private IPatcher inputSource;
-        private IPredictor predictor;
+        private readonly IPatcher inputSource;
+        private readonly IPredictor predictor;
+        private readonly IDetector detector;
 
         public int InputDataSize => this.predictor.InputDataSize;
 
-        public Regenerator(IPatcher inputSource, IPredictor predictor)
+        public Regenerator(
+            IPatcher inputSource,
+            IPredictor predictor,
+            IDetector detector)
         {
             this.inputSource = inputSource;
             this.predictor = predictor;
+            this.detector = detector;
         }
 
-        public double RestoreFragment(AbstractFragment fragment)
+        public void RestorePatch(AbstractPatch patch)
         {
-            var forwardRestoredSamples = this.GetForwardArray(fragment);
-            var backwardRestoredSamples = this.GetBackwardArray(fragment);
+            var forwardRestoredSamples = this.GetForwardArray(patch);
+            var backwardRestoredSamples = this.GetBackwardArray(patch);
             var joinedRestoredSamples = this.ApplyWindowFunction(
                 forwardRestoredSamples,
                 backwardRestoredSamples);
 
-            fragment.SetInternalArray(joinedRestoredSamples);
+            patch.SetInternalArray(joinedRestoredSamples);
 
-            var middleIndex = forwardRestoredSamples.Length / 2;
-
-            return Math.Abs(forwardRestoredSamples[middleIndex]
-                - backwardRestoredSamples[middleIndex]);
+            patch.ErrorLevelAtStart = this.GetErrorLevelAtStart(patch);
+            patch.ConnectionError = this.GetConnectionError(
+                forwardRestoredSamples,
+                backwardRestoredSamples);
+            patch.ErrorLevelAfterEnd = this.GetErrorLevelAfterEnd(patch);
         }
+
+        private double GetErrorLevelAtStart(AbstractPatch patch) =>
+            this.detector.GetErrorLevel(patch.StartPosition, patch);
+
+        private double GetConnectionError(
+            double[] forwardRestoredSamples,
+            double[] backwardRestoredSamples)
+        {
+            var errorSum = 0.0;
+
+            for (var index = 0; index < forwardRestoredSamples.Length; index++)
+            {
+                errorSum += Math.Abs(
+                    forwardRestoredSamples[index] -
+                    backwardRestoredSamples[index]);
+            }
+
+            return errorSum / forwardRestoredSamples.Length;
+        }
+
+        private double GetErrorLevelAfterEnd(AbstractPatch patch) =>
+            (this.detector.GetErrorLevel(patch.EndPosition + 1, patch) +
+            this.detector.GetErrorLevel(patch.EndPosition + 2, patch) +
+            this.detector.GetErrorLevel(patch.EndPosition + 3, patch)) / 3;
 
         private double[] ApplyWindowFunction(
             double[] forwardRestoredSamples,

@@ -6,6 +6,6 @@
     {
         int InputDataSize { get; }
 
-        double RestoreFragment(AbstractFragment patched);
+        void RestorePatch(AbstractPatch patch);
     }
 }

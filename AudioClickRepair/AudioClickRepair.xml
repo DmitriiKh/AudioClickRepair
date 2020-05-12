@@ -75,7 +75,7 @@
             Gets error level at the start position that was found at detection process.
             </summary>
         </member>
-        <member name="P:AudioClickRepair.Data.AbstractPatch.CurrentErrorLevel">
+        <member name="P:AudioClickRepair.Data.AbstractPatch.ErrorLevelAtStart">
             <summary>
             Gets current error level.
             </summary>
@@ -153,12 +153,11 @@
             </summary>
             <returns>Returns hash code.</returns>
         </member>
-        <member name="M:AudioClickRepair.Data.AbstractPatch.OnChange(AudioClickRepair.Data.PatchEventArgs)">
+        <member name="M:AudioClickRepair.Data.AbstractPatch.OnChange">
             <summary>
             Invokes Updater method and then updates internal array,
             start position and current error level.
             </summary>
-            <param name="args">Arguments (input and output).</param>
         </member>
         <member name="M:AudioClickRepair.Data.AbstractPatch.ChangeApproved">
             <summary>
@@ -241,28 +240,6 @@
         <member name="M:AudioClickRepair.Data.Patch.ExpandRight">
             <summary>
             Expands patch on end.
-            </summary>
-        </member>
-        <member name="T:AudioClickRepair.Data.PatchEventArgs">
-            <summary>
-            Arguments for calling event handler.
-            </summary>
-        </member>
-        <member name="M:AudioClickRepair.Data.PatchEventArgs.#ctor(System.Int32,System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.PatchEventArgs"/> class.
-            </summary>
-            <param name="newStartPosition">Start position of fragment.</param>
-            <param name="newLength">Length of fragment.</param>
-        </member>
-        <member name="P:AudioClickRepair.Data.PatchEventArgs.Patched">
-            <summary>
-            Gets fragment. Needs to be updated by event handler.
-            </summary>
-        </member>
-        <member name="P:AudioClickRepair.Data.PatchEventArgs.NewErrorLevelAtStart">
-            <summary>
-            Gets error level. Needs to be updated by event handler.
             </summary>
         </member>
         <member name="T:AudioClickRepair.Data.Stereo">
@@ -438,7 +415,7 @@
             <param name="updateFunc">Function to call to get the patched value.
             Example: (patch, position) => patch.GetOutputSample(position).</param>
         </member>
-        <member name="M:AudioClickRepair.Processing.Patcher.GetRange(System.Int32,System.Int32)">
+        <member name="M:AudioClickRepair.Processing.Patcher.GetRange(System.Int32,System.Int32,AudioClickRepair.Data.AbstractPatch)">
             <summary>
             Gets array containing sequence of patched samples of specified length
             starting from the specified position.

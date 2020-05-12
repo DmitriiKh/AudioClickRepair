@@ -32,14 +32,13 @@ namespace AudioClickRepair.Data
             this.internalArray = patchedSamples;
             this.StartPosition = startPosition;
             this.ErrorLevelAtDetection = errorLevelAtDetection;
-            this.CurrentErrorLevel = errorLevelAtDetection;
             this.Approved = true;
         }
 
         /// <summary>
         /// Updater that called when patch needs updating.
         /// </summary>
-        public event EventHandler<PatchEventArgs> Updater;
+        public event EventHandler Updater;
 
         /// <summary>
         /// Gets error level at the start position that was found at detection process.
@@ -49,14 +48,16 @@ namespace AudioClickRepair.Data
         /// <summary>
         /// Gets current error level.
         /// </summary>
-        public double CurrentErrorLevel { get; private set; }
+        public double ErrorLevelAtStart { get; internal set; }
+
+        public double ConnectionError { get; internal set; }
+
+        public double ErrorLevelAfterEnd { get; internal set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether patch was approved by user.
         /// </summary>
         public bool Approved { get; set; }
-
-        public double RegenerationError { get; internal set; }
 
         /// <summary>
         /// Compares start positions and lengths of operands.
@@ -142,13 +143,9 @@ namespace AudioClickRepair.Data
         /// Invokes Updater method and then updates internal array,
         /// start position and current error level.
         /// </summary>
-        /// <param name="args">Arguments (input and output).</param>
-        protected virtual void OnChange(PatchEventArgs args)
+        protected virtual void OnChange()
         {
-            this.Updater?.Invoke(this, args);
-            this.internalArray = args.Patched.GetInternalArray();
-            this.StartPosition = args.Patched.StartPosition;
-            this.CurrentErrorLevel = args.NewErrorLevelAtStart;
+            this.Updater?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

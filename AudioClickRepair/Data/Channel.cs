@@ -16,10 +16,11 @@ namespace AudioClickRepair.Data
         private readonly ImmutableArray<double> input;
         private readonly IPatcher inputPatcher;
         private readonly IAnalyzer normCalculator;
-        private readonly IRegenerator regenerarator;
         private readonly IAudioProcessingSettings settings;
         private readonly IPredictor predictor;
-        private readonly IPatchMaker patchMaker;
+        private IRegenerator regenerarator;
+        private IPatchMaker patchMaker;
+        private IDetector damageDetector;
         private ImmutableArray<double> predictionErr;
         private IPatcher predictionErrPatcher;
 
@@ -43,10 +44,6 @@ namespace AudioClickRepair.Data
                 settings.HistoryLengthSamples);
 
             this.normCalculator = new AveragedMaxErrorAnalyzer();
-
-            this.regenerarator = new Regenerator(this.inputPatcher, this.predictor);
-
-            this.patchMaker = new PatchMaker(this.regenerarator);
 
             this.settings = settings;
 
@@ -72,6 +69,16 @@ namespace AudioClickRepair.Data
                 this.patchCollection,
                 (_, __) => AbstractPatch.MinimalPredictionError);
 
+            this.damageDetector = new DamagedSampleDetector(
+                this.predictionErrPatcher,
+                this.inputPatcher,
+                this.normCalculator,
+                this.predictor);
+
+            this.regenerarator = new Regenerator(this.inputPatcher, this.predictor, this.damageDetector);
+
+            this.patchMaker = new PatchMaker(this.regenerarator);
+
             this.IsReadyForScan = true;
         }
 
@@ -92,20 +99,17 @@ namespace AudioClickRepair.Data
 
             for (var position = start; position < end; position++)
             {
-                var errorLevelAtDetection = this.GetErrorLevel(position);
+                var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
 
-                if (errorLevelAtDetection >= this.settings.ThresholdForDetection)
+                if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                 {
                     var patch = this.patchMaker.NewPatch(
                         position,
                         this.settings.MaxLengthOfCorrection,
                         errorLevelAtDetection);
 
-                    if (patch.RegenerationError < this.settings.MaxRegenerationError)
-                    {
-                        this.RegisterPatch(patch);
-                        position = patch.EndPosition + 1;
-                    }
+                    this.RegisterPatch(patch);
+                    position = patch.EndPosition + 1;
                 }
             }
         }
@@ -144,30 +148,7 @@ namespace AudioClickRepair.Data
             patch.Updater += this.PatchUpdater;
         }
 
-        private void PatchUpdater(object sender, PatchEventArgs e)
-        {
-            this.regenerarator.RestoreFragment(e.Patched);
-            e.NewErrorLevelAtStart = this.GetErrorLevel(e.Patched.StartPosition);
-        }
-
-        private double GetErrorLevel(int position) =>
-            this.predictionErr[position]
-                / this.GetPredictionErrNorm(position);
-
-        private double GetPredictionErrNorm(int position)
-        {
-            var startIndex = position - this.normCalculator.InputDataSize;
-
-            // If there is not enough data to analyze
-            if (startIndex < 0)
-            {
-                return this.normCalculator.DefaultResult;
-            }
-
-            return this.normCalculator.GetResult(
-                this.predictionErrPatcher.GetRange(
-                    position - this.normCalculator.InputDataSize,
-                    this.normCalculator.InputDataSize));
-        }
+        private void PatchUpdater(object sender, EventArgs e) =>
+            this.regenerarator.RestorePatch(sender as AbstractPatch);
     }
 }

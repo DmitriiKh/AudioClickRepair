@@ -49,11 +49,9 @@ namespace AudioClickRepair.Data
         /// <param name="replacementArray">New internal array.</param>
         internal void SetInternalArray(double[] replacementArray)
         {
-            if (replacementArray is null 
-                || replacementArray.Length != this.internalArray.Length)
+            if (replacementArray is null)
             {
-                throw new ArgumentException(
-                    nameof(replacementArray) + " is null, longer or shorter.");
+                throw new ArgumentNullException(nameof(replacementArray));
             }
 
             this.internalArray = replacementArray;

@@ -28,25 +28,39 @@ namespace AudioClickRepair.Data
         /// <summary>
         /// Expands patch on beginning.
         /// </summary>
-        public void ExpandLeft() =>
-            this.OnChange(new PatchEventArgs(this.StartPosition - 1, this.Length + 1));
+        public void ExpandLeft()
+        {
+            this.StartPosition--;
+            this.SetInternalArray(new double[this.Length + 1]);
+            this.OnChange();
+        }
 
         /// <summary>
         /// Shortens patch on beginning.
         /// </summary>
-        public void ShrinkLeft() =>
-            this.OnChange(new PatchEventArgs(this.StartPosition + 1, this.Length - 1));
+        public void ShrinkLeft()
+        {
+            this.StartPosition++;
+            this.SetInternalArray(new double[this.Length - 1]);
+            this.OnChange();
+        }
 
         /// <summary>
         /// Shortens patch on end.
         /// </summary>
-        public void ShrinkRight() =>
-            this.OnChange(new PatchEventArgs(this.StartPosition, this.Length - 1));
+        public void ShrinkRight()
+        {
+            this.SetInternalArray(new double[this.Length - 1]);
+            this.OnChange();
+        }
 
         /// <summary>
         /// Expands patch on end.
         /// </summary>
-        public void ExpandRight() =>
-            this.OnChange(new PatchEventArgs(this.StartPosition, this.Length + 1));
+        public void ExpandRight()
+        {
+            this.SetInternalArray(new double[this.Length + 1]);
+            this.OnChange();
+        }
     }
 }
