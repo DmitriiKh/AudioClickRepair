@@ -8,6 +8,11 @@
     class PatchMaker : IPatchMaker
     {
         private const int MaxLeftShift = 10;
+        private const int NumberOfSamplesForAveraging = 5;
+        private const int MinLengthForConvergeCheck =
+            2 * NumberOfSamplesForAveraging;
+
+        private const double MaxErrorLevelAfterEnd = 1.5;
         private readonly IRegenerator regenerarator;
 
         public PatchMaker(IRegenerator regenerarator)
@@ -61,11 +66,11 @@
                 patches.Add(newPatch);
 
                 // Break the loop if it takes too long
-                // and not converging and also
+                // and errors are not dropping and also
                 // there are no suspicious samples after the last fixed sample
-                if (patches.Count > 10
-                    && !this.IsConverging(patches)
-                    && newPatch.ErrorLevelAfterEnd < 1.5)
+                if (patches.Count > MinLengthForConvergeCheck
+                    && !this.ErrorsAreDropping(patches)
+                    && newPatch.ErrorLevelAfterEnd < MaxErrorLevelAfterEnd)
                 {
                     break;
                 }
@@ -76,49 +81,60 @@
 
         private AbstractPatch BestOf(List<AbstractPatch> patches)
         {
-            const double ErrorAtStartCoefficientWeight = 0.33;
-            const double RegenerationErrorCoefficientWeight = 0.33;
-            const double ErrorAtEndCoefficientWeight = 0.33;
+            const double ErrorAtStartWeight = 0.33;
+            const double ConnectionErrorWeight = 0.33;
+            const double ErrorAtEndWeight = 0.33;
 
-            var max1 = patches.Select(p => p.ErrorLevelAtStart).Max();
-            var min1 = patches.Select(p => p.ErrorLevelAtStart).Min();
-            var max2 = patches.Select(p => p.ConnectionError).Max();
-            var min2 = patches.Select(p => p.ConnectionError).Min();
-            var max3 = patches.Select(p => p.ErrorLevelAfterEnd).Max();
-            var min3 = patches.Select(p => p.ErrorLevelAfterEnd).Min();
+            var maxErrorAtStart = patches.Select(p => p.ErrorLevelAtStart).Max();
+            var minErrorAtStart = patches.Select(p => p.ErrorLevelAtStart).Min();
+            var maxConnectionError = patches.Select(p => p.ConnectionError).Max();
+            var minConnectionError = patches.Select(p => p.ConnectionError).Min();
+            var maxErrorAtEnd = patches.Select(p => p.ErrorLevelAfterEnd).Max();
+            var minErrorAtEnd = patches.Select(p => p.ErrorLevelAfterEnd).Min();
 
             AbstractPatch bestPatch = null;
-            var bestError = 0.0;
+            var bestPatchError = 0.0;
 
             foreach (var patch in patches)
             {
-                var currentErrorLevelCoef = ErrorAtStartCoefficientWeight * (patch.ErrorLevelAtStart - min1) / (max1 - min1);
-                var regenerationErrorCoef = RegenerationErrorCoefficientWeight * (patch.ConnectionError - min2) / (max2 - min2);
-                var currentErrorLevelAtEndCoef = ErrorAtEndCoefficientWeight * (patch.ErrorLevelAfterEnd - min3) / (max3 - min3);
+                var errorAtStartCoef = ErrorAtStartWeight *
+                    (patch.ErrorLevelAtStart - minErrorAtStart) /
+                    (maxErrorAtStart - minErrorAtStart);
 
-                var patchError = currentErrorLevelCoef + regenerationErrorCoef + currentErrorLevelAtEndCoef;
+                var connectionErrorCoef = ConnectionErrorWeight *
+                    (patch.ConnectionError - minConnectionError) /
+                    (maxConnectionError - minConnectionError);
 
-                if (bestPatch is null || patchError < bestError)
+                var errorAtEndCoef = ErrorAtEndWeight *
+                    (patch.ErrorLevelAfterEnd - minErrorAtEnd) /
+                    (maxErrorAtEnd - minErrorAtEnd);
+
+                var patchError = errorAtStartCoef + connectionErrorCoef + errorAtEndCoef;
+
+                if (bestPatch is null || patchError < bestPatchError)
                 {
                     bestPatch = patch;
-                    bestError = patchError;
+                    bestPatchError = patchError;
                 }
             }
 
             return bestPatch;
         }
 
-        private bool IsConverging(List<AbstractPatch> patches)
+        private bool ErrorsAreDropping(List<AbstractPatch> patches)
         {
-            var diff1 = patches.Select(p => p.ConnectionError);
-            var lastAv1 = diff1.AsEnumerable().Reverse().Take(5).Average();
-            var preLastAv1 = diff1.AsEnumerable().Reverse().Skip(5).Take(5).Average();
+            var length = NumberOfSamplesForAveraging;
 
-            var diff2 = patches.Select(p => p.ErrorLevelAfterEnd);
-            var lastAv2 = diff2.AsEnumerable().Reverse().Take(5).Average();
-            var preLastAv2 = diff2.AsEnumerable().Reverse().Skip(5).Take(5).Average();
+            var connectionErrors = patches.Select(p => p.ConnectionError).ToArray();
+            var errorsAfterEnd = patches.Select(p => p.ErrorLevelAfterEnd).ToArray();
 
-            return lastAv1 < preLastAv1 || lastAv2 < preLastAv2;
+            var connectionErrorsDrop = connectionErrors.Reverse().Take(length).Average()
+                < connectionErrors.Reverse().Skip(length).Take(length).Average();
+
+            var errorsAfterEndDrop = errorsAfterEnd.Reverse().Take(length).Average()
+                < errorsAfterEnd.Reverse().Skip(length).Take(length).Average();
+
+            return connectionErrorsDrop || errorsAfterEndDrop;
         }
     }
 }
