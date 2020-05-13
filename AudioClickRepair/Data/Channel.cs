@@ -91,9 +91,9 @@ namespace AudioClickRepair.Data
 
             this.RemoveAllPatches();
 
-            var start =
-                this.patchMaker.InputDataSize
-                + this.normCalculator.InputDataSize;
+            var start = Math.Max(
+                this.patchMaker.InputDataSize,
+                this.damageDetector.InputDataSize);
 
             var end = this.Length - this.patchMaker.InputDataSize;
 

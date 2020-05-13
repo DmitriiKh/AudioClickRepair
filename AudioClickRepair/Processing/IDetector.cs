@@ -4,6 +4,8 @@
 
     public interface IDetector
     {
+        int InputDataSize { get; }
+
         double GetErrorLevel(int position, AbstractPatch anotherPatch = null);
     }
 }

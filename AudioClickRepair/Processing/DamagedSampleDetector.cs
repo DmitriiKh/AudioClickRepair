@@ -22,6 +22,10 @@
             this.predictor = predictor;
         }
 
+        public int InputDataSize =>
+            this.predictor.InputDataSize
+            + this.normCalculator.InputDataSize;
+
         public double GetErrorLevel(int position, AbstractPatch anotherPatch)
         {
             var errors = this.predictionErrPatcher.GetRange(
