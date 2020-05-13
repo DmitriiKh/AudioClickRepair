@@ -58,13 +58,21 @@ namespace AudioClickRepair.Data
             var inputDataSize = this.predictor.InputDataSize;
             var errors = new double[this.Length];
 
-            for (var position = inputDataSize; position < this.Length; position++)
+            var part = Partitioner.Create(
+                inputDataSize,
+                this.Length,
+                (this.Length - inputDataSize) / Environment.ProcessorCount);
+
+            Parallel.ForEach(part, range =>
             {
-                var inputDataStart = position - inputDataSize;
-                errors[position] = this.input[position]
-                    - this.predictor.GetForward(
-                        this.inputPatcher.GetRange(inputDataStart, inputDataSize));
-            }
+                for (var position = range.Item1; position < range.Item2; position++)
+                {
+                    var inputDataStart = position - inputDataSize;
+                    errors[position] = this.input[position]
+                        - this.predictor.GetForward(
+                            this.inputPatcher.GetRange(inputDataStart, inputDataSize));
+                }
+            });
 
             this.predictionErr = ImmutableArray.Create(errors);
             this.predictionErrPatcher = new Patcher(
