@@ -1,6 +1,7 @@
 ﻿namespace AudioClickRepair.Data
 {
     using System;
+    using System.Threading.Tasks;
 
     /// <summary>
     ///     Represents mono audio samples and includes information
@@ -27,7 +28,8 @@
 
         public IAudioProcessingSettings Settings { get; }
 
-        public void Scan() => this.monoChannel.Scan();
+        public async Task ScanAsync(IProgress<string> status) =>
+            await this.monoChannel.ScanAsync(status).ConfigureAwait(false);
 
         public int GetTotalNumberOfPatches() =>
             this.monoChannel.NumberOfPatches;

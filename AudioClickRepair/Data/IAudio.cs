@@ -1,4 +1,7 @@
-﻿namespace AudioClickRepair.Data
+﻿using System;
+using System.Threading.Tasks;
+
+namespace AudioClickRepair.Data
 {
     public interface IAudio
     {
@@ -8,7 +11,7 @@
 
         public IAudioProcessingSettings Settings { get; }
 
-        public void Scan();
+        public Task ScanAsync(IProgress<string> status);
 
         public int GetTotalNumberOfPatches();
 

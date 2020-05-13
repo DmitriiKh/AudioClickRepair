@@ -1,6 +1,7 @@
 ﻿namespace AudioClickRepair.Data
 {
     using System;
+    using System.Threading.Tasks;
 
     /// <summary>
     ///     Represents stereo audio samples and includes information
@@ -32,10 +33,10 @@
 
         public IAudioProcessingSettings Settings { get; }
 
-        public void Scan()
+        public async Task ScanAsync(IProgress<string> status)
         {
-            this.leftChannel.Scan();
-            this.rightChannel.Scan();
+            await this.leftChannel.ScanAsync(status).ConfigureAwait(false);
+            await this.rightChannel.ScanAsync(status).ConfigureAwait(false);
         }
 
         public int GetTotalNumberOfPatches() =>

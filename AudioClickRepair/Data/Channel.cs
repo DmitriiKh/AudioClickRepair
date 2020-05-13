@@ -53,7 +53,7 @@ namespace AudioClickRepair.Data
             this.IsReadyForScan = false;
         }
 
-        internal void GetReadyForScan()
+        internal void GetReadyForScan(IProgress<string> status)
         {
             var inputDataSize = this.predictor.InputDataSize;
             var errors = new double[this.Length];
@@ -62,6 +62,8 @@ namespace AudioClickRepair.Data
                 inputDataSize,
                 this.Length,
                 (this.Length - inputDataSize) / Environment.ProcessorCount);
+
+            status.Report("Preparation");
 
             Parallel.ForEach(part, range =>
             {
@@ -96,11 +98,16 @@ namespace AudioClickRepair.Data
             this.IsReadyForScan = true;
         }
 
-        internal void Scan()
+        internal async Task ScanAsync(IProgress<string> status)
+        {
+            await Task.Run(() => this.Scan(status)).ConfigureAwait(false);
+        }
+
+        internal void Scan(IProgress<string> status)
         {
             if (!this.IsReadyForScan)
             {
-                this.GetReadyForScan();
+                this.GetReadyForScan(status);
             }
 
             this.RemoveAllPatches();
@@ -118,6 +125,8 @@ namespace AudioClickRepair.Data
                 end,
                 (end - start) / Environment.ProcessorCount);
 
+            status.Report("Detection");
+
             Parallel.ForEach(part, range =>
             {
                 for (var position = range.Item1; position < range.Item2; position++)
@@ -132,7 +141,11 @@ namespace AudioClickRepair.Data
                 }
             });
 
+            status.Report("Restoration");
+
             suspectsList.AsParallel().ForAll(s => this.CheckSuspect(s));
+
+            status.Report(String.Empty);
         }
 
         private void CheckSuspect((int start, double errorLevelAtDetection) suspect)
