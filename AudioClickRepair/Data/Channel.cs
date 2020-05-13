@@ -10,6 +10,7 @@ namespace AudioClickRepair.Data
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using AudioClickRepair.Processing;
 
     internal class Channel
@@ -104,16 +105,24 @@ namespace AudioClickRepair.Data
 
             var suspectsList = new List<(int, double)>();
 
-            for (var position = start; position < end; position++)
-            {
-                var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
+            var part = Partitioner.Create(
+                start,
+                end,
+                (end - start) / Environment.ProcessorCount);
 
-                if (errorLevelAtDetection > this.settings.ThresholdForDetection)
+            Parallel.ForEach(part, range =>
+            {
+                for (var position = range.Item1; position < range.Item2; position++)
                 {
-                    suspectsList.Add((position, errorLevelAtDetection));
-                    position += this.damageDetector.InputDataSize;
+                    var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
+
+                    if (errorLevelAtDetection > this.settings.ThresholdForDetection)
+                    {
+                        suspectsList.Add((position, errorLevelAtDetection));
+                        position += this.damageDetector.InputDataSize;
+                    }
                 }
-            }
+            });
 
             suspectsList.AsParallel().ForAll(s => this.CheckSuspect(s));
         }
