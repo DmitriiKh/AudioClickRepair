@@ -28,8 +28,11 @@
 
         public IAudioProcessingSettings Settings { get; }
 
-        public async Task ScanAsync(IProgress<string> status) =>
-            await this.monoChannel.ScanAsync(status).ConfigureAwait(false);
+        public async Task ScanAsync(
+            IProgress<string> status,
+            IProgress<double> progress) =>
+            await this.monoChannel.ScanAsync(status, progress)
+                .ConfigureAwait(false);
 
         public int GetTotalNumberOfPatches() =>
             this.monoChannel.NumberOfPatches;

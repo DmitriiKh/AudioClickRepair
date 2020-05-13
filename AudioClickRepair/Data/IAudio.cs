@@ -11,7 +11,7 @@ namespace AudioClickRepair.Data
 
         public IAudioProcessingSettings Settings { get; }
 
-        public Task ScanAsync(IProgress<string> status);
+        public Task ScanAsync(IProgress<string> status, IProgress<double> progress);
 
         public int GetTotalNumberOfPatches();
 

@@ -33,10 +33,14 @@
 
         public IAudioProcessingSettings Settings { get; }
 
-        public async Task ScanAsync(IProgress<string> status)
+        public async Task ScanAsync(
+            IProgress<string> status,
+            IProgress<double> progress)
         {
-            await this.leftChannel.ScanAsync(status).ConfigureAwait(false);
-            await this.rightChannel.ScanAsync(status).ConfigureAwait(false);
+            await this.leftChannel.ScanAsync(status, progress)
+                .ConfigureAwait(false);
+            await this.rightChannel.ScanAsync(status, progress)
+                .ConfigureAwait(false);
         }
 
         public int GetTotalNumberOfPatches() =>

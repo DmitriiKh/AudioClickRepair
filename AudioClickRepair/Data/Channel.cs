@@ -53,7 +53,9 @@ namespace AudioClickRepair.Data
             this.IsReadyForScan = false;
         }
 
-        internal void GetReadyForScan(IProgress<string> status)
+        internal void GetReadyForScan(
+            IProgress<string> status,
+            IProgress<double> progress)
         {
             var inputDataSize = this.predictor.InputDataSize;
             var errors = new double[this.Length];
@@ -63,9 +65,10 @@ namespace AudioClickRepair.Data
                 this.Length,
                 (this.Length - inputDataSize) / Environment.ProcessorCount);
 
+            progress.Report(0);
             status.Report("Preparation");
 
-            Parallel.ForEach(part, range =>
+            Parallel.ForEach(part, (range, state, index) =>
             {
                 for (var position = range.Item1; position < range.Item2; position++)
                 {
@@ -73,6 +76,13 @@ namespace AudioClickRepair.Data
                     errors[position] = this.input[position]
                         - this.predictor.GetForward(
                             this.inputPatcher.GetRange(inputDataStart, inputDataSize));
+
+                    if (index == 0 && position % 1000 == 0)
+                    {
+                        progress.Report(
+                            100.0 * (position - range.Item1)
+                            / (range.Item2 - range.Item1));
+                    }
                 }
             });
 
@@ -98,16 +108,18 @@ namespace AudioClickRepair.Data
             this.IsReadyForScan = true;
         }
 
-        internal async Task ScanAsync(IProgress<string> status)
+        internal async Task ScanAsync(
+            IProgress<string> status,
+            IProgress<double> progress)
         {
-            await Task.Run(() => this.Scan(status)).ConfigureAwait(false);
+            await Task.Run(() => this.Scan(status, progress)).ConfigureAwait(false);
         }
 
-        internal void Scan(IProgress<string> status)
+        internal void Scan(IProgress<string> status, IProgress<double> progress)
         {
             if (!this.IsReadyForScan)
             {
-                this.GetReadyForScan(status);
+                this.GetReadyForScan(status, progress);
             }
 
             this.RemoveAllPatches();
@@ -126,26 +138,55 @@ namespace AudioClickRepair.Data
                 (end - start) / Environment.ProcessorCount);
 
             status.Report("Detection");
+            progress.Report(0);
 
-            Parallel.ForEach(part, range =>
+            Parallel.ForEach(part, (range, state, index) =>
             {
                 for (var position = range.Item1; position < range.Item2; position++)
                 {
-                    var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
+                    var errorLevelAtDetection =
+                        this.damageDetector.GetErrorLevel(position);
 
                     if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                     {
                         suspectsList.Add((position, errorLevelAtDetection));
                         position += this.damageDetector.InputDataSize;
                     }
+
+                    if (index == 0 && position % 1000 == 0)
+                    {
+                        progress.Report(
+                            100.0 * (position - range.Item1)
+                            / (range.Item2 - range.Item1));
+                    }
                 }
             });
 
             status.Report("Restoration");
+            progress.Report(0);
 
-            suspectsList.AsParallel().ForAll(s => this.CheckSuspect(s));
+            var suspectRange = Partitioner.Create(
+                0,
+                suspectsList.Count,
+                (int)Math.Ceiling((double)suspectsList.Count / Environment.ProcessorCount));
+
+            Parallel.ForEach(suspectRange, (range, state, index) =>
+            {
+                for (var suspectIndex = range.Item1; suspectIndex < range.Item2; suspectIndex++)
+                {
+                    this.CheckSuspect(suspectsList[suspectIndex]);
+
+                    if (index == 0)
+                    {
+                        progress.Report(
+                            100.0 * (suspectIndex - range.Item1)
+                            / (range.Item2 - range.Item1));
+                    }
+                }
+            });
 
             status.Report(String.Empty);
+            progress.Report(100);
         }
 
         private void CheckSuspect((int start, double errorLevelAtDetection) suspect)
