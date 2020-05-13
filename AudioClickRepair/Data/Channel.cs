@@ -6,8 +6,10 @@ namespace AudioClickRepair.Data
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
+    using System.Threading;
     using AudioClickRepair.Processing;
 
     internal class Channel
@@ -75,7 +77,10 @@ namespace AudioClickRepair.Data
                 this.normCalculator,
                 this.predictor);
 
-            this.regenerarator = new Regenerator(this.inputPatcher, this.predictor, this.damageDetector);
+            this.regenerarator = new Regenerator(
+                this.inputPatcher,
+                this.predictor,
+                this.damageDetector);
 
             this.patchMaker = new PatchMaker(this.regenerarator);
 
@@ -97,19 +102,53 @@ namespace AudioClickRepair.Data
 
             var end = this.Length - this.patchMaker.InputDataSize;
 
+            var suspectsList = new List<(int, double)>();
+
             for (var position = start; position < end; position++)
             {
                 var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
 
                 if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                 {
+                    suspectsList.Add((position, errorLevelAtDetection));
+                    position += this.damageDetector.InputDataSize;
+                }
+            }
+
+            suspectsList.AsParallel().ForAll(s => this.CheckSuspect(s));
+        }
+
+        private void CheckSuspect((int start, double errorLevelAtDetection) suspect)
+        {
+
+            var firstPatch = this.patchMaker.NewPatch(
+                    suspect.start,
+                    this.settings.MaxLengthOfCorrection,
+                    suspect.errorLevelAtDetection);
+
+            this.RegisterPatch(firstPatch);
+
+            var maxCheckLength =
+                this.settings.MaxLengthOfCorrection +
+                this.damageDetector.InputDataSize;
+
+            var end = suspect.start + maxCheckLength;
+
+            for (var position = firstPatch.EndPosition + 1; position < end; position++)
+            {
+                var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
+
+                if (errorLevelAtDetection > this.settings.ThresholdForDetection)
+                {
                     var patch = this.patchMaker.NewPatch(
-                        position,
-                        this.settings.MaxLengthOfCorrection,
-                        errorLevelAtDetection);
+                    position,
+                    this.settings.MaxLengthOfCorrection,
+                    suspect.errorLevelAtDetection);
 
                     this.RegisterPatch(patch);
-                    position = patch.EndPosition + 1;
+
+                    var newEnd = firstPatch.EndPosition + maxCheckLength;
+                    end = Math.Max(end, newEnd);
                 }
             }
         }
