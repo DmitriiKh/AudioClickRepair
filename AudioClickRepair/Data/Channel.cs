@@ -57,35 +57,9 @@ namespace AudioClickRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            var inputDataSize = this.predictor.InputDataSize;
-            var errors = new double[this.Length];
+            var errors = this.CalculatePredictionErrors(status, progress);
 
-            var part = Partitioner.Create(
-                inputDataSize,
-                this.Length,
-                (this.Length - inputDataSize) / Environment.ProcessorCount);
-
-            progress.Report(0);
-            status.Report("Preparation");
-
-            Parallel.ForEach(part, (range, state, index) =>
-            {
-                for (var position = range.Item1; position < range.Item2; position++)
-                {
-                    var inputDataStart = position - inputDataSize;
-                    errors[position] = this.input[position]
-                        - this.predictor.GetForward(
-                            this.inputPatcher.GetRange(inputDataStart, inputDataSize));
-
-                    if (index == 0 && position % 1000 == 0)
-                    {
-                        progress.Report(
-                            100.0 * (position - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
-            });
-
+            // Initialize fields that depend on prediction errors
             this.predictionErr = ImmutableArray.Create(errors);
             this.predictionErrPatcher = new Patcher(
                 this.predictionErr,
@@ -105,7 +79,50 @@ namespace AudioClickRepair.Data
 
             this.patchMaker = new PatchMaker(this.regenerarator);
 
+            // The fields are initialized
             this.IsReadyForScan = true;
+        }
+
+        private double[] CalculatePredictionErrors(
+            IProgress<string> status,
+            IProgress<double> progress)
+        {
+            status.Report("Preparation");
+            progress.Report(0);
+
+            var errors = new double[this.Length];
+
+            var inputDataSize = this.predictor.InputDataSize;
+
+            var part = Partitioner.Create(
+                inputDataSize,
+                this.Length,
+                (this.Length - inputDataSize) / Environment.ProcessorCount);
+
+            Parallel.ForEach(part, (range, state, index) =>
+            {
+                for (var position = range.Item1; position < range.Item2; position++)
+                {
+                    var inputDataStart = position - inputDataSize;
+
+                    errors[position] = this.input[position]
+                        - this.predictor.GetForward(
+                            this.inputPatcher.GetRange(inputDataStart, inputDataSize));
+
+                    // Only the first thread reports
+                    // Throttling by 1000 samples
+                    if (index == 0 && position % 1000 == 0)
+                    {
+                        progress.Report(
+                            100.0 * (position - range.Item1)
+                            / (range.Item2 - range.Item1));
+                    }
+                }
+            });
+
+            progress.Report(100);
+
+            return errors;
         }
 
         internal async Task ScanAsync(
@@ -124,21 +141,68 @@ namespace AudioClickRepair.Data
 
             this.RemoveAllPatches();
 
+            var suspects = this.DetectSuspiciousPositions(status, progress);
+
+            this.GenerateNewPatches(suspects, status, progress);
+
+            status.Report(String.Empty);
+            progress.Report(100);
+        }
+
+        private void GenerateNewPatches(
+            (int, double)[] suspects,
+            IProgress<string> status,
+            IProgress<double> progress)
+        {
+            status.Report("Restoration");
+            progress.Report(0);
+
+            var suspectRange = Partitioner.Create(
+                0,
+                suspects.Length,
+                (int)Math.Ceiling((double)suspects.Length / Environment.ProcessorCount));
+
+            Parallel.ForEach(suspectRange, (range, state, index) =>
+            {
+                for (var suspectIndex = range.Item1;
+                    suspectIndex < range.Item2;
+                    suspectIndex++)
+                {
+                    this.CheckSuspect(suspects[suspectIndex]);
+
+                    // Only the first thread reports
+                    if (index == 0)
+                    {
+                        progress.Report(
+                            100.0 * (suspectIndex - range.Item1)
+                            / (range.Item2 - range.Item1));
+                    }
+                }
+            });
+
+            progress.Report(100);
+        }
+
+
+        private (int, double)[] DetectSuspiciousPositions(
+            IProgress<string> status,
+            IProgress<double> progress)
+        {
+            status.Report("Detection");
+            progress.Report(0);
+
+            var suspectsList = new List<(int, double)>();
+
             var start = Math.Max(
                 this.patchMaker.InputDataSize,
                 this.damageDetector.InputDataSize);
 
             var end = this.Length - this.patchMaker.InputDataSize;
 
-            var suspectsList = new List<(int, double)>();
-
             var part = Partitioner.Create(
                 start,
                 end,
                 (end - start) / Environment.ProcessorCount);
-
-            status.Report("Detection");
-            progress.Report(0);
 
             Parallel.ForEach(part, (range, state, index) =>
             {
@@ -162,31 +226,9 @@ namespace AudioClickRepair.Data
                 }
             });
 
-            status.Report("Restoration");
-            progress.Report(0);
-
-            var suspectRange = Partitioner.Create(
-                0,
-                suspectsList.Count,
-                (int)Math.Ceiling((double)suspectsList.Count / Environment.ProcessorCount));
-
-            Parallel.ForEach(suspectRange, (range, state, index) =>
-            {
-                for (var suspectIndex = range.Item1; suspectIndex < range.Item2; suspectIndex++)
-                {
-                    this.CheckSuspect(suspectsList[suspectIndex]);
-
-                    if (index == 0)
-                    {
-                        progress.Report(
-                            100.0 * (suspectIndex - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
-            });
-
-            status.Report(String.Empty);
             progress.Report(100);
+
+            return suspectsList.ToArray();
         }
 
         private void CheckSuspect((int start, double errorLevelAtDetection) suspect)
