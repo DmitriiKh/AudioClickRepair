@@ -4,14 +4,13 @@
 
 namespace AudioClickRepair.Data
 {
+    using AudioClickRepair.Processing;
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
-    using AudioClickRepair.Processing;
 
     internal class Channel
     {
@@ -141,7 +140,7 @@ namespace AudioClickRepair.Data
 
             this.RemoveAllPatches();
 
-            var suspects = this.DetectSuspiciousPositions(status, progress);
+            var suspects = this.DetectSuspiciousSamples(status, progress);
 
             this.GenerateNewPatches(suspects, status, progress);
 
@@ -183,8 +182,7 @@ namespace AudioClickRepair.Data
             progress.Report(100);
         }
 
-
-        private (int, double)[] DetectSuspiciousPositions(
+        private (int, double)[] DetectSuspiciousSamples(
             IProgress<string> status,
             IProgress<double> progress)
         {
@@ -214,9 +212,12 @@ namespace AudioClickRepair.Data
                     if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                     {
                         suspectsList.Add((position, errorLevelAtDetection));
-                        position += this.damageDetector.InputDataSize;
+                        position += this.settings.MaxLengthOfCorrection
+                            + this.damageDetector.InputDataSize;
                     }
 
+                    // Only the first thread reports
+                    // Throttling by 1000 samples
                     if (index == 0 && position % 1000 == 0)
                     {
                         progress.Report(
@@ -233,7 +234,6 @@ namespace AudioClickRepair.Data
 
         private void CheckSuspect((int start, double errorLevelAtDetection) suspect)
         {
-
             var firstPatch = this.patchMaker.NewPatch(
                     suspect.start,
                     this.settings.MaxLengthOfCorrection,
