@@ -12,7 +12,7 @@ namespace NUnitTests
         private const int _testArrayLength = 1000;
         private ImmutableArray<double> _arrayValueEqualsIndex;
         private BlockingCollection<AbstractPatch> _patchCollection;
-        private Patcher _patcher;
+        private IPatcher _patcher;
 
         [SetUp]
         public void Setup()
