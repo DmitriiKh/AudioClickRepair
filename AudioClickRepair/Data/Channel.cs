@@ -149,7 +149,7 @@ namespace AudioClickRepair.Data
         }
 
         private void GenerateNewPatches(
-            (int, double)[] suspects,
+            (int start, int length, double errorLevelAtDetection)[] suspects,
             IProgress<string> status,
             IProgress<double> progress)
         {
@@ -182,14 +182,14 @@ namespace AudioClickRepair.Data
             progress.Report(100);
         }
 
-        private (int, double)[] DetectSuspiciousSamples(
+        private (int start, int length, double errorLevelAtDetection)[] DetectSuspiciousSamples(
             IProgress<string> status,
             IProgress<double> progress)
         {
             status.Report("Detection");
             progress.Report(0);
 
-            var suspectsList = new List<(int, double)>();
+            var suspectsList = new List<(int, int, double)>();
 
             var start = Math.Max(
                 this.patchMaker.InputDataSize,
@@ -211,9 +211,11 @@ namespace AudioClickRepair.Data
 
                     if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                     {
-                        suspectsList.Add((position, errorLevelAtDetection));
-                        position += this.settings.MaxLengthOfCorrection
+                        var lengthToSkip = this.settings.MaxLengthOfCorrection
                             + this.damageDetector.InputDataSize;
+
+                        suspectsList.Add((position, lengthToSkip, errorLevelAtDetection));
+                        position += lengthToSkip;
                     }
 
                     // Only the first thread reports
@@ -232,7 +234,7 @@ namespace AudioClickRepair.Data
             return suspectsList.ToArray();
         }
 
-        private void CheckSuspect((int start, double errorLevelAtDetection) suspect)
+        private void CheckSuspect((int start, int length, double errorLevelAtDetection) suspect)
         {
             var firstPatch = this.patchMaker.NewPatch(
                     suspect.start,
@@ -241,11 +243,7 @@ namespace AudioClickRepair.Data
 
             this.RegisterPatch(firstPatch);
 
-            var maxCheckLength =
-                this.settings.MaxLengthOfCorrection +
-                this.damageDetector.InputDataSize;
-
-            var end = suspect.start + maxCheckLength;
+            var end = suspect.start + suspect.length;
 
             for (var position = firstPatch.EndPosition + 1; position < end; position++)
             {
@@ -260,7 +258,7 @@ namespace AudioClickRepair.Data
 
                     this.RegisterPatch(patch);
 
-                    var newEnd = firstPatch.EndPosition + maxCheckLength;
+                    var newEnd = patch.StartPosition + suspect.length;
                     end = Math.Max(end, newEnd);
                 }
             }
