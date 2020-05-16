@@ -186,6 +186,31 @@
             <param name="rangeLength">Length of sequence to be copied.</param>
             <returns>RangeData.</returns>
         </member>
+        <member name="T:AudioClickRepair.Data.AudioProcessingSettings">
+            <summary>
+            Set of settings for audio data.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.AudioProcessingSettings.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.AudioProcessingSettings"/> class.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.AudioProcessingSettings.HistoryLengthSamples">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.AudioProcessingSettings.CoefficientsNumber">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.AudioProcessingSettings.ThresholdForDetection">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.AudioProcessingSettings.MaxLengthOfCorrection">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.AudioProcessingSettings.SampleRate">
+            <inheritdoc/>
+        </member>
         <member name="T:AudioClickRepair.Data.ChannelType">
             <summary>
             Audio channel type (left or right).

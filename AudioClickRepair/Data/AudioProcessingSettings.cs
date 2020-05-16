@@ -16,8 +16,8 @@ namespace AudioClickRepair.Data
         {
             this.HistoryLengthSamples = 512;
             this.CoefficientsNumber = 4;
-            this.ThresholdForDetection = 10;
-            this.MaxLengthOfCorrection = 250;
+            this.ThresholdForDetection = 7;
+            this.MaxLengthOfCorrection = 150;
         }
 
         /// <inheritdoc/>
