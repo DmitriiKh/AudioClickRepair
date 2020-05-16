@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface of a Patcher.
     /// </summary>
-    public interface IPatcher
+    internal interface IPatcher
     {
         /// <summary>
         /// Gets array containing sequence of patched samples of specified length

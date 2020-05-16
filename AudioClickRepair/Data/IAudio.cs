@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+
+// Make internal classes of whole the project visible to the Unit tests project
+[assembly: InternalsVisibleTo("NUnitTests")]
 
 namespace AudioClickRepair.Data
 {

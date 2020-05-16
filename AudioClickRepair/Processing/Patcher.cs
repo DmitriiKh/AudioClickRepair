@@ -14,7 +14,7 @@ namespace AudioClickRepair.Processing
     /// Replaces samples from immutable array using update function
     /// if the elements were patched.
     /// </summary>
-    public class Patcher : IPatcher
+    internal class Patcher : IPatcher
     {
         private readonly ImmutableArray<double> immutableArray;
         private readonly BlockingCollection<AbstractPatch> patchCollection;

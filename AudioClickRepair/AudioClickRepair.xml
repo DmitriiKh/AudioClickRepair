@@ -395,6 +395,29 @@
             <param name="inputData">Input data.</param>
             <returns>Result.</returns>
         </member>
+        <member name="T:AudioClickRepair.Processing.IPatcher">
+            <summary>
+            Interface of a Patcher.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IPatcher.GetRange(System.Int32,System.Int32,AudioClickRepair.Data.AbstractPatch)">
+            <summary>
+            Gets array containing sequence of patched samples of specified length
+            starting from the specified position.
+            </summary>
+            <param name="start">Start position of range.</param>
+            <param name="length">Length of range.</param>
+            <param name="anotherPatch">One more optional AbstractPatch
+            that is not in the Collection yet.</param>
+            <returns>Array of patched samples.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IPatcher.GetValue(System.Int32)">
+            <summary>
+            Returns patched value of a sample.
+            </summary>
+            <param name="position">Position of the required sample.</param>
+            <returns>Value of the sample.</returns>
+        </member>
         <member name="P:AudioClickRepair.Processing.IPatchMaker.InputDataSize">
             <summary>
             Gets size of input data array needed to perform calculations.
@@ -403,7 +426,8 @@
         </member>
         <member name="T:AudioClickRepair.Processing.Patcher">
             <summary>
-            Replaces samples from immutable array that were patched using update function.
+            Replaces samples from immutable array using update function
+            if the elements were patched.
             </summary>
         </member>
         <member name="M:AudioClickRepair.Processing.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{AudioClickRepair.Data.AbstractPatch},System.Func{AudioClickRepair.Data.AbstractPatch,System.Int32,System.Double})">
@@ -422,7 +446,17 @@
             </summary>
             <param name="start">Start position of range.</param>
             <param name="length">Length of range.</param>
+            <param name="anotherPatch">One more optional AbstractPatch
+            that is not in the Collection yet.</param>
             <returns>Array of patched samples.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.Patcher.GetValue(System.Int32)">
+            <summary>
+            Returns either value of sample from the immutable array or from a patch
+            (if the patch covers the position).
+            </summary>
+            <param name="position">Position of required sample.</param>
+            <returns>Value of sample.</returns>
         </member>
     </members>
 </doc>
