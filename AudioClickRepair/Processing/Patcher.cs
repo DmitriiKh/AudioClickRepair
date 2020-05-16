@@ -11,7 +11,8 @@ namespace AudioClickRepair.Processing
     using AudioClickRepair.Data;
 
     /// <summary>
-    /// Replaces samples from immutable array that were patched using update function.
+    /// Replaces samples from immutable array using update function
+    /// if the elements were patched.
     /// </summary>
     public class Patcher : IPatcher
     {
@@ -42,8 +43,10 @@ namespace AudioClickRepair.Processing
         /// </summary>
         /// <param name="start">Start position of range.</param>
         /// <param name="length">Length of range.</param>
+        /// <param name="anotherPatch">One more optional AbstractPatch
+        /// that is not in the Collection yet.</param>
         /// <returns>Array of patched samples.</returns>
-        public double[] GetRange(int start, int length, AbstractPatch anotherPatch)
+        public double[] GetRange(int start, int length, AbstractPatch anotherPatch = null)
         {
             var range = new ArrayFragment(
                 this.immutableArray,
@@ -65,6 +68,12 @@ namespace AudioClickRepair.Processing
             return range.GetInternalArray();
         }
 
+        /// <summary>
+        /// Returns either value of sample from the immutable array or from a patch
+        /// (if the patch covers the position).
+        /// </summary>
+        /// <param name="position">Position of required sample.</param>
+        /// <returns>Value of sample.</returns>
         public double GetValue(int position)
         {
             var patchForPosition = this.PatchForPosition(position);
