@@ -201,11 +201,175 @@
             Right audio channel.
             </summary>
         </member>
+        <member name="T:AudioClickRepair.Data.IAudio">
+            <summary>
+            Public interface of Mono and Stereo classes.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudio.IsStereo">
+            <summary>
+            Gets a value indicating whether the class contains stereo.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudio.LengthSamples">
+            <summary>
+            Gets length of audio data in samples.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudio.Settings">
+            <summary>
+            Gets audio settings associated with data inside the class.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <summary>
+            Asynchronously scans input data for damaged samples.
+            </summary>
+            <param name="status">IProress object to get reports on status of scanning.</param>
+            <param name="progress">IProress object to get reports on progress of scanning.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetTotalNumberOfPatches">
+            <summary>
+            Returns total number of patches applied to input data.
+            </summary>
+            <returns>Number of patches.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetNumberOfPatches(AudioClickRepair.Data.ChannelType)">
+            <summary>
+            Returns number of patches applied to channel.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>Number of patches.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetPatches(AudioClickRepair.Data.ChannelType)">
+            <summary>
+            Returns array of patches that were applied to channel during scanning.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>Array of patches.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.ChannelIsPreprocessed(AudioClickRepair.Data.ChannelType)">
+            <summary>
+            Returns true if the channel was preprocessed and ready for rescan.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>True if the channel was preprocessed.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetInputSample(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <summary>
+            Returns value of input sample from specified channel at specified position.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="position">Position of sample.</param>
+            <returns>Value of sample.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetOutputSample(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <summary>
+            Returns value of output sample from specified channel at specified position.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="position">Position of sample.</param>
+            <returns>Value of sample.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetPredictionErr(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <summary>
+            Returns prediction error from specified channel at specified position.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="position">Position of sample.</param>
+            <returns>Prediction error.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Data.IAudio.GetOutputArray(AudioClickRepair.Data.ChannelType)">
+            <summary>
+            Returns array of output samples from specified channel.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>Array of samples.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Data.IAudioProcessingSettings">
+            <summary>
+            Interface for audio settings.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudioProcessingSettings.HistoryLengthSamples">
+            <summary>
+            Gets or sets number of samples used to calculate prediction errors.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudioProcessingSettings.CoefficientsNumber">
+            <summary>
+            Gets or sets number of coefficients used to calculate prediction errors.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudioProcessingSettings.ThresholdForDetection">
+            <summary>
+            Gets or sets threshold for error level.
+            Error level is ratio of current prediction error value
+            to statistically normal error.
+            Lower threshold makes the algorithm more sensitive.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudioProcessingSettings.MaxLengthOfCorrection">
+            <summary>
+            Gets or sets max number of samples that can be reconstructed.
+            Lower value makes scanning faster, but longer sequences
+            of damaged samples may not be fixed.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.IAudioProcessingSettings.SampleRate">
+            <summary>
+            Gets or sets sample rate of audio data.
+            </summary>
+        </member>
         <member name="T:AudioClickRepair.Data.Mono">
             <summary>
                 Represents mono audio samples and includes information
                 about damaged samples.
             </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.#ctor(System.Double[],AudioClickRepair.Data.IAudioProcessingSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.Mono"/> class.
+            </summary>
+            <param name="samples">Input samples.</param>
+            <param name="settings">Settings associated with this audio data.</param>
+        </member>
+        <member name="P:AudioClickRepair.Data.Mono.IsStereo">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.Mono.LengthSamples">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.Mono.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetTotalNumberOfPatches">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetNumberOfPatches(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetPatches(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.ChannelIsPreprocessed(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetInputSample(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetOutputSample(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetPredictionErr(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Mono.GetOutputArray(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
         </member>
         <member name="T:AudioClickRepair.Data.Patch">
             <summary>
@@ -247,6 +411,50 @@
                 Represents stereo audio samples and includes information
                 about damaged samples.
             </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.#ctor(System.Double[],System.Double[],AudioClickRepair.Data.IAudioProcessingSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Data.Stereo"/> class.
+            </summary>
+            <param name="leftChannelSamples">Input samples (left channel).</param>
+            <param name="rightChannelSamples">Input samples (right channel.</param>
+            <param name="settings">Settings associated with this audio data.</param>
+        </member>
+        <member name="P:AudioClickRepair.Data.Stereo.IsStereo">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.Stereo.LengthSamples">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Data.Stereo.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetTotalNumberOfPatches">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetNumberOfPatches(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetPatches(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.ChannelIsPreprocessed(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetInputSample(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetOutputSample(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetPredictionErr(AudioClickRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.GetOutputArray(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
         </member>
         <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64">
             <summary>

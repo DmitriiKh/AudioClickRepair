@@ -38,10 +38,5 @@ namespace AudioClickRepair.Data
         /// Gets or sets sample rate of audio data.
         /// </summary>
         public int SampleRate { get; set; }
-
-        /// <summary>
-        /// Gets or sets max error. This property ill be removed.
-        /// </summary>
-        double MaxRegenerationError { get; set; }
     }
 }
