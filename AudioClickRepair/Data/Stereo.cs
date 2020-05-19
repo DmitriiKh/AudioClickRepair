@@ -41,7 +41,7 @@ namespace AudioClickRepair.Data
         public bool IsStereo => true;
 
         /// <inheritdoc/>
-        public int LengthSamples => this.leftChannel.Length;
+        public int LengthSamples => this.leftChannel.LengthSamples;
 
         /// <inheritdoc/>
         public IAudioProcessingSettings Settings { get; }
@@ -76,8 +76,8 @@ namespace AudioClickRepair.Data
         /// <inheritdoc/>
         public bool ChannelIsPreprocessed(ChannelType channelType) =>
             channelType == ChannelType.Left
-            ? this.leftChannel.IsReadyForScan
-            : this.rightChannel.IsReadyForScan;
+            ? this.leftChannel.IsPreprocessed
+            : this.rightChannel.IsPreprocessed;
 
         /// <inheritdoc/>
         public double GetInputSample(ChannelType channelType, int index) =>
