@@ -11,7 +11,7 @@ namespace AudioClickRepair.Data
     ///     Represents stereo audio samples and includes information
     ///     about damaged samples.
     /// </summary>
-    public sealed class Stereo : IAudio, IDisposable
+    public sealed class Stereo : IAudio
     {
         private readonly Channel leftChannel;
         private readonly Channel rightChannel;

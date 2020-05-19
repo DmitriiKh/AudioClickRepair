@@ -14,7 +14,7 @@ namespace AudioClickRepair.Data
     /// <summary>
     /// Public interface of Mono and Stereo classes.
     /// </summary>
-    public interface IAudio
+    public interface IAudio : IDisposable
     {
         /// <summary>
         /// Gets a value indicating whether the class contains stereo.

@@ -11,7 +11,7 @@ namespace AudioClickRepair.Data
     ///     Represents mono audio samples and includes information
     ///     about damaged samples.
     /// </summary>
-    public sealed class Mono : IAudio, IDisposable
+    public sealed class Mono : IAudio
     {
         private readonly Channel monoChannel;
 
