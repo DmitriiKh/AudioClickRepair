@@ -217,6 +217,14 @@
         <member name="P:AudioClickRepair.Data.AudioProcessingSettings.SampleRate">
             <inheritdoc/>
         </member>
+        <member name="T:AudioClickRepair.Data.Channel">
+            <summary>
+            Represents audio samples for one channel.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Data.Channel.Dispose">
+            <inheritdoc/>
+        </member>
         <member name="T:AudioClickRepair.Data.ChannelType">
             <summary>
             Audio channel type (left or right).
@@ -402,6 +410,9 @@
         <member name="M:AudioClickRepair.Data.Mono.GetOutputArray(AudioClickRepair.Data.ChannelType)">
             <inheritdoc/>
         </member>
+        <member name="M:AudioClickRepair.Data.Mono.Dispose">
+            <inheritdoc/>
+        </member>
         <member name="T:AudioClickRepair.Data.Patch">
             <summary>
             Contains information on sequences of damaged samples.
@@ -485,6 +496,9 @@
             <inheritdoc/>
         </member>
         <member name="M:AudioClickRepair.Data.Stereo.GetOutputArray(AudioClickRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Data.Stereo.Dispose">
             <inheritdoc/>
         </member>
         <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64">

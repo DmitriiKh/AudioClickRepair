@@ -4,15 +4,18 @@
 
 namespace AudioClickRepair.Data
 {
-    using AudioClickRepair.Processing;
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
+    using AudioClickRepair.Processing;
 
-    internal class Channel
+    /// <summary>
+    /// Represents audio samples for one channel.
+    /// </summary>
+    internal class Channel : IDisposable
     {
         private readonly BlockingCollection<AbstractPatch> patchCollection;
         private readonly ImmutableArray<double> input;
@@ -50,6 +53,12 @@ namespace AudioClickRepair.Data
             this.settings = settings;
 
             this.IsReadyForScan = false;
+        }
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            this.patchCollection.Dispose();
         }
 
         internal void GetReadyForScan(
