@@ -1,10 +1,16 @@
-﻿using System;
+﻿// <copyright file="AbstractFragment.cs" company="Dmitrii Khrustalev">
+// Copyright (c) Dmitrii Khrustalev. All rights reserved.
+// </copyright>
 
 namespace AudioClickRepair.Data
 {
+    /// <summary>
+    /// This class represents a fragment of an array.
+    /// The position indexes are the same as they would be in the original array.
+    /// </summary>
     public abstract class AbstractFragment
     {
-        protected double[] internalArray;
+        private double[] internalArray;
 
         /// <summary>
         /// Gets or sets relative position of the first sample of fragment.
@@ -38,23 +44,16 @@ namespace AudioClickRepair.Data
             this.internalArray[position - this.StartPosition];
 
         /// <summary>
-        /// Gets internal array of samples.
+        /// Gets internal array.
         /// </summary>
         /// <returns>Array of samples.</returns>
         public double[] GetInternalArray() => this.internalArray;
 
         /// <summary>
-        /// Replaces internal array.
+        /// Sets internal array.
         /// </summary>
-        /// <param name="replacementArray">New internal array.</param>
-        internal void SetInternalArray(double[] replacementArray)
-        {
-            if (replacementArray is null)
-            {
-                throw new ArgumentNullException(nameof(replacementArray));
-            }
-
-            this.internalArray = replacementArray;
-        }
+        /// <param name="array">New internal array.</param>
+        public void SetInternalArray(double[] array) =>
+            this.internalArray = array;
     }
 }

@@ -29,7 +29,7 @@ namespace AudioClickRepair.Data
             int startPosition,
             double errorLevelAtDetection)
         {
-            this.internalArray = patchedSamples;
+            this.SetInternalArray(patchedSamples);
             this.StartPosition = startPosition;
             this.ErrorLevelAtDetection = errorLevelAtDetection;
             this.Approved = true;

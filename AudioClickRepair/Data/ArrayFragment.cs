@@ -24,7 +24,7 @@ namespace AudioClickRepair.Data
                 throw new ArgumentNullException(nameof(internalArray));
             }
 
-            this.internalArray = internalArray;
+            this.SetInternalArray(internalArray);
             this.StartPosition = startPosition;
         }
 

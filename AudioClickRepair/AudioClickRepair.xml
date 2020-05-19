@@ -4,6 +4,12 @@
         <name>AudioClickRepair</name>
     </assembly>
     <members>
+        <member name="T:AudioClickRepair.Data.AbstractFragment">
+            <summary>
+            This class represents a fragment of an array.
+            The position indexes are the same as they would be in the original array.
+            </summary>
+        </member>
         <member name="P:AudioClickRepair.Data.AbstractFragment.StartPosition">
             <summary>
             Gets or sets relative position of the first sample of fragment.
@@ -35,15 +41,15 @@
         </member>
         <member name="M:AudioClickRepair.Data.AbstractFragment.GetInternalArray">
             <summary>
-            Gets internal array of samples.
+            Gets internal array.
             </summary>
             <returns>Array of samples.</returns>
         </member>
         <member name="M:AudioClickRepair.Data.AbstractFragment.SetInternalArray(System.Double[])">
             <summary>
-            Replaces internal array.
+            Sets internal array.
             </summary>
-            <param name="replacementArray">New internal array.</param>
+            <param name="array">New internal array.</param>
         </member>
         <member name="T:AudioClickRepair.Data.AbstractPatch">
             <summary>
