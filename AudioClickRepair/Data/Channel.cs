@@ -264,7 +264,9 @@ namespace AudioClickRepair.Data
                 this.patchMaker.InputDataSize,
                 this.damageDetector.InputDataSize);
 
-            var end = this.LengthSamples - this.patchMaker.InputDataSize;
+            var end = this.LengthSamples
+                - (this.patchMaker.InputDataSize
+                    + this.settings.MaxLengthOfCorrection);
 
             var part = Partitioner.Create(
                 start,
