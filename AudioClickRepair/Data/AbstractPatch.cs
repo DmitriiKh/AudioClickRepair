@@ -46,12 +46,19 @@ namespace AudioClickRepair.Data
         public double ErrorLevelAtDetection { get; }
 
         /// <summary>
-        /// Gets current error level.
+        /// Gets error level for the first sample of the patch.
         /// </summary>
         public double ErrorLevelAtStart { get; internal set; }
 
+        /// <summary>
+        /// Gets error that shows how forward predictions for the samples
+        /// inside of the patch are different from backward predictions.
+        /// </summary>
         public double ConnectionError { get; internal set; }
 
+        /// <summary>
+        /// Gets error level for the first three samples following of the patch.
+        /// </summary>
         public double ErrorLevelAfterEnd { get; internal set; }
 
         /// <summary>
@@ -140,6 +147,11 @@ namespace AudioClickRepair.Data
                    this.Length.GetHashCode();
 
         /// <summary>
+        /// Toggles approved state.
+        /// </summary>
+        public void ChangeApproved() => this.Approved = !this.Approved;
+
+        /// <summary>
         /// Invokes Updater method and then updates internal array,
         /// start position and current error level.
         /// </summary>
@@ -147,10 +159,5 @@ namespace AudioClickRepair.Data
         {
             this.Updater?.Invoke(this, EventArgs.Empty);
         }
-
-        /// <summary>
-        /// Toggles approved state.
-        /// </summary>
-        public void ChangeApproved() => this.Approved = !this.Approved;
     }
 }
