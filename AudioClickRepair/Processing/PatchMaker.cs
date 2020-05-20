@@ -58,6 +58,22 @@ namespace AudioClickRepair.Processing
             return this.BestOf(patches);
         }
 
+        private static bool ErrorsAreDropping(List<AbstractPatch> patches)
+        {
+            var length = NumberOfSamplesForAveraging;
+
+            var connectionErrors = patches.Select(p => p.ConnectionError).ToArray();
+            var errorsAfterEnd = patches.Select(p => p.ErrorLevelAfterEnd).ToArray();
+
+            var connectionErrorsDrop = connectionErrors.Reverse().Take(length).Average()
+                < connectionErrors.Reverse().Skip(length).Take(length).Average();
+
+            var errorsAfterEndDrop = errorsAfterEnd.Reverse().Take(length).Average()
+                < errorsAfterEnd.Reverse().Skip(length).Take(length).Average();
+
+            return connectionErrorsDrop || errorsAfterEndDrop;
+        }
+
         private List<AbstractPatch> PlayWithLength(
             int start,
             int minLengthOfCorrection,
@@ -83,7 +99,7 @@ namespace AudioClickRepair.Processing
                 // and errors are not dropping and also
                 // there are no suspicious samples after the last fixed sample
                 if (patches.Count > MinLengthForConvergeCheck
-                    && !this.ErrorsAreDropping(patches)
+                    && !ErrorsAreDropping(patches)
                     && newPatch.ErrorLevelAfterEnd < MaxErrorLevelAfterEnd)
                 {
                     break;
@@ -133,22 +149,6 @@ namespace AudioClickRepair.Processing
             }
 
             return bestPatch;
-        }
-
-        private bool ErrorsAreDropping(List<AbstractPatch> patches)
-        {
-            var length = NumberOfSamplesForAveraging;
-
-            var connectionErrors = patches.Select(p => p.ConnectionError).ToArray();
-            var errorsAfterEnd = patches.Select(p => p.ErrorLevelAfterEnd).ToArray();
-
-            var connectionErrorsDrop = connectionErrors.Reverse().Take(length).Average()
-                < connectionErrors.Reverse().Skip(length).Take(length).Average();
-
-            var errorsAfterEndDrop = errorsAfterEnd.Reverse().Take(length).Average()
-                < errorsAfterEnd.Reverse().Skip(length).Take(length).Average();
-
-            return connectionErrorsDrop || errorsAfterEndDrop;
         }
     }
 }
