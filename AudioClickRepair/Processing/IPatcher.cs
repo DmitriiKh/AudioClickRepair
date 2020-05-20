@@ -1,4 +1,8 @@
-﻿namespace AudioClickRepair.Processing
+﻿// <copyright file="IPatcher.cs" company="Dmitrii Khrustalev">
+// Copyright (c) Dmitrii Khrustalev. All rights reserved.
+// </copyright>
+
+namespace AudioClickRepair.Processing
 {
     /// <summary>
     /// Interface of a Patcher.
