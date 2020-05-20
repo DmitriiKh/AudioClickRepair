@@ -1,13 +1,18 @@
-﻿using System;
+﻿// <copyright file="FastBurgAlgorithm64.cs" company="Dmitrii Khrustalev">
+// Copyright (c) Dmitrii Khrustalev. All rights reserved.
+// </copyright>
+
+#pragma warning disable
+using System;
 
 namespace AudioClickRepair.Processing
 {
     /// <summary>
-    ///     Fast implimentation of Burg algorithm for real signals.
+    ///     Fast implementation of Burg algorithm for real signals.
     ///     For details see paper A Fast Implementation of Burg’s Method by Koen Vos.
     ///     FastBurgAlgorithm64 uses internal variables of type double
     /// </summary>
-    public class FastBurgAlgorithm64
+    internal class FastBurgAlgorithm64
     {
         private readonly double[] _xInputSignal;
 
