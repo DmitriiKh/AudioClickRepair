@@ -729,11 +729,41 @@
             <param name="position">Position of the required sample.</param>
             <returns>Value of the sample.</returns>
         </member>
+        <member name="T:AudioClickRepair.Processing.IPatchMaker">
+            <summary>
+            Creates patches.
+            </summary>
+        </member>
         <member name="P:AudioClickRepair.Processing.IPatchMaker.InputDataSize">
             <summary>
             Gets size of input data array needed to perform calculations.
             </summary>
             <returns>Size.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IPatchMaker.NewPatch(System.Int32,System.Int32,System.Double)">
+            <summary>
+            Create patch at position.
+            </summary>
+            <param name="startPosition">Start position for the new patch.</param>
+            <param name="maxLengthOfCorrection">Max limit for patch length.</param>
+            <param name="errorLevelAtDetection">Error level calculated on detection stage.</param>
+            <returns>New AbstractPatch.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Processing.IRegenerator">
+            <summary>
+            Regenerates sequence of audio samples.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Processing.IRegenerator.InputDataSize">
+            <summary>
+            Gets number of input samples needed in order to make regeneration.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IRegenerator.RestorePatch(AudioClickRepair.Data.AbstractPatch)">
+            <summary>
+            Restores the sequence of audio samples inside patch.
+            </summary>
+            <param name="patch">Patch that needs restoration.</param>
         </member>
         <member name="T:AudioClickRepair.Processing.Patcher">
             <summary>
@@ -768,6 +798,46 @@
             </summary>
             <param name="position">Position of required sample.</param>
             <returns>Value of sample.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Processing.PatchMaker">
+            <summary>
+            Creates patches.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.PatchMaker.#ctor(AudioClickRepair.Processing.IRegenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Processing.PatchMaker"/> class.
+            </summary>
+            <param name="regenerarator">IRegenerator for restoring samples
+            inside new patch.</param>
+        </member>
+        <member name="P:AudioClickRepair.Processing.PatchMaker.InputDataSize">
+            <summary>
+            <inheritdoc/>
+            </summary>
+        </member>
+        <member name="T:AudioClickRepair.Processing.Regenerator">
+            <summary>
+            Regenerates sequence of audio samples.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.Regenerator.#ctor(AudioClickRepair.Processing.IPatcher,AudioClickRepair.Processing.IPredictor,AudioClickRepair.Processing.IDetector)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Processing.Regenerator"/> class.
+            </summary>
+            <param name="inputSource">Source of input samples (IPatcher).</param>
+            <param name="predictor">Predictions calculator.</param>
+            <param name="detector">Error level calculator.</param>
+        </member>
+        <member name="P:AudioClickRepair.Processing.Regenerator.InputDataSize">
+            <summary>
+            Gets number of input samples on both sides of patch
+            needed in order to make regeneration.
+            |---------------|+++++|---------------|.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.Regenerator.RestorePatch(AudioClickRepair.Data.AbstractPatch)">
+            <inheritdoc/>
         </member>
     </members>
 </doc>

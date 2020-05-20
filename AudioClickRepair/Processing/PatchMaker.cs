@@ -1,11 +1,18 @@
-﻿namespace AudioClickRepair.Processing
+﻿// <copyright file="PatchMaker.cs" company="Dmitrii Khrustalev">
+// Copyright (c) Dmitrii Khrustalev. All rights reserved.
+// </copyright>
+
+namespace AudioClickRepair.Processing
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using AudioClickRepair.Data;
 
-    class PatchMaker : IPatchMaker
+    /// <summary>
+    /// Creates patches.
+    /// </summary>
+    internal class PatchMaker : IPatchMaker
     {
         private const int MaxLeftShift = 10;
         private const int NumberOfSamplesForAveraging = 5;
@@ -15,14 +22,21 @@
         private const double MaxErrorLevelAfterEnd = 1.5;
         private readonly IRegenerator regenerarator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PatchMaker"/> class.
+        /// </summary>
+        /// <param name="regenerarator">IRegenerator for restoring samples
+        /// inside new patch.</param>
         public PatchMaker(IRegenerator regenerarator)
         {
             this.regenerarator = regenerarator;
         }
 
+        /// <inheritdoc/>
         public int InputDataSize =>
             this.regenerarator.InputDataSize + MaxLeftShift;
 
+        /// <inheritdoc/>
         public AbstractPatch NewPatch(
             int position,
             int maxLengthOfCorrection,

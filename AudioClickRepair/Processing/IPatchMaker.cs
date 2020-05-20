@@ -14,7 +14,6 @@ namespace AudioClickRepair.Processing
         /// <summary>
         /// Gets size of input data array needed to perform calculations.
         /// </summary>
-        /// <returns>Size.</returns>
         int InputDataSize { get; }
 
         /// <summary>
