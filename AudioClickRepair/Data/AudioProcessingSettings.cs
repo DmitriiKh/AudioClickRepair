@@ -2,7 +2,7 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Data
+namespace CarefulAudioRepair.Data
 {
     /// <summary>
     /// Set of settings for audio data.

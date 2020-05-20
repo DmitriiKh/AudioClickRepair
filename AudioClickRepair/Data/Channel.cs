@@ -2,7 +2,7 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Data
+namespace CarefulAudioRepair.Data
 {
     using System;
     using System.Collections.Concurrent;
@@ -10,7 +10,7 @@ namespace AudioClickRepair.Data
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
-    using AudioClickRepair.Processing;
+    using CarefulAudioRepair.Processing;
 
     /// <summary>
     /// Represents audio samples for one channel.

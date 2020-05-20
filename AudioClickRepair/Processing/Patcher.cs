@@ -2,13 +2,13 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Immutable;
     using System.Linq;
-    using AudioClickRepair.Data;
+    using CarefulAudioRepair.Data;
 
     /// <summary>
     /// Replaces samples from immutable array using update function

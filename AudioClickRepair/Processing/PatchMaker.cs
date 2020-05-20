@@ -2,12 +2,12 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using AudioClickRepair.Data;
+    using CarefulAudioRepair.Data;
 
     /// <summary>
     /// Creates patches.

@@ -5,7 +5,7 @@
 #pragma warning disable
 using System;
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
     /// <summary>
     ///     Fast implementation of Burg algorithm for real signals.

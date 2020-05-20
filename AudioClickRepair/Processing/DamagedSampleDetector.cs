@@ -2,10 +2,10 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
     using System;
-    using AudioClickRepair.Data;
+    using CarefulAudioRepair.Data;
 
     /// <summary>
     /// Detects prediction error level as a ratio of current prediction error

@@ -2,7 +2,7 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
     /// <summary>
     /// Gives predictions for a sequence of samples using Fast Burg Algorithm.

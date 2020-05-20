@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 // Make internal classes of whole the project visible to the Unit tests project
 [assembly: InternalsVisibleTo("NUnitTests")]
 
-namespace AudioClickRepair.Data
+namespace CarefulAudioRepair.Data
 {
     /// <summary>
     /// Public interface of Mono and Stereo classes.

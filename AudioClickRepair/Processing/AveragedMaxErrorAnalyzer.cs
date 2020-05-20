@@ -2,7 +2,7 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
     using System;
     using System.Collections.Generic;

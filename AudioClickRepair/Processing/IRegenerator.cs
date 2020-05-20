@@ -2,9 +2,9 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-namespace AudioClickRepair.Processing
+namespace CarefulAudioRepair.Processing
 {
-    using AudioClickRepair.Data;
+    using CarefulAudioRepair.Data;
 
     /// <summary>
     /// Regenerates sequence of audio samples.
