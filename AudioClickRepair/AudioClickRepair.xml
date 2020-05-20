@@ -83,7 +83,18 @@
         </member>
         <member name="P:AudioClickRepair.Data.AbstractPatch.ErrorLevelAtStart">
             <summary>
-            Gets current error level.
+            Gets error level for the first sample of the patch.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.AbstractPatch.ConnectionError">
+            <summary>
+            Gets error that shows how forward predictions for the samples
+            inside of the patch are different from backward predictions.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Data.AbstractPatch.ErrorLevelAfterEnd">
+            <summary>
+            Gets error level for the first three samples following of the patch.
             </summary>
         </member>
         <member name="P:AudioClickRepair.Data.AbstractPatch.Approved">
@@ -159,15 +170,15 @@
             </summary>
             <returns>Returns hash code.</returns>
         </member>
+        <member name="M:AudioClickRepair.Data.AbstractPatch.ChangeApproved">
+            <summary>
+            Toggles approved state.
+            </summary>
+        </member>
         <member name="M:AudioClickRepair.Data.AbstractPatch.OnChange">
             <summary>
             Invokes Updater method and then updates internal array,
             start position and current error level.
-            </summary>
-        </member>
-        <member name="M:AudioClickRepair.Data.AbstractPatch.ChangeApproved">
-            <summary>
-            Toggles approved state.
             </summary>
         </member>
         <member name="T:AudioClickRepair.Data.ArrayFragment">
@@ -559,9 +570,46 @@
         <member name="M:AudioClickRepair.Data.Stereo.Dispose">
             <inheritdoc/>
         </member>
+        <member name="T:AudioClickRepair.Processing.AveragedMaxErrorAnalyzer">
+            <summary>
+            Analyzes errors. Finds maximums for each block of errors and than averages them.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Processing.AveragedMaxErrorAnalyzer.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="P:AudioClickRepair.Processing.AveragedMaxErrorAnalyzer.DefaultResult">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Processing.AveragedMaxErrorAnalyzer.GetResult(System.Double[])">
+            <inheritdoc/>
+        </member>
+        <member name="T:AudioClickRepair.Processing.DamagedSampleDetector">
+            <summary>
+            Detects prediction error level as a ratio of current prediction error
+            and normal prediction error.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.DamagedSampleDetector.#ctor(AudioClickRepair.Processing.IPatcher,AudioClickRepair.Processing.IPatcher,AudioClickRepair.Processing.IAnalyzer,AudioClickRepair.Processing.IPredictor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Processing.DamagedSampleDetector"/> class.
+            </summary>
+            <param name="predictionErrPatcher">Source of prediction errors
+            for normCalculator.</param>
+            <param name="inputPatcher">Source of input samples for
+            calculating prediction errors.</param>
+            <param name="normCalculator">Calculator for normal prediction errors.</param>
+            <param name="predictor">Calculator for predictions.</param>
+        </member>
+        <member name="P:AudioClickRepair.Processing.DamagedSampleDetector.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Processing.DamagedSampleDetector.GetErrorLevel(System.Int32,AudioClickRepair.Data.AbstractPatch)">
+            <inheritdoc/>
+        </member>
         <member name="T:AudioClickRepair.Processing.FastBurgAlgorithm64">
             <summary>
-                Fast implimentation of Burg algorithm for real signals.
+                Fast implementation of Burg algorithm for real signals.
                 For details see paper A Fast Implementation of Burg’s Method by Koen Vos.
                 FastBurgAlgorithm64 uses internal variables of type double
             </summary>
@@ -682,6 +730,29 @@
                 A Fast Implementation of Burg’s Method by Koen Vos
             </summary>
         </member>
+        <member name="T:AudioClickRepair.Processing.FastBurgPredictor">
+            <summary>
+            Gives predictions for a sequence of samples using Fast Burg Algorithm.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgPredictor.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AudioClickRepair.Processing.FastBurgPredictor"/> class.
+            </summary>
+            <param name="coefficientsNumber">Number of coefficients for
+            the Burg algorithm.</param>
+            <param name="historyLength">Number of samples used as input
+            for training the Burg Algorithm.</param>
+        </member>
+        <member name="P:AudioClickRepair.Processing.FastBurgPredictor.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgPredictor.GetForward(System.Double[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:AudioClickRepair.Processing.FastBurgPredictor.GetBackward(System.Double[])">
+            <inheritdoc/>
+        </member>
         <member name="T:AudioClickRepair.Processing.IAnalyzer">
             <summary>
             IAnalyzer interface.
@@ -705,6 +776,25 @@
             </summary>
             <param name="inputData">Input data.</param>
             <returns>Result.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Processing.IDetector">
+            <summary>
+            Detects prediction error level.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Processing.IDetector.InputDataSize">
+            <summary>
+            Gets size of input data needed to perform calculations.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IDetector.GetErrorLevel(System.Int32,AudioClickRepair.Data.AbstractPatch)">
+            <summary>
+            Returns prediction error level for a sample at specific position.
+            </summary>
+            <param name="position">Position of sample.</param>
+            <param name="anotherPatch">Additional patch that is not included
+            in the patch collection (optional).</param>
+            <returns>Prediction error level.</returns>
         </member>
         <member name="T:AudioClickRepair.Processing.IPatcher">
             <summary>
@@ -738,7 +828,6 @@
             <summary>
             Gets size of input data array needed to perform calculations.
             </summary>
-            <returns>Size.</returns>
         </member>
         <member name="M:AudioClickRepair.Processing.IPatchMaker.NewPatch(System.Int32,System.Int32,System.Double)">
             <summary>
@@ -748,6 +837,30 @@
             <param name="maxLengthOfCorrection">Max limit for patch length.</param>
             <param name="errorLevelAtDetection">Error level calculated on detection stage.</param>
             <returns>New AbstractPatch.</returns>
+        </member>
+        <member name="T:AudioClickRepair.Processing.IPredictor">
+            <summary>
+            Gives predictions for a sequence of samples.
+            </summary>
+        </member>
+        <member name="P:AudioClickRepair.Processing.IPredictor.InputDataSize">
+            <summary>
+            Gets number of samples needed to make calculations.
+            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IPredictor.GetForward(System.Double[])">
+            <summary>
+            Returns forward prediction for the sequence of samples.
+            </summary>
+            <param name="samples">Sequence of samples.</param>
+            <returns>Forward prediction.</returns>
+        </member>
+        <member name="M:AudioClickRepair.Processing.IPredictor.GetBackward(System.Double[])">
+            <summary>
+            Returns backward prediction for the sequence of samples.
+            </summary>
+            <param name="samples">Sequence of samples.</param>
+            <returns>Backward prediction.</returns>
         </member>
         <member name="T:AudioClickRepair.Processing.IRegenerator">
             <summary>
@@ -812,9 +925,10 @@
             inside new patch.</param>
         </member>
         <member name="P:AudioClickRepair.Processing.PatchMaker.InputDataSize">
-            <summary>
             <inheritdoc/>
-            </summary>
+        </member>
+        <member name="M:AudioClickRepair.Processing.PatchMaker.NewPatch(System.Int32,System.Int32,System.Double)">
+            <inheritdoc/>
         </member>
         <member name="T:AudioClickRepair.Processing.Regenerator">
             <summary>
