@@ -7,14 +7,21 @@ namespace AudioClickRepair.Processing
     using System;
     using AudioClickRepair.Data;
 
+    /// <summary>
+    /// Regenerates sequence of audio samples.
+    /// </summary>
     internal class Regenerator : IRegenerator
     {
         private readonly IPatcher inputSource;
         private readonly IPredictor predictor;
         private readonly IDetector detector;
 
-        public int InputDataSize => this.predictor.InputDataSize;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Regenerator"/> class.
+        /// </summary>
+        /// <param name="inputSource">Source of input samples (IPatcher).</param>
+        /// <param name="predictor">Predictions calculator.</param>
+        /// <param name="detector">Error level calculator.</param>
         public Regenerator(
             IPatcher inputSource,
             IPredictor predictor,
@@ -25,6 +32,14 @@ namespace AudioClickRepair.Processing
             this.detector = detector;
         }
 
+        /// <summary>
+        /// Gets number of input samples on both sides of patch
+        /// needed in order to make regeneration.
+        /// |---------------|+++++|---------------|.
+        /// </summary>
+        public int InputDataSize => this.predictor.InputDataSize;
+
+        /// <inheritdoc/>
         public void RestorePatch(AbstractPatch patch)
         {
             var forwardRestoredSamples = this.GetForwardArray(patch);
