@@ -6,6 +6,9 @@ namespace AudioClickRepair.Processing
 {
     using AudioClickRepair.Data;
 
+    /// <summary>
+    /// Creates patches.
+    /// </summary>
     internal interface IPatchMaker
     {
         /// <summary>
@@ -14,8 +17,15 @@ namespace AudioClickRepair.Processing
         /// <returns>Size.</returns>
         int InputDataSize { get; }
 
+        /// <summary>
+        /// Create patch at position.
+        /// </summary>
+        /// <param name="startPosition">Start position for the new patch.</param>
+        /// <param name="maxLengthOfCorrection">Max limit for patch length.</param>
+        /// <param name="errorLevelAtDetection">Error level calculated on detection stage.</param>
+        /// <returns>New AbstractPatch.</returns>
         AbstractPatch NewPatch(
-            int position,
+            int startPosition,
             int maxLengthOfCorrection,
             double errorLevelAtDetection);
     }
