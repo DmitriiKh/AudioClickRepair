@@ -1,0 +1,957 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CarefulAudioRepair</name>
+    </assembly>
+    <members>
+        <member name="T:CarefulAudioRepair.Data.AbstractFragment">
+            <summary>
+            This class represents a fragment of an array.
+            The position indexes are the same as they would be in the original array.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractFragment.StartPosition">
+            <summary>
+            Gets or sets relative position of the first sample of fragment.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractFragment.EndPosition">
+            <summary>
+            Gets relative position of the last sample of fragment.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractFragment.Length">
+            <summary>
+            Gets length of fragment.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractFragment.SetValue(System.Int32,System.Double)">
+            <summary>
+            Sets value of internal array using relative position.
+            </summary>
+            <param name="position">Relative position.</param>
+            <param name="value">Value.</param>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractFragment.GetValue(System.Int32)">
+            <summary>
+            Gets value from internal array using relative position.
+            </summary>
+            <param name="position">Relative position.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractFragment.GetInternalArray">
+            <summary>
+            Gets internal array.
+            </summary>
+            <returns>Array of samples.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractFragment.SetInternalArray(System.Double[])">
+            <summary>
+            Sets internal array.
+            </summary>
+            <param name="array">New internal array.</param>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.AbstractPatch">
+            <summary>
+            Basic behavior for Patch class.
+            </summary>
+        </member>
+        <member name="F:CarefulAudioRepair.Data.AbstractPatch.MinimalPredictionError">
+            <summary>
+            Minimal allowed value for prediction errors.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.#ctor(System.Double[],System.Int32,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.AbstractPatch"/> class.
+            </summary>
+            <param name="patchedSamples">Array of corrected samples.</param>
+            <param name="startPosition">Relative position of beginning of a sequence of
+            samples in the input audio data.</param>
+            <param name="errorLevelAtDetection">Prediction error to average
+            error ratio.</param>
+        </member>
+        <member name="E:CarefulAudioRepair.Data.AbstractPatch.Updater">
+            <summary>
+            Updater that called when patch needs updating.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractPatch.ErrorLevelAtDetection">
+            <summary>
+            Gets error level at the start position that was found at detection process.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractPatch.ErrorLevelAtStart">
+            <summary>
+            Gets error level for the first sample of the patch.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractPatch.ConnectionError">
+            <summary>
+            Gets error that shows how forward predictions for the samples
+            inside of the patch are different from backward predictions.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractPatch.ErrorLevelAfterEnd">
+            <summary>
+            Gets error level for the first three samples following of the patch.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AbstractPatch.Approved">
+            <summary>
+            Gets or sets a value indicating whether patch was approved by user.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.op_Equality(CarefulAudioRepair.Data.AbstractPatch,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares start positions and lengths of operands.
+            </summary>
+            <param name="left">First operand.</param>
+            <param name="right">Second operand.</param>
+            <returns>Returns true if start positions and lengths of operands are equal.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.op_Inequality(CarefulAudioRepair.Data.AbstractPatch,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares start positions and lengths of operands.
+            </summary>
+            <param name="left">First operand.</param>
+            <param name="right">Second operand.</param>
+            <returns>Returns true if start positions and lengths of operands are not equal.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.op_LessThan(CarefulAudioRepair.Data.AbstractPatch,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares start positions of operands.
+            </summary>
+            <param name="left">First operand.</param>
+            <param name="right">Second operand.</param>
+            <returns>Returns true if start position of the first operand is less.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.op_LessThanOrEqual(CarefulAudioRepair.Data.AbstractPatch,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares start positions of operands.
+            </summary>
+            <param name="left">First operand.</param>
+            <param name="right">Second operand.</param>
+            <returns>Returns true if start position of the first operand is less or equal.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.op_GreaterThanOrEqual(CarefulAudioRepair.Data.AbstractPatch,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares start positions of operands.
+            </summary>
+            <param name="left">First operand.</param>
+            <param name="right">Second operand.</param>
+            <returns>Returns true if start position of the first operand is larger or equal.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.op_GreaterThan(CarefulAudioRepair.Data.AbstractPatch,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares start positions of operands.
+            </summary>
+            <param name="left">First operand.</param>
+            <param name="right">Second operand.</param>
+            <returns>Returns true if start position of the first operand is larger.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.CompareTo(CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Compares by position.
+            </summary>
+            <param name="otherPatch">Other instance.</param>
+            <returns>Result of CompareTo of StartPosition.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.Equals(System.Object)">
+            <summary>
+            Checks if start positions are equal.
+            </summary>
+            <param name="obj">Object.</param>
+            <returns>Returns true if start positions are equal.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.GetHashCode">
+            <summary>
+            Gets hash code based on start position and length.
+            </summary>
+            <returns>Returns hash code.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.ChangeApproved">
+            <summary>
+            Toggles approved state.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AbstractPatch.OnChange">
+            <summary>
+            Invokes Updater method and then updates internal array,
+            start position and current error level.
+            </summary>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.ArrayFragment">
+            <summary>
+            Contains a sequence of samples from a larger array.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.ArrayFragment.#ctor(System.Double[],System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.ArrayFragment"/> class.
+            </summary>
+            <param name="internalArray">Contains short sequence of samples.</param>
+            <param name="startPosition">Relative position of the first sample.</param>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.ArrayFragment.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.ArrayFragment"/> class
+            and copies samples from immutable array.
+            </summary>
+            <param name="immutableArray">Source of samples.</param>
+            <param name="rangeStart">Relative position of the first sample.</param>
+            <param name="rangeLength">Length of sequence to be copied.</param>
+            <returns>RangeData.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.AudioProcessingSettings">
+            <summary>
+            Set of settings for audio data.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.AudioProcessingSettings.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.AudioProcessingSettings"/> class.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AudioProcessingSettings.HistoryLengthSamples">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AudioProcessingSettings.CoefficientsNumber">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AudioProcessingSettings.ThresholdForDetection">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AudioProcessingSettings.MaxLengthOfCorrection">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.AudioProcessingSettings.SampleRate">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.Channel">
+            <summary>
+            Represents audio samples for one channel.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.#ctor(System.Double[],CarefulAudioRepair.Data.IAudioProcessingSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Channel"/> class.
+            </summary>
+            <param name="inputSamples">Input audio samples.</param>
+            <param name="settings">Audio setting.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Channel.IsPreprocessed">
+            <summary>
+            Gets a value indicating whether scan was performed once on this data
+            so the prediction errors were calculated.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Channel.LengthSamples">
+            <summary>
+            Gets length of audio in samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Channel.NumberOfPatches">
+            <summary>
+            Gets number of patches.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <summary>
+            Asynchronously scans audio for damaged samples and repairs them.
+            </summary>
+            <param name="status">Parameter to report status through.</param>
+            <param name="progress">Parameter to report progress through.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.GetAllPatches">
+            <summary>
+            Returns array of patches generated by ScanAsync method.
+            </summary>
+            <returns>Array of patches.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.GetInputSample(System.Int32)">
+            <summary>
+            Returns value of input sample at position.
+            </summary>
+            <param name="position">Position of input sample.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.GetOutputSample(System.Int32)">
+            <summary>
+            Returns value of output sample at position.
+            </summary>
+            <param name="position">Position of output sample.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.GetPredictionErr(System.Int32)">
+            <summary>
+            Returns value of prediction error at position.
+            </summary>
+            <param name="position">Position of prediction error.</param>
+            <returns>Value.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.ChannelType">
+            <summary>
+            Audio channel type (left or right).
+            </summary>
+        </member>
+        <member name="F:CarefulAudioRepair.Data.ChannelType.Left">
+            <summary>
+            Left audio channel.
+            </summary>
+        </member>
+        <member name="F:CarefulAudioRepair.Data.ChannelType.Right">
+            <summary>
+            Right audio channel.
+            </summary>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.IAudio">
+            <summary>
+            Public interface of Mono and Stereo classes.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudio.IsStereo">
+            <summary>
+            Gets a value indicating whether the class contains stereo.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudio.LengthSamples">
+            <summary>
+            Gets length of audio data in samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudio.Settings">
+            <summary>
+            Gets audio settings associated with data inside the class.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <summary>
+            Asynchronously scans input data for damaged samples.
+            </summary>
+            <param name="status">IProress object to get reports on status of scanning.</param>
+            <param name="progress">IProress object to get reports on progress of scanning.</param>
+            <returns>Task.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetTotalNumberOfPatches">
+            <summary>
+            Returns total number of patches applied to input data.
+            </summary>
+            <returns>Number of patches.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetNumberOfPatches(CarefulAudioRepair.Data.ChannelType)">
+            <summary>
+            Returns number of patches applied to channel.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>Number of patches.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetPatches(CarefulAudioRepair.Data.ChannelType)">
+            <summary>
+            Returns array of patches that were applied to channel during scanning.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>Array of patches.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.ChannelIsPreprocessed(CarefulAudioRepair.Data.ChannelType)">
+            <summary>
+            Returns true if the channel was preprocessed and ready for rescan.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>True if the channel was preprocessed.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetInputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <summary>
+            Returns value of input sample from specified channel at specified position.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="position">Position of sample.</param>
+            <returns>Value of sample.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetOutputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <summary>
+            Returns value of output sample from specified channel at specified position.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="position">Position of sample.</param>
+            <returns>Value of sample.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetPredictionErr(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <summary>
+            Returns prediction error from specified channel at specified position.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="position">Position of sample.</param>
+            <returns>Prediction error.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetOutputArray(CarefulAudioRepair.Data.ChannelType)">
+            <summary>
+            Returns array of output samples from specified channel.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <returns>Array of samples.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.IAudioProcessingSettings">
+            <summary>
+            Interface for audio settings.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudioProcessingSettings.HistoryLengthSamples">
+            <summary>
+            Gets or sets number of samples used to calculate prediction errors.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudioProcessingSettings.CoefficientsNumber">
+            <summary>
+            Gets or sets number of coefficients used to calculate prediction errors.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudioProcessingSettings.ThresholdForDetection">
+            <summary>
+            Gets or sets threshold for error level.
+            Error level is ratio of current prediction error value
+            to statistically normal error.
+            Lower threshold makes the algorithm more sensitive.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudioProcessingSettings.MaxLengthOfCorrection">
+            <summary>
+            Gets or sets max number of samples that can be reconstructed.
+            Lower value makes scanning faster, but longer sequences
+            of damaged samples may not be fixed.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.IAudioProcessingSettings.SampleRate">
+            <summary>
+            Gets or sets sample rate of audio data.
+            </summary>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.Mono">
+            <summary>
+                Represents mono audio samples and includes information
+                about damaged samples.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.#ctor(System.Double[],CarefulAudioRepair.Data.IAudioProcessingSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Mono"/> class.
+            </summary>
+            <param name="samples">Input samples.</param>
+            <param name="settings">Settings associated with this audio data.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Mono.IsStereo">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Mono.LengthSamples">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Mono.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetTotalNumberOfPatches">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetNumberOfPatches(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetPatches(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.ChannelIsPreprocessed(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetInputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetOutputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetPredictionErr(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetOutputArray(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.Patch">
+            <summary>
+            Contains information on sequences of damaged samples.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Patch.#ctor(System.Double[],System.Int32,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Patch"/> class.
+            </summary>
+            <param name="patchedSamples">Array of corrected samples.</param>
+            <param name="startPosition">Relative position of beginning of a sequence of
+            samples in the input audio data.</param>
+            <param name="errorLevelAtDetection">Prediction error to average
+            error ratio.</param>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Patch.ExpandLeft">
+            <summary>
+            Expands patch on beginning.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Patch.ShrinkLeft">
+            <summary>
+            Shortens patch on beginning.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Patch.ShrinkRight">
+            <summary>
+            Shortens patch on end.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Patch.ExpandRight">
+            <summary>
+            Expands patch on end.
+            </summary>
+        </member>
+        <member name="T:CarefulAudioRepair.Data.Stereo">
+            <summary>
+                Represents stereo audio samples and includes information
+                about damaged samples.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.#ctor(System.Double[],System.Double[],CarefulAudioRepair.Data.IAudioProcessingSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Stereo"/> class.
+            </summary>
+            <param name="leftChannelSamples">Input samples (left channel).</param>
+            <param name="rightChannelSamples">Input samples (right channel.</param>
+            <param name="settings">Settings associated with this audio data.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Stereo.IsStereo">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Stereo.LengthSamples">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Data.Stereo.Settings">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetTotalNumberOfPatches">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetNumberOfPatches(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetPatches(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.ChannelIsPreprocessed(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetInputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetOutputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetPredictionErr(CarefulAudioRepair.Data.ChannelType,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetOutputArray(CarefulAudioRepair.Data.ChannelType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.AveragedMaxErrorAnalyzer">
+            <summary>
+            Analyzes errors. Finds maximums for each block of errors and than averages them.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.AveragedMaxErrorAnalyzer.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.AveragedMaxErrorAnalyzer.DefaultResult">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.AveragedMaxErrorAnalyzer.GetResult(System.Double[])">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.DamagedSampleDetector">
+            <summary>
+            Detects prediction error level as a ratio of current prediction error
+            and normal prediction error.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.DamagedSampleDetector.#ctor(CarefulAudioRepair.Processing.IPatcher,CarefulAudioRepair.Processing.IPatcher,CarefulAudioRepair.Processing.IAnalyzer,CarefulAudioRepair.Processing.IPredictor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.DamagedSampleDetector"/> class.
+            </summary>
+            <param name="predictionErrPatcher">Source of prediction errors
+            for normCalculator.</param>
+            <param name="inputPatcher">Source of input samples for
+            calculating prediction errors.</param>
+            <param name="normCalculator">Calculator for normal prediction errors.</param>
+            <param name="predictor">Calculator for predictions.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.DamagedSampleDetector.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.DamagedSampleDetector.GetErrorLevel(System.Int32,CarefulAudioRepair.Data.AbstractPatch)">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.FastBurgAlgorithm64">
+            <summary>
+                Fast implementation of Burg algorithm for real signals.
+                For details see paper A Fast Implementation of Burg’s Method by Koen Vos.
+                FastBurgAlgorithm64 uses internal variables of type double
+            </summary>
+        </member>
+        <member name="F:CarefulAudioRepair.Processing.FastBurgAlgorithm64._absolutePosition">
+            <summary>
+                Position in x_inputSignal that we need prediction for.
+            </summary>
+        </member>
+        <member name="F:CarefulAudioRepair.Processing.FastBurgAlgorithm64._deltaRAndAProduct">
+            <summary>
+                Product of deltaR matrix and a_predictionCoefs
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.Train(System.Int32,System.Int32,System.Int32)">
+            <summary>
+                Calculates prediction coefficients for one sample using CPU
+            </summary>
+            <param name="position">
+                Position in inputSignal that we need
+                prediction for. Must be greater than historyLengthSamples
+            </param>
+            <param name="coefficientsNumber">
+                Number of prediction coefficients
+                that will be calculated. Greater number gives more accurate
+                prediction but takes more time to calculate
+            </param>
+            <param name="historyLengthSamples">
+                Number of samples that will
+                be used to calculate prediction coefficients
+            </param>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.CreateInternalVariables">
+            <summary>
+                Creates internal variables with desirable length
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.GetForwardPrediction">
+            <summary>
+                Returns forward prediction based on prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.GetBackwardPrediction">
+            <summary>
+                Returns backward prediction based on prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.GetPredictionCoefs">
+            <summary>
+                Returns prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.GetReflectionCoefs">
+            <summary>
+                Returns prediction coefficients that were
+                previously calculated with Train() method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.UpdateG">
+            <summary>
+                Updates vector g. For details see step 7 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.ComputeDeltaRMultByA">
+            <summary>
+                Calculates vector deltaRAndAProduct. For details see step 6
+                of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.UpdateR">
+            <summary>
+                Updates vector r. For details see step 5 of algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.UpdatePredictionCoefs">
+            <summary>
+                Updates vector of prediction coefficients. For details see step 2 of
+                algorithm on page 3 of A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.ComputeReflectionCoef">
+            <summary>
+                Computes vector of reflection coefficients. For details see step 1
+                of algorithm on page 3 of A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.JinversOrder(System.Int32,System.Int32)">
+            <summary>
+                Inverts index to flip a vector instead of multiplication with J matrix.
+                For details see (12) on page 2 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+            <param name="index">from 0 to max</param>
+            <param name="max">positive number</param>
+            <returns></returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.Initialization">
+            <summary>
+                Initializes i_iterationCounter and vectors. For details see step 0 of
+                algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.FindAutocorrelations">
+            <summary>
+                Calculates autocorrelations. For details see step 0 of
+                algorithm on page 3 of
+                A Fast Implementation of Burg’s Method by Koen Vos
+            </summary>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.FastBurgPredictor">
+            <summary>
+            Gives predictions for a sequence of samples using Fast Burg Algorithm.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgPredictor.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.FastBurgPredictor"/> class.
+            </summary>
+            <param name="coefficientsNumber">Number of coefficients for
+            the Burg algorithm.</param>
+            <param name="historyLength">Number of samples used as input
+            for training the Burg Algorithm.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.FastBurgPredictor.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgPredictor.GetForward(System.Double[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.FastBurgPredictor.GetBackward(System.Double[])">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.IAnalyzer">
+            <summary>
+            IAnalyzer interface.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.IAnalyzer.InputDataSize">
+            <summary>
+            Gets size of input data array needed to perform calculations.
+            </summary>
+            <returns>Size.</returns>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.IAnalyzer.DefaultResult">
+            <summary>
+            Gets default result. Can be used if calculation can not be done.
+            </summary>
+            <returns>Default result.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IAnalyzer.GetResult(System.Double[])">
+            <summary>
+            Returns result of calculation.
+            </summary>
+            <param name="inputData">Input data.</param>
+            <returns>Result.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.IDetector">
+            <summary>
+            Detects prediction error level.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.IDetector.InputDataSize">
+            <summary>
+            Gets size of input data needed to perform calculations.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IDetector.GetErrorLevel(System.Int32,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Returns prediction error level for a sample at specific position.
+            </summary>
+            <param name="position">Position of sample.</param>
+            <param name="anotherPatch">Additional patch that is not included
+            in the patch collection (optional).</param>
+            <returns>Prediction error level.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.IPatcher">
+            <summary>
+            Interface of a Patcher.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IPatcher.GetRange(System.Int32,System.Int32,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Gets array containing sequence of patched samples of specified length
+            starting from the specified position.
+            </summary>
+            <param name="start">Start position of range.</param>
+            <param name="length">Length of range.</param>
+            <param name="anotherPatch">One more optional AbstractPatch
+            that is not in the Collection yet.</param>
+            <returns>Array of patched samples.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IPatcher.GetValue(System.Int32)">
+            <summary>
+            Returns patched value of a sample.
+            </summary>
+            <param name="position">Position of the required sample.</param>
+            <returns>Value of the sample.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.IPatchMaker">
+            <summary>
+            Creates patches.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.IPatchMaker.InputDataSize">
+            <summary>
+            Gets size of input data array needed to perform calculations.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IPatchMaker.NewPatch(System.Int32,System.Int32,System.Double)">
+            <summary>
+            Create patch at position.
+            </summary>
+            <param name="startPosition">Start position for the new patch.</param>
+            <param name="maxLengthOfCorrection">Max limit for patch length.</param>
+            <param name="errorLevelAtDetection">Error level calculated on detection stage.</param>
+            <returns>New AbstractPatch.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.IPredictor">
+            <summary>
+            Gives predictions for a sequence of samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.IPredictor.InputDataSize">
+            <summary>
+            Gets number of samples needed to make calculations.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IPredictor.GetForward(System.Double[])">
+            <summary>
+            Returns forward prediction for the sequence of samples.
+            </summary>
+            <param name="samples">Sequence of samples.</param>
+            <returns>Forward prediction.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IPredictor.GetBackward(System.Double[])">
+            <summary>
+            Returns backward prediction for the sequence of samples.
+            </summary>
+            <param name="samples">Sequence of samples.</param>
+            <returns>Backward prediction.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.IRegenerator">
+            <summary>
+            Regenerates sequence of audio samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.IRegenerator.InputDataSize">
+            <summary>
+            Gets number of input samples needed in order to make regeneration.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IRegenerator.RestorePatch(CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Restores the sequence of audio samples inside patch.
+            </summary>
+            <param name="patch">Patch that needs restoration.</param>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.Patcher">
+            <summary>
+            Replaces samples from immutable array using update function
+            if the elements were patched.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{CarefulAudioRepair.Data.AbstractPatch},System.Func{CarefulAudioRepair.Data.AbstractPatch,System.Int32,System.Double})">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.Patcher"/> class.
+            </summary>
+            <param name="immutableArray">Immutable array of samples.</param>
+            <param name="patchCollection">Collection of patches.</param>
+            <param name="updateFunc">Function to call to get the patched value.
+            Example: (patch, position) => patch.GetOutputSample(position).</param>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Patcher.GetRange(System.Int32,System.Int32,CarefulAudioRepair.Data.AbstractPatch)">
+            <summary>
+            Gets array containing sequence of patched samples of specified length
+            starting from the specified position.
+            </summary>
+            <param name="start">Start position of range.</param>
+            <param name="length">Length of range.</param>
+            <param name="anotherPatch">One more optional AbstractPatch
+            that is not in the Collection yet.</param>
+            <returns>Array of patched samples.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Patcher.GetValue(System.Int32)">
+            <summary>
+            Returns either value of sample from the immutable array or from a patch
+            (if the patch covers the position).
+            </summary>
+            <param name="position">Position of required sample.</param>
+            <returns>Value of sample.</returns>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.PatchMaker">
+            <summary>
+            Creates patches.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.PatchMaker.#ctor(CarefulAudioRepair.Processing.IRegenerator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.PatchMaker"/> class.
+            </summary>
+            <param name="regenerarator">IRegenerator for restoring samples
+            inside new patch.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.PatchMaker.InputDataSize">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.PatchMaker.NewPatch(System.Int32,System.Int32,System.Double)">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.Regenerator">
+            <summary>
+            Regenerates sequence of audio samples.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Regenerator.#ctor(CarefulAudioRepair.Processing.IPatcher,CarefulAudioRepair.Processing.IPredictor,CarefulAudioRepair.Processing.IDetector)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.Regenerator"/> class.
+            </summary>
+            <param name="inputSource">Source of input samples (IPatcher).</param>
+            <param name="predictor">Predictions calculator.</param>
+            <param name="detector">Error level calculator.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.Regenerator.InputDataSize">
+            <summary>
+            Gets number of input samples on both sides of patch
+            needed in order to make regeneration.
+            |---------------|+++++|---------------|.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Regenerator.RestorePatch(CarefulAudioRepair.Data.AbstractPatch)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>
