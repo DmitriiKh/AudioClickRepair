@@ -30,6 +30,11 @@ namespace CarefulAudioRepair.Processing
                 throw new ArgumentNullException(nameof(errors));
             }
 
+            if (errors.Length != this.InputDataSize)
+            {
+                throw new ArgumentException("Incorrect size of " + nameof(errors));
+            }
+
             return this.Slice(errors)
                 .Select(block => block.Select(Math.Abs).Max())
                 .Average();
