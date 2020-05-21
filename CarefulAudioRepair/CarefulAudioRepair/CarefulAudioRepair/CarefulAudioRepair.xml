@@ -953,5 +953,26 @@
         <member name="M:CarefulAudioRepair.Processing.Regenerator.RestorePatch(CarefulAudioRepair.Data.AbstractPatch)">
             <inheritdoc/>
         </member>
+        <member name="T:CarefulAudioRepair.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Properties.Resources.Incorrect_size_of_errors">
+            <summary>
+              Looks up a localized string similar to Incorrect size of .
+            </summary>
+        </member>
     </members>
 </doc>
