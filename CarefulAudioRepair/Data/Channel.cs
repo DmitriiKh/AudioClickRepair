@@ -176,7 +176,6 @@ namespace CarefulAudioRepair.Data
 
             if (start >= end)
             {
-                progress.Report(100);
                 return errors;
             }
 
