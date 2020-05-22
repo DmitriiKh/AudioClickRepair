@@ -33,7 +33,8 @@ namespace CarefulAudioRepair.Processing
 
             if (errors.Length != this.InputDataSize)
             {
-                throw new ArgumentException(Resources.Incorrect_size_of_errors + nameof(errors));
+                throw new ArgumentException(
+                    Resources.Incorrect_size_of_errors + nameof(errors));
             }
 
             return this.Slice(errors)

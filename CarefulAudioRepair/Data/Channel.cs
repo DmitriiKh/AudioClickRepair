@@ -211,7 +211,10 @@ namespace CarefulAudioRepair.Data
 
             var suspects = this.DetectSuspiciousSamples(status, progress);
 
-            this.GenerateNewPatches(suspects, status, progress);
+            if (suspects.Any())
+            {
+                this.GenerateNewPatches(suspects, status, progress);
+            }
 
             status.Report(string.Empty);
             progress.Report(100);
