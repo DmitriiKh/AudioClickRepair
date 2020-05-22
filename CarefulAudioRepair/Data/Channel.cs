@@ -173,6 +173,13 @@ namespace CarefulAudioRepair.Data
 
             var start = inputDataSize;
             var end = this.LengthSamples;
+
+            if (start >= end)
+            {
+                progress.Report(100);
+                return errors;
+            }
+
             var chunkSize = Math.Max(
                 inputDataSize,
                 (end - start) / Environment.ProcessorCount);
@@ -274,7 +281,7 @@ namespace CarefulAudioRepair.Data
                 - (this.patchMaker.InputDataSize
                     + this.settings.MaxLengthOfCorrection);
 
-            if (start > end)
+            if (start >= end)
             {
                 progress.Report(100);
                 return suspectsList.ToArray();
