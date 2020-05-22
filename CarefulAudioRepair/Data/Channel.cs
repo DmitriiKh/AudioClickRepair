@@ -171,10 +171,14 @@ namespace CarefulAudioRepair.Data
 
             var inputDataSize = this.predictor.InputDataSize;
 
+            var start = inputDataSize;
+            var end = this.LengthSamples;
+            var chunkSize = (this.LengthSamples - inputDataSize) / Environment.ProcessorCount;
+
             var part = Partitioner.Create(
-                inputDataSize,
-                this.LengthSamples,
-                (this.LengthSamples - inputDataSize) / Environment.ProcessorCount);
+                start,
+                end,
+                chunkSize);
 
             Parallel.ForEach(part, (range, state, index) =>
             {
