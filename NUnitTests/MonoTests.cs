@@ -15,6 +15,9 @@ namespace NUnitTests
 
         [TestCase(0)]
         [TestCase(10)]
+        [TestCase(512)]
+        [TestCase(513)]
+        [TestCase(1024)]
         public void Mono_ScansArray_DoNotThrow(int inputLength)
         {
             var zeros = new double[inputLength];

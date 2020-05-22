@@ -274,10 +274,9 @@ namespace CarefulAudioRepair.Data
                 - (this.patchMaker.InputDataSize
                     + this.settings.MaxLengthOfCorrection);
 
-            var part = Partitioner.Create(
-                start,
-                end,
-                (end - start) / Environment.ProcessorCount);
+            var chunkSize = (end - start) / Environment.ProcessorCount;
+
+            var part = Partitioner.Create(start, end, chunkSize);
 
             Parallel.ForEach(part, (range, state, index) =>
             {
