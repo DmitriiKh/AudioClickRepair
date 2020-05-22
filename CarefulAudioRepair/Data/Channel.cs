@@ -274,6 +274,12 @@ namespace CarefulAudioRepair.Data
                 - (this.patchMaker.InputDataSize
                     + this.settings.MaxLengthOfCorrection);
 
+            if (start > end)
+            {
+                progress.Report(100);
+                return suspectsList.ToArray();
+            }
+
             var chunkSize = (end - start) / Environment.ProcessorCount;
 
             var part = Partitioner.Create(start, end, chunkSize);
