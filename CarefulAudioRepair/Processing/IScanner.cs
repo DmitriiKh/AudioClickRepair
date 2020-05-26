@@ -5,10 +5,14 @@
 namespace CarefulAudioRepair.Processing
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
+    using System.Collections.Concurrent;
+    using System.Threading.Tasks;
+    using CarefulAudioRepair.Data;
 
-    interface IScanner
+    internal interface IScanner
     {
+        public Task ScanAsync(
+            IProgress<string> status,
+            IProgress<double> progress);
     }
 }
