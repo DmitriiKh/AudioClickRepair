@@ -5,7 +5,6 @@
 namespace CarefulAudioRepair.Data
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
@@ -18,10 +17,6 @@ namespace CarefulAudioRepair.Data
     {
         private readonly ImmutableArray<double> input;
         private readonly IAudioProcessingSettings settings;
-        private IRegenerator regenerarator;
-        private IPatcher inputPatcher;
-        private IPatcher predictionErrPatcher;
-        private BlockingCollection<AbstractPatch> patchCollection;
         private ScannerTools scannerTools;
 
         /// <summary>
@@ -37,8 +32,6 @@ namespace CarefulAudioRepair.Data
             }
 
             this.settings = settings;
-
-            this.patchCollection = new BlockingCollection<AbstractPatch>();
 
             this.input = ImmutableArray.Create(inputSamples);
 
@@ -61,7 +54,7 @@ namespace CarefulAudioRepair.Data
         /// <summary>
         /// Gets number of patches.
         /// </summary>
-        public int NumberOfPatches => this.patchCollection.Count;
+        public int NumberOfPatches => this.scannerTools.PatchCollection.Count;
 
         /// <summary>
         /// Asynchronously scans audio for damaged samples and repairs them.
@@ -92,7 +85,7 @@ namespace CarefulAudioRepair.Data
         /// <returns>Array of patches.</returns>
         public Patch[] GetAllPatches()
         {
-            var patchList = this.patchCollection.ToList();
+            var patchList = this.scannerTools.PatchCollection.ToList();
             patchList.Sort();
             return patchList.Select(p => p as Patch).ToArray();
         }
@@ -110,7 +103,7 @@ namespace CarefulAudioRepair.Data
         /// <param name="position">Position of output sample.</param>
         /// <returns>Value.</returns>
         public double GetOutputSample(int position) =>
-            this.inputPatcher.GetValue(position);
+            this.scannerTools.InputPatcher.GetValue(position);
 
         /// <summary>
         /// Returns value of prediction error at position.
@@ -118,17 +111,17 @@ namespace CarefulAudioRepair.Data
         /// <param name="position">Position of prediction error.</param>
         /// <returns>Value.</returns>
         public double GetPredictionErr(int position) =>
-            this.predictionErrPatcher.GetValue(position);
+            this.scannerTools.PredictionErrPatcher.GetValue(position);
 
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.patchCollection.Dispose();
+            this.scannerTools.PatchCollection.Dispose();
         }
 
         private void RemoveAllPatches()
         {
-            while (this.patchCollection.TryTake(out _))
+            while (this.scannerTools.PatchCollection.TryTake(out _))
             {
             }
         }
@@ -139,6 +132,6 @@ namespace CarefulAudioRepair.Data
         }
 
         private void PatchUpdater(object sender, EventArgs e) =>
-            this.regenerarator.RestorePatch(sender as AbstractPatch);
+            this.scannerTools.Regenerarator.RestorePatch(sender as AbstractPatch);
     }
 }
