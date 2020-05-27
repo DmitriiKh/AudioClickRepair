@@ -1,4 +1,8 @@
-﻿namespace CarefulAudioRepair.Processing
+﻿// <copyright file="ScannerTools.cs" company="Dmitrii Khrustalev">
+// Copyright (c) Dmitrii Khrustalev. All rights reserved.
+// </copyright>
+
+namespace CarefulAudioRepair.Processing
 {
     using System;
     using System.Collections.Concurrent;
@@ -6,10 +10,18 @@
     using System.Threading.Tasks;
     using CarefulAudioRepair.Data;
 
+    /// <summary>
+    /// Contains a set of objects to support the Scanner class.
+    /// </summary>
     internal class ScannerTools : IDisposable
     {
         private ImmutableArray<double> predictionErr;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScannerTools"/> class.
+        /// </summary>
+        /// <param name="inputSamples">Input audio samples.</param>
+        /// <param name="settings">Settings for processing audio.</param>
         public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
         {
             this.PatchCollection = new BlockingCollection<AbstractPatch>();
@@ -30,33 +42,72 @@
             this.NormCalculator = new AveragedMaxErrorAnalyzer();
         }
 
-        public bool IsPreprocessed { get; private set; } = false;
+        /// <summary>
+        /// Gets a value indicating whether prediction errors were calculated.
+        /// </summary>
+        public bool IsPreprocessed => this.PredictionErrPatcher != null;
 
+        /// <summary>
+        /// Gets IDetector for search of damaged samples.
+        /// </summary>
         public IDetector DamageDetector { get; private set; }
 
+        /// <summary>
+        /// Gets IPredictor for finding predictions.
+        /// </summary>
         public IPredictor Predictor { get; }
 
+        /// <summary>
+        /// Gets IAnalyzer for finding normal errors levels.
+        /// </summary>
         public IAnalyzer NormCalculator { get; }
 
+        /// <summary>
+        /// Gets collection of patches.
+        /// </summary>
         public BlockingCollection<AbstractPatch> PatchCollection { get; }
 
+        /// <summary>
+        /// Gets input samples.
+        /// </summary>
         public ImmutableArray<double> Input { get; }
 
+        /// <summary>
+        /// Gets settings for processing audio.
+        /// </summary>
         public IAudioProcessingSettings Settings { get; }
 
+        /// <summary>
+        /// Gets patcher for prediction errors.
+        /// </summary>
         internal IPatcher PredictionErrPatcher { get; private set; }
 
+        /// <summary>
+        /// Gets a patch maker.
+        /// </summary>
         internal IPatchMaker PatchMaker { get; private set; }
 
+        /// <summary>
+        /// Gets a regenerator for restoring damaged audio samples.
+        /// </summary>
         internal IRegenerator Regenerarator { get; private set; }
 
+        /// <summary>
+        /// Gets patcher for input samples.
+        /// </summary>
         internal IPatcher InputPatcher { get; }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             this.PatchCollection.Dispose();
         }
 
+        /// <summary>
+        /// Calculates prediction errors for input and gets ready for the detection phase.
+        /// </summary>
+        /// <param name="status">Parameter to report status through.</param>
+        /// <param name="progress">Parameter to report progress through.</param>
         public void GetReady(
             IProgress<string> status,
             IProgress<double> progress)
@@ -89,7 +140,6 @@
             progress.Report(100);
 
             // The fields are initialized
-            this.IsPreprocessed = true;
         }
 
         private double[] CalculatePredictionErrors(
