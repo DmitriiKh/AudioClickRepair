@@ -15,7 +15,6 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     internal class Channel : IDisposable
     {
-        private readonly IAudioProcessingSettings settings;
         private ScannerTools scannerTools;
 
         /// <summary>
@@ -30,11 +29,9 @@ namespace CarefulAudioRepair.Data
                 throw new ArgumentNullException(nameof(inputSamples));
             }
 
-            this.settings = settings;
-
             this.scannerTools = new ScannerTools(
                 ImmutableArray.Create(inputSamples),
-                this.settings);
+                settings);
         }
 
         /// <summary>
