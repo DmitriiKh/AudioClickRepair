@@ -46,14 +46,14 @@ namespace CarefulAudioRepair.Processing
             return this.tools;
         }
 
-        private (int start, int length, double errorLevelAtDetection)[] DetectSuspiciousSamples(
+        private Suspect[] DetectSuspiciousSamples(
             IProgress<string> status,
             IProgress<double> progress)
         {
             status.Report("Detection");
             progress.Report(0);
 
-            var suspectsList = new List<(int, int, double)>();
+            var suspectsList = new List<Suspect>();
 
             var start = Math.Max(
                 this.tools.PatchMaker.InputDataSize,
@@ -85,7 +85,7 @@ namespace CarefulAudioRepair.Processing
                         var lengthToSkip = this.tools.Settings.MaxLengthOfCorrection
                             + this.tools.DamageDetector.InputDataSize;
 
-                        suspectsList.Add((position, lengthToSkip, errorLevelAtDetection));
+                        suspectsList.Add(new Suspect(position, lengthToSkip, errorLevelAtDetection));
                         position += lengthToSkip;
                     }
 
@@ -106,7 +106,7 @@ namespace CarefulAudioRepair.Processing
         }
 
         private void GenerateNewPatches(
-            (int start, int length, double errorLevelAtDetection)[] suspects,
+            Suspect[] suspects,
             IProgress<string> status,
             IProgress<double> progress)
         {
@@ -139,16 +139,16 @@ namespace CarefulAudioRepair.Processing
             progress.Report(100);
         }
 
-        private void CheckSuspect((int start, int length, double errorLevelAtDetection) suspect)
+        private void CheckSuspect(Suspect suspect)
         {
             var firstPatch = this.tools.PatchMaker.NewPatch(
-                    suspect.start,
+                    suspect.Start,
                     this.tools.Settings.MaxLengthOfCorrection,
-                    suspect.errorLevelAtDetection);
+                    suspect.ErrorLevelAtDetection);
 
             this.tools.PatchCollection.Add(firstPatch);
 
-            var end = suspect.start + suspect.length;
+            var end = suspect.Start + suspect.Length;
 
             for (var position = firstPatch.EndPosition + 1; position < end; position++)
             {
@@ -159,14 +159,30 @@ namespace CarefulAudioRepair.Processing
                     var patch = this.tools.PatchMaker.NewPatch(
                     position,
                     this.tools.Settings.MaxLengthOfCorrection,
-                    suspect.errorLevelAtDetection);
+                    suspect.ErrorLevelAtDetection);
 
                     this.tools.PatchCollection.Add(patch);
 
-                    var newEnd = patch.StartPosition + suspect.length;
+                    var newEnd = patch.StartPosition + suspect.Length;
                     end = Math.Max(end, newEnd);
                 }
             }
+        }
+
+        private struct Suspect
+        {
+            public Suspect(int start, int length, double errorLevelAtDetection)
+            {
+                this.Start = start;
+                this.Length = length;
+                this.ErrorLevelAtDetection = errorLevelAtDetection;
+            }
+
+            public int Start { get; }
+
+            public int Length { get; }
+
+            public double ErrorLevelAtDetection { get; }
         }
     }
 }
