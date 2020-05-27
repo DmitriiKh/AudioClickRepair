@@ -75,10 +75,10 @@ namespace CarefulAudioRepair.Data
         {
             var scanner = new Scanner(this.input, this.settings, this.scannerTools);
 
-            (this.patchCollection, this.inputPatcher, this.predictionErrPatcher, this.regenerarator) =
+            this.scannerTools =
                 await scanner.ScanAsync(status, progress).ConfigureAwait(false);
 
-            foreach (var patch in this.patchCollection)
+            foreach (var patch in this.scannerTools.PatchCollection)
             {
                 this.RegisterPatch(patch);
             }

@@ -28,14 +28,14 @@ namespace CarefulAudioRepair.Processing
             this.settings = settings;
         }
 
-        public async Task<(BlockingCollection<AbstractPatch>, IPatcher, IPatcher, IRegenerator)> ScanAsync(
+        public async Task<ScannerTools> ScanAsync(
             IProgress<string> status,
             IProgress<double> progress)
         {
             return await Task.Run(() => this.Scan(status, progress)).ConfigureAwait(false);
         }
 
-        private (BlockingCollection<AbstractPatch>, IPatcher, IPatcher, IRegenerator) Scan(IProgress<string> status, IProgress<double> progress)
+        private ScannerTools Scan(IProgress<string> status, IProgress<double> progress)
         {
             if (!this.isPreprocessed)
             {
@@ -52,7 +52,7 @@ namespace CarefulAudioRepair.Processing
             status.Report(string.Empty);
             progress.Report(100);
 
-            return (this.tools.PatchCollection, this.tools.InputPatcher, this.tools.PredictionErrPatcher, this.tools.Regenerarator);
+            return this.tools;
         }
 
         private (int start, int length, double errorLevelAtDetection)[] DetectSuspiciousSamples(
