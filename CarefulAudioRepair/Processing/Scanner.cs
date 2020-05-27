@@ -47,14 +47,14 @@ namespace CarefulAudioRepair.Processing
             this.normCalculator = new AveragedMaxErrorAnalyzer();
         }
 
-        public async Task<(BlockingCollection<AbstractPatch>, IPatcher, IPatcher)> ScanAsync(
+        public async Task<(BlockingCollection<AbstractPatch>, IPatcher, IPatcher, IRegenerator)> ScanAsync(
             IProgress<string> status,
             IProgress<double> progress)
         {
             return await Task.Run(() => this.Scan(status, progress)).ConfigureAwait(false);
         }
 
-        private (BlockingCollection<AbstractPatch>, IPatcher, IPatcher) Scan(IProgress<string> status, IProgress<double> progress)
+        private (BlockingCollection<AbstractPatch>, IPatcher, IPatcher, IRegenerator) Scan(IProgress<string> status, IProgress<double> progress)
         {
             if (!this.isPreprocessed)
             {
@@ -71,7 +71,7 @@ namespace CarefulAudioRepair.Processing
             status.Report(string.Empty);
             progress.Report(100);
 
-            return (this.patchCollection,this.inputPatcher, this.predictionErrPatcher);
+            return (this.patchCollection,this.inputPatcher, this.predictionErrPatcher, this.regenerarator);
         }
 
         private void GetReady(
