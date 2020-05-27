@@ -8,20 +8,19 @@
 
     class ScannerTools
     {
-        private readonly BlockingCollection<AbstractPatch> patchCollection;
         private readonly ImmutableArray<double> input;
         private readonly IAudioProcessingSettings settings;
         private ImmutableArray<double> predictionErr;
 
         public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
         {
-            this.patchCollection = new BlockingCollection<AbstractPatch>();
+            this.PatchCollection = new BlockingCollection<AbstractPatch>();
 
             this.input = inputSamples;
 
             this.InputPatcher = new Patcher(
                 this.input,
-                this.patchCollection,
+                this.PatchCollection,
                 (patch, position) => patch.GetValue(position));
 
             this.Predictor = new FastBurgPredictor(
@@ -38,6 +37,8 @@
         public IPredictor Predictor { get; }
 
         public IAnalyzer NormCalculator { get; }
+
+        public BlockingCollection<AbstractPatch> PatchCollection { get; }
 
         internal IPatcher PredictionErrPatcher { get; private set; }
 
@@ -60,7 +61,7 @@
             this.predictionErr = ImmutableArray.Create(errors);
             this.PredictionErrPatcher = new Patcher(
                 this.predictionErr,
-                this.patchCollection,
+                this.PatchCollection,
                 (_, __) => AbstractPatch.MinimalPredictionError);
 
             this.DamageDetector = new DamagedSampleDetector(

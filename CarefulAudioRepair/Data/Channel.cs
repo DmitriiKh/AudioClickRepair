@@ -22,6 +22,7 @@ namespace CarefulAudioRepair.Data
         private IPatcher inputPatcher;
         private IPatcher predictionErrPatcher;
         private BlockingCollection<AbstractPatch> patchCollection;
+        private ScannerTools scannerTools;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel"/> class.
@@ -35,11 +36,13 @@ namespace CarefulAudioRepair.Data
                 throw new ArgumentNullException(nameof(inputSamples));
             }
 
+            this.settings = settings;
+
             this.patchCollection = new BlockingCollection<AbstractPatch>();
 
             this.input = ImmutableArray.Create(inputSamples);
 
-            this.settings = settings;
+            this.scannerTools = new ScannerTools(this.input, this.settings);
 
             this.IsPreprocessed = false;
         }
@@ -70,7 +73,7 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            var scanner = new Scanner(this.input, this.settings);
+            var scanner = new Scanner(this.input, this.settings, this.scannerTools);
 
             (this.patchCollection, this.inputPatcher, this.predictionErrPatcher, this.regenerarator) =
                 await scanner.ScanAsync(status, progress).ConfigureAwait(false);

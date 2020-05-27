@@ -14,37 +14,18 @@ namespace CarefulAudioRepair.Processing
 
     internal class Scanner : IScanner
     {
-        private readonly BlockingCollection<AbstractPatch> patchCollection;
         private readonly ImmutableArray<double> input;
-        private readonly IPatcher inputPatcher;
-        private readonly IAnalyzer normCalculator;
         private readonly IAudioProcessingSettings settings;
-        private readonly IPredictor predictor;
-        private IRegenerator regenerarator;
-        private IPatchMaker patchMaker;
-        private IDetector damageDetector;
-        private ImmutableArray<double> predictionErr;
-        private IPatcher predictionErrPatcher;
         private bool isPreprocessed = false;
+        private ScannerTools tools;
 
-        public Scanner(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
+        public Scanner(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings, ScannerTools tools)
         {
-            this.patchCollection = new BlockingCollection<AbstractPatch>();
+            this.tools = tools;
 
             this.input = inputSamples;
 
             this.settings = settings;
-
-            this.inputPatcher = new Patcher(
-                this.input,
-                this.patchCollection,
-                (patch, position) => patch.GetValue(position));
-
-            this.predictor = new FastBurgPredictor(
-                settings.CoefficientsNumber,
-                settings.HistoryLengthSamples);
-
-            this.normCalculator = new AveragedMaxErrorAnalyzer();
         }
 
         public async Task<(BlockingCollection<AbstractPatch>, IPatcher, IPatcher, IRegenerator)> ScanAsync(
@@ -58,7 +39,7 @@ namespace CarefulAudioRepair.Processing
         {
             if (!this.isPreprocessed)
             {
-                this.GetReady(status, progress);
+                this.tools.GetReady(status, progress);
             }
 
             var suspects = this.DetectSuspiciousSamples(status, progress);
@@ -71,87 +52,7 @@ namespace CarefulAudioRepair.Processing
             status.Report(string.Empty);
             progress.Report(100);
 
-            return (this.patchCollection, this.inputPatcher, this.predictionErrPatcher, this.regenerarator);
-        }
-
-        private void GetReady(
-            IProgress<string> status,
-            IProgress<double> progress)
-        {
-            status.Report("Preparation");
-            progress.Report(0);
-
-            var errors = this.CalculatePredictionErrors(progress);
-
-            // Initialize fields that depend on prediction errors
-            this.predictionErr = ImmutableArray.Create(errors);
-            this.predictionErrPatcher = new Patcher(
-                this.predictionErr,
-                this.patchCollection,
-                (_, __) => AbstractPatch.MinimalPredictionError);
-
-            this.damageDetector = new DamagedSampleDetector(
-                this.predictionErrPatcher,
-                this.inputPatcher,
-                this.normCalculator,
-                this.predictor);
-
-            this.regenerarator = new Regenerator(
-                this.inputPatcher,
-                this.predictor,
-                this.damageDetector);
-
-            this.patchMaker = new PatchMaker(this.regenerarator);
-
-            progress.Report(100);
-
-            // The fields are initialized
-            this.isPreprocessed = true;
-        }
-
-        private double[] CalculatePredictionErrors(
-            IProgress<double> progress)
-        {
-            var errors = new double[this.input.Length];
-
-            var inputDataSize = this.predictor.InputDataSize;
-
-            var start = inputDataSize;
-            var end = this.input.Length;
-
-            if (start >= end)
-            {
-                return errors;
-            }
-
-            var chunkSize = Math.Max(
-                inputDataSize,
-                (end - start) / Environment.ProcessorCount);
-
-            var part = Partitioner.Create(start, end, chunkSize);
-
-            Parallel.ForEach(part, (range, state, index) =>
-            {
-                for (var position = range.Item1; position < range.Item2; position++)
-                {
-                    var inputDataStart = position - inputDataSize;
-
-                    errors[position] = this.input[position]
-                        - this.predictor.GetForward(
-                            this.inputPatcher.GetRange(inputDataStart, inputDataSize));
-
-                    // Only the first thread reports
-                    // Throttling by 1000 samples
-                    if (index == 0 && position % 1000 == 0)
-                    {
-                        progress.Report(
-                            100.0 * (position - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
-            });
-
-            return errors;
+            return (this.tools.PatchCollection, this.tools.InputPatcher, this.tools.PredictionErrPatcher, this.tools.Regenerarator);
         }
 
         private (int start, int length, double errorLevelAtDetection)[] DetectSuspiciousSamples(
@@ -164,11 +65,11 @@ namespace CarefulAudioRepair.Processing
             var suspectsList = new List<(int, int, double)>();
 
             var start = Math.Max(
-                this.patchMaker.InputDataSize,
-                this.damageDetector.InputDataSize);
+                this.tools.PatchMaker.InputDataSize,
+                this.tools.DamageDetector.InputDataSize);
 
             var end = this.input.Length
-                - (this.patchMaker.InputDataSize
+                - (this.tools.PatchMaker.InputDataSize
                     + this.settings.MaxLengthOfCorrection);
 
             if (start >= end)
@@ -186,12 +87,12 @@ namespace CarefulAudioRepair.Processing
                 for (var position = range.Item1; position < range.Item2; position++)
                 {
                     var errorLevelAtDetection =
-                        this.damageDetector.GetErrorLevel(position);
+                        this.tools.DamageDetector.GetErrorLevel(position);
 
                     if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                     {
                         var lengthToSkip = this.settings.MaxLengthOfCorrection
-                            + this.damageDetector.InputDataSize;
+                            + this.tools.DamageDetector.InputDataSize;
 
                         suspectsList.Add((position, lengthToSkip, errorLevelAtDetection));
                         position += lengthToSkip;
@@ -249,27 +150,27 @@ namespace CarefulAudioRepair.Processing
 
         private void CheckSuspect((int start, int length, double errorLevelAtDetection) suspect)
         {
-            var firstPatch = this.patchMaker.NewPatch(
+            var firstPatch = this.tools.PatchMaker.NewPatch(
                     suspect.start,
                     this.settings.MaxLengthOfCorrection,
                     suspect.errorLevelAtDetection);
 
-            this.patchCollection.Add(firstPatch);
+            this.tools.PatchCollection.Add(firstPatch);
 
             var end = suspect.start + suspect.length;
 
             for (var position = firstPatch.EndPosition + 1; position < end; position++)
             {
-                var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
+                var errorLevelAtDetection = this.tools.DamageDetector.GetErrorLevel(position);
 
                 if (errorLevelAtDetection > this.settings.ThresholdForDetection)
                 {
-                    var patch = this.patchMaker.NewPatch(
+                    var patch = this.tools.PatchMaker.NewPatch(
                     position,
                     this.settings.MaxLengthOfCorrection,
                     suspect.errorLevelAtDetection);
 
-                    this.patchCollection.Add(patch);
+                    this.tools.PatchCollection.Add(patch);
 
                     var newEnd = patch.StartPosition + suspect.length;
                     end = Math.Max(end, newEnd);
