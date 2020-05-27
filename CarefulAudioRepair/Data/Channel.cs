@@ -35,15 +35,13 @@ namespace CarefulAudioRepair.Data
             this.scannerTools = new ScannerTools(
                 ImmutableArray.Create(inputSamples),
                 this.settings);
-
-            this.IsPreprocessed = false;
         }
 
         /// <summary>
         /// Gets a value indicating whether scan was performed once on this data
         /// so the prediction errors were calculated.
         /// </summary>
-        public bool IsPreprocessed { get; private set; }
+        public bool IsPreprocessed => this.scannerTools.IsPreprocessed;
 
         /// <summary>
         /// Gets length of audio in samples.
@@ -74,8 +72,6 @@ namespace CarefulAudioRepair.Data
             {
                 this.RegisterPatch(patch);
             }
-
-            this.IsPreprocessed = true;
         }
 
         /// <summary>
