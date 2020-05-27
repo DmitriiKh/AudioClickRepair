@@ -8,7 +8,6 @@
 
     class ScannerTools
     {
-        private readonly IAudioProcessingSettings settings;
         private ImmutableArray<double> predictionErr;
 
         public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
@@ -16,6 +15,8 @@
             this.PatchCollection = new BlockingCollection<AbstractPatch>();
 
             this.Input = inputSamples;
+
+            this.Settings = settings;
 
             this.InputPatcher = new Patcher(
                 this.Input,
@@ -40,6 +41,8 @@
         public BlockingCollection<AbstractPatch> PatchCollection { get; }
 
         public ImmutableArray<double> Input { get; }
+
+        public IAudioProcessingSettings Settings { get; }
 
         internal IPatcher PredictionErrPatcher { get; private set; }
 

@@ -9,19 +9,15 @@ namespace CarefulAudioRepair.Processing
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using CarefulAudioRepair.Data;
 
     internal class Scanner : IScanner
     {
-        private readonly IAudioProcessingSettings settings;
         private bool isPreprocessed = false;
         private ScannerTools tools;
 
         public Scanner(ScannerTools tools)
         {
             this.tools = tools;
-
-            this.settings = settings;
         }
 
         public async Task<ScannerTools> ScanAsync(
@@ -66,7 +62,7 @@ namespace CarefulAudioRepair.Processing
 
             var end = this.tools.Input.Length
                 - (this.tools.PatchMaker.InputDataSize
-                    + this.settings.MaxLengthOfCorrection);
+                    + this.tools.Settings.MaxLengthOfCorrection);
 
             if (start >= end)
             {
@@ -85,9 +81,9 @@ namespace CarefulAudioRepair.Processing
                     var errorLevelAtDetection =
                         this.tools.DamageDetector.GetErrorLevel(position);
 
-                    if (errorLevelAtDetection > this.settings.ThresholdForDetection)
+                    if (errorLevelAtDetection > this.tools.Settings.ThresholdForDetection)
                     {
-                        var lengthToSkip = this.settings.MaxLengthOfCorrection
+                        var lengthToSkip = this.tools.Settings.MaxLengthOfCorrection
                             + this.tools.DamageDetector.InputDataSize;
 
                         suspectsList.Add((position, lengthToSkip, errorLevelAtDetection));
@@ -148,7 +144,7 @@ namespace CarefulAudioRepair.Processing
         {
             var firstPatch = this.tools.PatchMaker.NewPatch(
                     suspect.start,
-                    this.settings.MaxLengthOfCorrection,
+                    this.tools.Settings.MaxLengthOfCorrection,
                     suspect.errorLevelAtDetection);
 
             this.tools.PatchCollection.Add(firstPatch);
@@ -159,11 +155,11 @@ namespace CarefulAudioRepair.Processing
             {
                 var errorLevelAtDetection = this.tools.DamageDetector.GetErrorLevel(position);
 
-                if (errorLevelAtDetection > this.settings.ThresholdForDetection)
+                if (errorLevelAtDetection > this.tools.Settings.ThresholdForDetection)
                 {
                     var patch = this.tools.PatchMaker.NewPatch(
                     position,
-                    this.settings.MaxLengthOfCorrection,
+                    this.tools.Settings.MaxLengthOfCorrection,
                     suspect.errorLevelAtDetection);
 
                     this.tools.PatchCollection.Add(patch);
