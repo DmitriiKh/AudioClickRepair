@@ -12,7 +12,7 @@ namespace CarefulAudioRepair.Processing
     using System.Threading.Tasks;
     using CarefulAudioRepair.Data;
 
-    class Scanner : IScanner
+    internal class Scanner : IScanner
     {
         private readonly BlockingCollection<AbstractPatch> patchCollection;
         private readonly ImmutableArray<double> input;
@@ -71,7 +71,7 @@ namespace CarefulAudioRepair.Processing
             status.Report(string.Empty);
             progress.Report(100);
 
-            return (this.patchCollection,this.inputPatcher, this.predictionErrPatcher, this.regenerarator);
+            return (this.patchCollection, this.inputPatcher, this.predictionErrPatcher, this.regenerarator);
         }
 
         private void GetReady(
