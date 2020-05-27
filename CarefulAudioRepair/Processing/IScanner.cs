@@ -8,7 +8,7 @@ namespace CarefulAudioRepair.Processing
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Interface for Scanner
+    /// Interface for Scanner.
     /// </summary>
     internal interface IScanner
     {

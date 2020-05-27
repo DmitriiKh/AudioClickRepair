@@ -10,15 +10,23 @@ namespace CarefulAudioRepair.Processing
     using System.Linq;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// This class contains behavior for scanning audio for damaged samples.
+    /// </summary>
     internal class Scanner : IScanner
     {
-        private ScannerTools tools;
+        private readonly ScannerTools tools;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Scanner"/> class.
+        /// </summary>
+        /// <param name="tools">Set of tools.</param>
         public Scanner(ScannerTools tools)
         {
             this.tools = tools;
         }
 
+        /// <inheritdoc/>
         public async Task<ScannerTools> ScanAsync(
             IProgress<string> status,
             IProgress<double> progress)
