@@ -6,7 +6,6 @@ namespace CarefulAudioRepair.Data
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
@@ -18,14 +17,9 @@ namespace CarefulAudioRepair.Data
     internal class Channel : IDisposable
     {
         private readonly ImmutableArray<double> input;
-        private IPatcher inputPatcher;
-        private readonly IAnalyzer normCalculator;
         private readonly IAudioProcessingSettings settings;
-        private readonly IPredictor predictor;
         private IRegenerator regenerarator;
-        private IPatchMaker patchMaker;
-        private IDetector damageDetector;
-        private ImmutableArray<double> predictionErr;
+        private IPatcher inputPatcher;
         private IPatcher predictionErrPatcher;
         private BlockingCollection<AbstractPatch> patchCollection;
 
@@ -44,16 +38,6 @@ namespace CarefulAudioRepair.Data
             this.patchCollection = new BlockingCollection<AbstractPatch>();
 
             this.input = ImmutableArray.Create(inputSamples);
-            this.inputPatcher = new Patcher(
-                this.input,
-                this.patchCollection,
-                (patch, position) => patch.GetValue(position));
-
-            this.predictor = new FastBurgPredictor(
-                settings.CoefficientsNumber,
-                settings.HistoryLengthSamples);
-
-            this.normCalculator = new AveragedMaxErrorAnalyzer();
 
             this.settings = settings;
 
