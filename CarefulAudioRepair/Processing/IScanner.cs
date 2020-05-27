@@ -11,7 +11,7 @@ namespace CarefulAudioRepair.Processing
 
     internal interface IScanner
     {
-        public Task ScanAsync(
+        public Task<(BlockingCollection<AbstractPatch>, IPatcher)> ScanAsync(
             IProgress<string> status,
             IProgress<double> progress);
     }

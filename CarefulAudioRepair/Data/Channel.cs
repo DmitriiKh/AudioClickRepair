@@ -90,7 +90,8 @@ namespace CarefulAudioRepair.Data
 
             var scanner = new Scanner(this.input, this.settings, this.patchCollection);
 
-            await scanner.ScanAsync(status, progress).ConfigureAwait(false);
+            (this.patchCollection, this.predictionErrPatcher) =
+                await scanner.ScanAsync(status, progress).ConfigureAwait(false);
 
             foreach (var patch in this.patchCollection)
             {
