@@ -15,7 +15,6 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     internal class Channel : IDisposable
     {
-        private readonly ImmutableArray<double> input;
         private readonly IAudioProcessingSettings settings;
         private ScannerTools scannerTools;
 
@@ -33,9 +32,9 @@ namespace CarefulAudioRepair.Data
 
             this.settings = settings;
 
-            this.input = ImmutableArray.Create(inputSamples);
-
-            this.scannerTools = new ScannerTools(this.input, this.settings);
+            this.scannerTools = new ScannerTools(
+                ImmutableArray.Create(inputSamples),
+                this.settings);
 
             this.IsPreprocessed = false;
         }
@@ -49,7 +48,7 @@ namespace CarefulAudioRepair.Data
         /// <summary>
         /// Gets length of audio in samples.
         /// </summary>
-        public int LengthSamples => this.input.Length;
+        public int LengthSamples => this.scannerTools.Input.Length;
 
         /// <summary>
         /// Gets number of patches.
@@ -66,7 +65,7 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            var scanner = new Scanner(this.input, this.settings, this.scannerTools);
+            var scanner = new Scanner(this.scannerTools);
 
             this.scannerTools =
                 await scanner.ScanAsync(status, progress).ConfigureAwait(false);
@@ -95,7 +94,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="position">Position of input sample.</param>
         /// <returns>Value.</returns>
-        public double GetInputSample(int position) => this.input[position];
+        public double GetInputSample(int position) => this.scannerTools.Input[position];
 
         /// <summary>
         /// Returns value of output sample at position.

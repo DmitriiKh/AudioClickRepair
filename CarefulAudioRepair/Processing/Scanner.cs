@@ -7,23 +7,19 @@ namespace CarefulAudioRepair.Processing
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
     using CarefulAudioRepair.Data;
 
     internal class Scanner : IScanner
     {
-        private readonly ImmutableArray<double> input;
         private readonly IAudioProcessingSettings settings;
         private bool isPreprocessed = false;
         private ScannerTools tools;
 
-        public Scanner(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings, ScannerTools tools)
+        public Scanner(ScannerTools tools)
         {
             this.tools = tools;
-
-            this.input = inputSamples;
 
             this.settings = settings;
         }
@@ -68,7 +64,7 @@ namespace CarefulAudioRepair.Processing
                 this.tools.PatchMaker.InputDataSize,
                 this.tools.DamageDetector.InputDataSize);
 
-            var end = this.input.Length
+            var end = this.tools.Input.Length
                 - (this.tools.PatchMaker.InputDataSize
                     + this.settings.MaxLengthOfCorrection);
 

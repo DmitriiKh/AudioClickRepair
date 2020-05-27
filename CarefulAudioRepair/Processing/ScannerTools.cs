@@ -8,7 +8,6 @@
 
     class ScannerTools
     {
-        private readonly ImmutableArray<double> input;
         private readonly IAudioProcessingSettings settings;
         private ImmutableArray<double> predictionErr;
 
@@ -16,10 +15,10 @@
         {
             this.PatchCollection = new BlockingCollection<AbstractPatch>();
 
-            this.input = inputSamples;
+            this.Input = inputSamples;
 
             this.InputPatcher = new Patcher(
-                this.input,
+                this.Input,
                 this.PatchCollection,
                 (patch, position) => patch.GetValue(position));
 
@@ -39,6 +38,8 @@
         public IAnalyzer NormCalculator { get; }
 
         public BlockingCollection<AbstractPatch> PatchCollection { get; }
+
+        public ImmutableArray<double> Input { get; }
 
         internal IPatcher PredictionErrPatcher { get; private set; }
 
@@ -86,12 +87,12 @@
         private double[] CalculatePredictionErrors(
             IProgress<double> progress)
         {
-            var errors = new double[this.input.Length];
+            var errors = new double[this.Input.Length];
 
             var inputDataSize = this.Predictor.InputDataSize;
 
             var start = inputDataSize;
-            var end = this.input.Length;
+            var end = this.Input.Length;
 
             if (start >= end)
             {
@@ -110,7 +111,7 @@
                 {
                     var inputDataStart = position - inputDataSize;
 
-                    errors[position] = this.input[position]
+                    errors[position] = this.Input[position]
                         - this.Predictor.GetForward(
                             this.InputPatcher.GetRange(inputDataStart, inputDataSize));
 
