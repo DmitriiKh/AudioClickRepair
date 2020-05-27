@@ -18,7 +18,7 @@ namespace CarefulAudioRepair.Data
     internal class Channel : IDisposable
     {
         private readonly ImmutableArray<double> input;
-        private readonly IPatcher inputPatcher;
+        private IPatcher inputPatcher;
         private readonly IAnalyzer normCalculator;
         private readonly IAudioProcessingSettings settings;
         private readonly IPredictor predictor;
@@ -86,11 +86,9 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            this.RemoveAllPatches();
+            var scanner = new Scanner(this.input, this.settings);
 
-            var scanner = new Scanner(this.input, this.settings, this.patchCollection);
-
-            (this.patchCollection, this.predictionErrPatcher) =
+            (this.patchCollection, this.inputPatcher, this.predictionErrPatcher) =
                 await scanner.ScanAsync(status, progress).ConfigureAwait(false);
 
             foreach (var patch in this.patchCollection)

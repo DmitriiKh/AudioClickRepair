@@ -4,14 +4,13 @@
 
 namespace CarefulAudioRepair.Processing
 {
-    using CarefulAudioRepair.Data;
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
+    using CarefulAudioRepair.Data;
 
     class Scanner : IScanner
     {
@@ -28,9 +27,9 @@ namespace CarefulAudioRepair.Processing
         private IPatcher predictionErrPatcher;
         private bool isPreprocessed = false;
 
-        public Scanner(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings, BlockingCollection<AbstractPatch> patchCollection)
+        public Scanner(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
         {
-            this.patchCollection = patchCollection;
+            this.patchCollection = new BlockingCollection<AbstractPatch>();
 
             this.input = inputSamples;
 
@@ -48,14 +47,14 @@ namespace CarefulAudioRepair.Processing
             this.normCalculator = new AveragedMaxErrorAnalyzer();
         }
 
-        public async Task<(BlockingCollection<AbstractPatch>, IPatcher)> ScanAsync(
+        public async Task<(BlockingCollection<AbstractPatch>, IPatcher, IPatcher)> ScanAsync(
             IProgress<string> status,
             IProgress<double> progress)
         {
             return await Task.Run(() => this.Scan(status, progress)).ConfigureAwait(false);
         }
 
-        private (BlockingCollection<AbstractPatch>, IPatcher) Scan(IProgress<string> status, IProgress<double> progress)
+        private (BlockingCollection<AbstractPatch>, IPatcher, IPatcher) Scan(IProgress<string> status, IProgress<double> progress)
         {
             if (!this.isPreprocessed)
             {
@@ -72,7 +71,7 @@ namespace CarefulAudioRepair.Processing
             status.Report(string.Empty);
             progress.Report(100);
 
-            return (this.patchCollection, this.predictionErrPatcher);
+            return (this.patchCollection,this.inputPatcher, this.predictionErrPatcher);
         }
 
         private void GetReady(
