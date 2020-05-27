@@ -108,7 +108,7 @@ namespace CarefulAudioRepair.Data
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.scannerTools.PatchCollection.Dispose();
+            this.scannerTools.Dispose();
         }
 
         private void RemoveAllPatches()

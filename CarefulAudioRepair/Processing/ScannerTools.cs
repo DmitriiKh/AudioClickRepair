@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using CarefulAudioRepair.Data;
 
-    class ScannerTools
+    internal class ScannerTools : IDisposable
     {
         private ImmutableArray<double> predictionErr;
 
@@ -51,6 +51,11 @@
         internal IRegenerator Regenerarator { get; private set; }
 
         internal IPatcher InputPatcher { get; }
+
+        public void Dispose()
+        {
+            this.PatchCollection.Dispose();
+        }
 
         public void GetReady(
             IProgress<string> status,
