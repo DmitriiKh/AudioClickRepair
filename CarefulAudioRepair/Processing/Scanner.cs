@@ -12,7 +12,6 @@ namespace CarefulAudioRepair.Processing
 
     internal class Scanner : IScanner
     {
-        private bool isPreprocessed = false;
         private ScannerTools tools;
 
         public Scanner(ScannerTools tools)
@@ -29,7 +28,7 @@ namespace CarefulAudioRepair.Processing
 
         private ScannerTools Scan(IProgress<string> status, IProgress<double> progress)
         {
-            if (!this.isPreprocessed)
+            if (!this.tools.IsPreprocessed)
             {
                 this.tools.GetReady(status, progress);
             }
