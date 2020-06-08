@@ -7,6 +7,7 @@ namespace CarefulAudioRepair.Processing
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using CarefulAudioRepair.Properties;
 
     /// <summary>
     /// Analyzes errors. Finds maximums for each block of errors and than averages them.
@@ -28,6 +29,12 @@ namespace CarefulAudioRepair.Processing
             if (errors is null)
             {
                 throw new ArgumentNullException(nameof(errors));
+            }
+
+            if (errors.Length != this.InputDataSize)
+            {
+                throw new ArgumentException(
+                    Resources.Incorrect_size_of_errors + nameof(errors));
             }
 
             return this.Slice(errors)

@@ -273,7 +273,7 @@ namespace CarefulAudioRepair.Processing
         }
 
         /// <summary>
-        ///     Inverts index to flip a vector insted of multiplication with J matrix.
+        ///     Inverts index to flip a vector instead of multiplication with J matrix.
         ///     For details see (12) on page 2 of
         ///     A Fast Implementation of Burg’s Method by Koen Vos
         /// </summary>

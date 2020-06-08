@@ -708,7 +708,7 @@
         </member>
         <member name="M:CarefulAudioRepair.Processing.FastBurgAlgorithm64.JinversOrder(System.Int32,System.Int32)">
             <summary>
-                Inverts index to flip a vector insted of multiplication with J matrix.
+                Inverts index to flip a vector instead of multiplication with J matrix.
                 For details see (12) on page 2 of
                 A Fast Implementation of Burg’s Method by Koen Vos
             </summary>
@@ -878,6 +878,20 @@
             </summary>
             <param name="patch">Patch that needs restoration.</param>
         </member>
+        <member name="T:CarefulAudioRepair.Processing.IScanner">
+            <summary>
+            Interface for Scanner.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.IScanner.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <summary>
+            Scans audio using ScannerTools.
+            Changes ScannerTools.PatchCollection and ScannerTools.PredictionErrPatcher.
+            </summary>
+            <param name="status">Parameter to report status through.</param>
+            <param name="progress">Parameter to report progress through.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the result of the asynchronous operation.</returns>
+        </member>
         <member name="T:CarefulAudioRepair.Processing.Patcher">
             <summary>
             Replaces samples from immutable array using update function
@@ -952,6 +966,118 @@
         </member>
         <member name="M:CarefulAudioRepair.Processing.Regenerator.RestorePatch(CarefulAudioRepair.Data.AbstractPatch)">
             <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.Scanner">
+            <summary>
+            This class contains behavior for scanning audio for damaged samples.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Scanner.#ctor(CarefulAudioRepair.Processing.ScannerTools)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.Scanner"/> class.
+            </summary>
+            <param name="tools">Set of tools.</param>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.Scanner.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+            <inheritdoc/>
+        </member>
+        <member name="T:CarefulAudioRepair.Processing.ScannerTools">
+            <summary>
+            Contains a set of objects to support the Scanner class.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.ScannerTools.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},CarefulAudioRepair.Data.IAudioProcessingSettings)">
+            <summary>
+            Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.ScannerTools"/> class.
+            </summary>
+            <param name="inputSamples">Input audio samples.</param>
+            <param name="settings">Settings for processing audio.</param>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.IsPreprocessed">
+            <summary>
+            Gets a value indicating whether prediction errors were calculated.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.DamageDetector">
+            <summary>
+            Gets IDetector for search of damaged samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.Predictor">
+            <summary>
+            Gets IPredictor for finding predictions.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.NormCalculator">
+            <summary>
+            Gets IAnalyzer for finding normal errors levels.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.PatchCollection">
+            <summary>
+            Gets collection of patches.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.Input">
+            <summary>
+            Gets input samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.Settings">
+            <summary>
+            Gets settings for processing audio.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.PredictionErrPatcher">
+            <summary>
+            Gets patcher for prediction errors.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.PatchMaker">
+            <summary>
+            Gets a patch maker.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.Regenerarator">
+            <summary>
+            Gets a regenerator for restoring damaged audio samples.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Processing.ScannerTools.InputPatcher">
+            <summary>
+            Gets patcher for input samples.
+            </summary>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.ScannerTools.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Processing.ScannerTools.GetReady(System.IProgress{System.String},System.IProgress{System.Double})">
+            <summary>
+            Calculates prediction errors for input and gets ready for the detection phase.
+            </summary>
+            <param name="status">Parameter to report status through.</param>
+            <param name="progress">Parameter to report progress through.</param>
+        </member>
+        <member name="T:CarefulAudioRepair.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:CarefulAudioRepair.Properties.Resources.Incorrect_size_of_errors">
+            <summary>
+              Looks up a localized string similar to Incorrect size of .
+            </summary>
         </member>
     </members>
 </doc>

@@ -5,8 +5,6 @@
 namespace CarefulAudioRepair.Data
 {
     using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,17 +15,7 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     internal class Channel : IDisposable
     {
-        private readonly BlockingCollection<AbstractPatch> patchCollection;
-        private readonly ImmutableArray<double> input;
-        private readonly IPatcher inputPatcher;
-        private readonly IAnalyzer normCalculator;
-        private readonly IAudioProcessingSettings settings;
-        private readonly IPredictor predictor;
-        private IRegenerator regenerarator;
-        private IPatchMaker patchMaker;
-        private IDetector damageDetector;
-        private ImmutableArray<double> predictionErr;
-        private IPatcher predictionErrPatcher;
+        private ScannerTools scannerTools;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel"/> class.
@@ -41,40 +29,26 @@ namespace CarefulAudioRepair.Data
                 throw new ArgumentNullException(nameof(inputSamples));
             }
 
-            this.patchCollection = new BlockingCollection<AbstractPatch>();
-
-            this.input = ImmutableArray.Create(inputSamples);
-            this.inputPatcher = new Patcher(
-                this.input,
-                this.patchCollection,
-                (patch, position) => patch.GetValue(position));
-
-            this.predictor = new FastBurgPredictor(
-                settings.CoefficientsNumber,
-                settings.HistoryLengthSamples);
-
-            this.normCalculator = new AveragedMaxErrorAnalyzer();
-
-            this.settings = settings;
-
-            this.IsPreprocessed = false;
+            this.scannerTools = new ScannerTools(
+                ImmutableArray.Create(inputSamples),
+                settings);
         }
 
         /// <summary>
         /// Gets a value indicating whether scan was performed once on this data
         /// so the prediction errors were calculated.
         /// </summary>
-        public bool IsPreprocessed { get; private set; }
+        public bool IsPreprocessed => this.scannerTools.IsPreprocessed;
 
         /// <summary>
         /// Gets length of audio in samples.
         /// </summary>
-        public int LengthSamples => this.input.Length;
+        public int LengthSamples => this.scannerTools.Input.Length;
 
         /// <summary>
         /// Gets number of patches.
         /// </summary>
-        public int NumberOfPatches => this.patchCollection.Count;
+        public int NumberOfPatches => this.scannerTools.PatchCollection.Count;
 
         /// <summary>
         /// Asynchronously scans audio for damaged samples and repairs them.
@@ -86,7 +60,15 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            await Task.Run(() => this.Scan(status, progress)).ConfigureAwait(false);
+            var scanner = new Scanner(this.scannerTools);
+
+            this.scannerTools =
+                await scanner.ScanAsync(status, progress).ConfigureAwait(false);
+
+            foreach (var patch in this.scannerTools.PatchCollection)
+            {
+                this.RegisterPatch(patch);
+            }
         }
 
         /// <summary>
@@ -95,7 +77,7 @@ namespace CarefulAudioRepair.Data
         /// <returns>Array of patches.</returns>
         public Patch[] GetAllPatches()
         {
-            var patchList = this.patchCollection.ToList();
+            var patchList = this.scannerTools.PatchCollection.ToList();
             patchList.Sort();
             return patchList.Select(p => p as Patch).ToArray();
         }
@@ -105,7 +87,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="position">Position of input sample.</param>
         /// <returns>Value.</returns>
-        public double GetInputSample(int position) => this.input[position];
+        public double GetInputSample(int position) => this.scannerTools.Input[position];
 
         /// <summary>
         /// Returns value of output sample at position.
@@ -113,7 +95,7 @@ namespace CarefulAudioRepair.Data
         /// <param name="position">Position of output sample.</param>
         /// <returns>Value.</returns>
         public double GetOutputSample(int position) =>
-            this.inputPatcher.GetValue(position);
+            this.scannerTools.InputPatcher.GetValue(position);
 
         /// <summary>
         /// Returns value of prediction error at position.
@@ -121,234 +103,27 @@ namespace CarefulAudioRepair.Data
         /// <param name="position">Position of prediction error.</param>
         /// <returns>Value.</returns>
         public double GetPredictionErr(int position) =>
-            this.predictionErrPatcher.GetValue(position);
+            this.scannerTools.PredictionErrPatcher.GetValue(position);
 
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.patchCollection.Dispose();
-        }
-
-        private void GetReady(
-            IProgress<string> status,
-            IProgress<double> progress)
-        {
-            status.Report("Preparation");
-            progress.Report(0);
-
-            var errors = this.CalculatePredictionErrors(progress);
-
-            // Initialize fields that depend on prediction errors
-            this.predictionErr = ImmutableArray.Create(errors);
-            this.predictionErrPatcher = new Patcher(
-                this.predictionErr,
-                this.patchCollection,
-                (_, __) => AbstractPatch.MinimalPredictionError);
-
-            this.damageDetector = new DamagedSampleDetector(
-                this.predictionErrPatcher,
-                this.inputPatcher,
-                this.normCalculator,
-                this.predictor);
-
-            this.regenerarator = new Regenerator(
-                this.inputPatcher,
-                this.predictor,
-                this.damageDetector);
-
-            this.patchMaker = new PatchMaker(this.regenerarator);
-
-            progress.Report(100);
-
-            // The fields are initialized
-            this.IsPreprocessed = true;
-        }
-
-        private double[] CalculatePredictionErrors(
-            IProgress<double> progress)
-        {
-            var errors = new double[this.LengthSamples];
-
-            var inputDataSize = this.predictor.InputDataSize;
-
-            var part = Partitioner.Create(
-                inputDataSize,
-                this.LengthSamples,
-                (this.LengthSamples - inputDataSize) / Environment.ProcessorCount);
-
-            Parallel.ForEach(part, (range, state, index) =>
-            {
-                for (var position = range.Item1; position < range.Item2; position++)
-                {
-                    var inputDataStart = position - inputDataSize;
-
-                    errors[position] = this.input[position]
-                        - this.predictor.GetForward(
-                            this.inputPatcher.GetRange(inputDataStart, inputDataSize));
-
-                    // Only the first thread reports
-                    // Throttling by 1000 samples
-                    if (index == 0 && position % 1000 == 0)
-                    {
-                        progress.Report(
-                            100.0 * (position - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
-            });
-
-            return errors;
-        }
-
-        private void Scan(IProgress<string> status, IProgress<double> progress)
-        {
-            if (!this.IsPreprocessed)
-            {
-                this.GetReady(status, progress);
-            }
-
-            this.RemoveAllPatches();
-
-            var suspects = this.DetectSuspiciousSamples(status, progress);
-
-            this.GenerateNewPatches(suspects, status, progress);
-
-            status.Report(string.Empty);
-            progress.Report(100);
-        }
-
-        private void GenerateNewPatches(
-            (int start, int length, double errorLevelAtDetection)[] suspects,
-            IProgress<string> status,
-            IProgress<double> progress)
-        {
-            status.Report("Restoration");
-            progress.Report(0);
-
-            var suspectRange = Partitioner.Create(
-                0,
-                suspects.Length,
-                (int)Math.Ceiling((double)suspects.Length / Environment.ProcessorCount));
-
-            Parallel.ForEach(suspectRange, (range, state, index) =>
-            {
-                for (var suspectIndex = range.Item1;
-                    suspectIndex < range.Item2;
-                    suspectIndex++)
-                {
-                    this.CheckSuspect(suspects[suspectIndex]);
-
-                    // Only the first thread reports
-                    if (index == 0)
-                    {
-                        progress.Report(
-                            100.0 * (suspectIndex - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
-            });
-
-            progress.Report(100);
-        }
-
-        private (int start, int length, double errorLevelAtDetection)[] DetectSuspiciousSamples(
-            IProgress<string> status,
-            IProgress<double> progress)
-        {
-            status.Report("Detection");
-            progress.Report(0);
-
-            var suspectsList = new List<(int, int, double)>();
-
-            var start = Math.Max(
-                this.patchMaker.InputDataSize,
-                this.damageDetector.InputDataSize);
-
-            var end = this.LengthSamples
-                - (this.patchMaker.InputDataSize
-                    + this.settings.MaxLengthOfCorrection);
-
-            var part = Partitioner.Create(
-                start,
-                end,
-                (end - start) / Environment.ProcessorCount);
-
-            Parallel.ForEach(part, (range, state, index) =>
-            {
-                for (var position = range.Item1; position < range.Item2; position++)
-                {
-                    var errorLevelAtDetection =
-                        this.damageDetector.GetErrorLevel(position);
-
-                    if (errorLevelAtDetection > this.settings.ThresholdForDetection)
-                    {
-                        var lengthToSkip = this.settings.MaxLengthOfCorrection
-                            + this.damageDetector.InputDataSize;
-
-                        suspectsList.Add((position, lengthToSkip, errorLevelAtDetection));
-                        position += lengthToSkip;
-                    }
-
-                    // Only the first thread reports
-                    // Throttling by 1000 samples
-                    if (index == 0 && position % 1000 == 0)
-                    {
-                        progress.Report(
-                            100.0 * (position - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
-            });
-
-            progress.Report(100);
-
-            return suspectsList.ToArray();
-        }
-
-        private void CheckSuspect((int start, int length, double errorLevelAtDetection) suspect)
-        {
-            var firstPatch = this.patchMaker.NewPatch(
-                    suspect.start,
-                    this.settings.MaxLengthOfCorrection,
-                    suspect.errorLevelAtDetection);
-
-            this.RegisterPatch(firstPatch);
-
-            var end = suspect.start + suspect.length;
-
-            for (var position = firstPatch.EndPosition + 1; position < end; position++)
-            {
-                var errorLevelAtDetection = this.damageDetector.GetErrorLevel(position);
-
-                if (errorLevelAtDetection > this.settings.ThresholdForDetection)
-                {
-                    var patch = this.patchMaker.NewPatch(
-                    position,
-                    this.settings.MaxLengthOfCorrection,
-                    suspect.errorLevelAtDetection);
-
-                    this.RegisterPatch(patch);
-
-                    var newEnd = patch.StartPosition + suspect.length;
-                    end = Math.Max(end, newEnd);
-                }
-            }
+            this.scannerTools.Dispose();
         }
 
         private void RemoveAllPatches()
         {
-            while (this.patchCollection.TryTake(out _))
+            while (this.scannerTools.PatchCollection.TryTake(out _))
             {
             }
         }
 
         private void RegisterPatch(AbstractPatch patch)
         {
-            this.patchCollection.Add(patch);
             patch.Updater += this.PatchUpdater;
         }
 
         private void PatchUpdater(object sender, EventArgs e) =>
-            this.regenerarator.RestorePatch(sender as AbstractPatch);
+            this.scannerTools.Regenerarator.RestorePatch(sender as AbstractPatch);
     }
 }

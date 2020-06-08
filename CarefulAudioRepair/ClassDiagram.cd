@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="AudioClickRepair.Data.Mono" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.Mono" Collapsed="true">
     <Position X="0.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQABACCAAAAACIAUAAIAAAQAIAAAAAAgAAACAAAAAA=</HashCode>
@@ -11,7 +11,7 @@
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AudioClickRepair.Data.Stereo" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.Stereo" Collapsed="true">
     <Position X="4.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQABACCAAAAACJAEAAIAAAQAIAAAAAAgAAACCAAAAA=</HashCode>
@@ -23,7 +23,7 @@
     </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AudioClickRepair.Data.Channel" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.Channel" Collapsed="true">
     <Position X="2.75" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AgQAAUAACAACAAIWAAAKJABAQIGAABAAACAACgAAAgA=</HashCode>
@@ -46,23 +46,23 @@
     <TypeIdentifier />
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AudioClickRepair.Data.ArrayFragment" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.ArrayFragment" Collapsed="true">
     <Position X="7" Y="10.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\ArrayFragment.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AudioClickRepair.Data.Patch" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.Patch" Collapsed="true">
     <Position X="4.5" Y="12.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAIAgAACAAAAACAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\Patch.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AudioClickRepair.Data.AbstractPatch" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.AbstractPatch" Collapsed="true">
     <Position X="4.5" Y="10.75" Width="1.5" />
-    <InheritanceLine Type="AudioClickRepair.Data.AbstractFragment" FixedToPoint="true">
+    <InheritanceLine Type="CarefulAudioRepair.Data.AbstractFragment" FixedToPoint="true">
       <Path>
         <Point X="7.75" Y="10.062" />
         <Point X="7.75" Y="10.375" />
@@ -76,16 +76,16 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="AudioClickRepair.Data.AbstractFragment" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.AbstractFragment" Collapsed="true">
     <Position X="7" Y="9.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAABAAQMAAAAgAAAAAEAABAAAQAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\AbstractFragment.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AudioClickRepair.Data.PatchEventArgs" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Data.PatchEventArgs" Collapsed="true">
     <Position X="9.75" Y="10.75" Width="1.5" />
-    <AssociationLine Name="Patched" Type="AudioClickRepair.Data.AbstractFragment" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+    <AssociationLine Name="Patched" Type="CarefulAudioRepair.Data.AbstractFragment" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="10.438" Y="10.75" />
         <Point X="10.438" Y="10.375" />
@@ -101,7 +101,7 @@
       <Property Name="Patched" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="AudioClickRepair.Processing.FastBurgPredictor" Collapsed="true">
+  <Class Name="CarefulAudioRepair.Processing.FastBurgPredictor" Collapsed="true">
     <Position X="4.25" Y="8.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAEEAIAAAAAQAAAAAACAAAAAAAAA=</HashCode>
@@ -109,49 +109,49 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Interface Name="AudioClickRepair.Processing.IDetector" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Processing.IDetector" Collapsed="true">
     <Position X="6.25" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Processing\IDetector.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="AudioClickRepair.Processing.IPatcher" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Processing.IPatcher" Collapsed="true">
     <Position X="6.5" Y="4" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Processing\IPatcher.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="AudioClickRepair.Processing.IAnalyzer" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Processing.IAnalyzer" Collapsed="true">
     <Position X="6.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAIAAAAAEAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
       <FileName>Processing\IAnalyzer.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="AudioClickRepair.Processing.IPatchMaker" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Processing.IPatchMaker" Collapsed="true">
     <Position X="7" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAgAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Processing\IPatchMaker.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="AudioClickRepair.Processing.IPredictor" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Processing.IPredictor" Collapsed="true">
     <Position X="4.25" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAEAIAAAAAAAAAAAACAAAAAAAAA=</HashCode>
       <FileName>Processing\IPredictor.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="AudioClickRepair.Processing.IRegenerator" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Processing.IRegenerator" Collapsed="true">
     <Position X="2.5" Y="7.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAQAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Processing\IRegenerator.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="AudioClickRepair.Data.IAudioProcessingSettings" Collapsed="true">
+  <Interface Name="CarefulAudioRepair.Data.IAudioProcessingSettings" Collapsed="true">
     <Position X="3" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>BAAAAAAAAAAAAAAAAAAABAAAAAAAAAgAAAAAAAAAAQY=</HashCode>
