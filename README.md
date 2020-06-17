@@ -6,10 +6,11 @@ This is a library for removing short sharp noises (clicks, pops, etc.) from audi
 var inputMono = new double[...];
 // Update inputMono with input audio samples
 
-var audio = new Mono(inputMono, new AudioProcessingSettings());
+var audio = new Mono(inputMono, new AudioProcessingSettings() { SampleRate = <your_audio_sample_rate> });
 
 var status = new Progress<string>();
 var progress = new Progress<double>();
+
 await audio.ScanAsync(status, progress);
 
 var patches = audio.GetPatches(ChannelType.Left);
@@ -22,10 +23,11 @@ var inputLeft = new double[...];
 var inputRight = new double[...];
 // Update inputLeft and inputRight with input audio samples
 
-var audio = new Stereo(inputLeft, inputRight, new AudioProcessingSettings());
+var audio = new Stereo(inputLeft, inputRight, new AudioProcessingSettings() { SampleRate = <your_audio_sample_rate> });
 
 var status = new Progress<string>();
 var progress = new Progress<double>();
+
 await audio.ScanAsync(status, progress);
 
 var patchesLeft = audio.GetPatches(ChannelType.Left);
