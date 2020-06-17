@@ -111,6 +111,15 @@ namespace CarefulAudioRepair.Data
             this.scannerTools.Dispose();
         }
 
+        /// <summary>
+        /// Gets range of samples from input array.
+        /// </summary>
+        /// <param name="start">Start index.</param>
+        /// <param name="length">Range length.</param>
+        /// <returns>Array of input samples.</returns>
+        public double[] GetInputRange(int start, int length) =>
+            this.scannerTools.Input.Skip(start - 1).Take(length).ToArray();
+
         private void RemoveAllPatches()
         {
             while (this.scannerTools.PatchCollection.TryTake(out _))

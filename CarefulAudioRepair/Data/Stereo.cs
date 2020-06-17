@@ -116,5 +116,13 @@ namespace CarefulAudioRepair.Data
             this.leftChannel.Dispose();
             this.rightChannel.Dispose();
         }
+
+        /// <inheritdoc/>
+        public double[] GetInputRange(ChannelType channelType, int start, int length)
+        {
+            return channelType == ChannelType.Left
+            ? this.leftChannel.GetInputRange(start, length)
+            : this.rightChannel.GetInputRange(start, length);
+        }
     }
 }

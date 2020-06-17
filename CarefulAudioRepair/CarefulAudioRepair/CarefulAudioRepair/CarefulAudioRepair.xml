@@ -294,6 +294,14 @@
         <member name="M:CarefulAudioRepair.Data.Channel.Dispose">
             <inheritdoc/>
         </member>
+        <member name="M:CarefulAudioRepair.Data.Channel.GetInputRange(System.Int32,System.Int32)">
+            <summary>
+            Gets range of samples from input array.
+            </summary>
+            <param name="start">Start index.</param>
+            <param name="length">Range length.</param>
+            <returns>Array of input samples.</returns>
+        </member>
         <member name="T:CarefulAudioRepair.Data.ChannelType">
             <summary>
             Audio channel type (left or right).
@@ -371,6 +379,15 @@
             <param name="channelType">Left or Right channel.</param>
             <param name="position">Position of sample.</param>
             <returns>Value of sample.</returns>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.IAudio.GetInputRange(CarefulAudioRepair.Data.ChannelType,System.Int32,System.Int32)">
+            <summary>
+            Gets range of samples from input array.
+            </summary>
+            <param name="channelType">Left or Right channel.</param>
+            <param name="start">Start index.</param>
+            <param name="length">Range length.</param>
+            <returns>Array of input samples.</returns>
         </member>
         <member name="M:CarefulAudioRepair.Data.IAudio.GetOutputSample(CarefulAudioRepair.Data.ChannelType,System.Int32)">
             <summary>
@@ -482,6 +499,9 @@
         <member name="M:CarefulAudioRepair.Data.Mono.Dispose">
             <inheritdoc/>
         </member>
+        <member name="M:CarefulAudioRepair.Data.Mono.GetInputRange(CarefulAudioRepair.Data.ChannelType,System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
         <member name="T:CarefulAudioRepair.Data.Patch">
             <summary>
             Contains information on sequences of damaged samples.
@@ -568,6 +588,9 @@
             <inheritdoc/>
         </member>
         <member name="M:CarefulAudioRepair.Data.Stereo.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:CarefulAudioRepair.Data.Stereo.GetInputRange(CarefulAudioRepair.Data.ChannelType,System.Int32,System.Int32)">
             <inheritdoc/>
         </member>
         <member name="T:CarefulAudioRepair.Processing.AveragedMaxErrorAnalyzer">

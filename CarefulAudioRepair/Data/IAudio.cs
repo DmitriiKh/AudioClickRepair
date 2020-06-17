@@ -75,6 +75,15 @@ namespace CarefulAudioRepair.Data
         public double GetInputSample(ChannelType channelType, int position);
 
         /// <summary>
+        /// Gets range of samples from input array.
+        /// </summary>
+        /// <param name="channelType">Left or Right channel.</param>
+        /// <param name="start">Start index.</param>
+        /// <param name="length">Range length.</param>
+        /// <returns>Array of input samples.</returns>
+        public double[] GetInputRange(ChannelType channelType, int start, int length);
+
+        /// <summary>
         /// Returns value of output sample from specified channel at specified position.
         /// </summary>
         /// <param name="channelType">Left or Right channel.</param>
