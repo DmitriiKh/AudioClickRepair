@@ -144,6 +144,8 @@ namespace CarefulAudioRepair.Processing
                 }
             });
 
+            this.tools.PatchCollection.Finalize();
+
             progress.Report(100);
         }
 

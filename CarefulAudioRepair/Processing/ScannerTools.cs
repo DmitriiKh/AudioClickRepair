@@ -24,7 +24,7 @@ namespace CarefulAudioRepair.Processing
         /// <param name="settings">Settings for processing audio.</param>
         public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
         {
-            this.PatchCollection = new BlockingCollection<AbstractPatch>();
+            this.PatchCollection = new PatchCollection();
 
             this.Input = inputSamples;
 
@@ -65,7 +65,7 @@ namespace CarefulAudioRepair.Processing
         /// <summary>
         /// Gets collection of patches.
         /// </summary>
-        public BlockingCollection<AbstractPatch> PatchCollection { get; }
+        public PatchCollection PatchCollection { get; }
 
         /// <summary>
         /// Gets input samples.

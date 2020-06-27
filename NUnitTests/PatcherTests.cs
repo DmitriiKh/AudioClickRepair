@@ -11,7 +11,7 @@ namespace NUnitTests
     {
         private const int _testArrayLength = 1000;
         private ImmutableArray<double> _arrayValueEqualsIndex;
-        private BlockingCollection<AbstractPatch> _patchCollection;
+        private PatchCollection _patchCollection;
         private IPatcher _patcher;
 
         [SetUp]
@@ -21,7 +21,7 @@ namespace NUnitTests
                 .Select(i => (double)i)
                 .ToImmutableArray();
 
-            _patchCollection = new BlockingCollection<AbstractPatch>();
+            _patchCollection = new PatchCollection();
 
             _patcher = new Patcher(
                 _arrayValueEqualsIndex,

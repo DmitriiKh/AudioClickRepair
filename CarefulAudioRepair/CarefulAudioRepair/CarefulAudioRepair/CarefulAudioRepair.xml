@@ -921,7 +921,7 @@
             if the elements were patched.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Processing.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},System.Collections.Concurrent.BlockingCollection{CarefulAudioRepair.Data.AbstractPatch},System.Func{CarefulAudioRepair.Data.AbstractPatch,System.Int32,System.Double})">
+        <member name="M:CarefulAudioRepair.Processing.Patcher.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},CarefulAudioRepair.Data.PatchCollection,System.Func{CarefulAudioRepair.Data.AbstractPatch,System.Int32,System.Double})">
             <summary>
             Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.Patcher"/> class.
             </summary>

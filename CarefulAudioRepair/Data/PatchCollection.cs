@@ -19,11 +19,13 @@ namespace CarefulAudioRepair.Data
 
         private int[] startPositions;
 
-        public bool Finalized { get; private set; } = false;
-
         public PatchCollection()
         {
         }
+
+        public bool Finalized { get; private set; } = false;
+
+        public int Count => this.patchCollection.Count;
 
         public void Add(AbstractPatch patch)
         {
@@ -111,6 +113,20 @@ namespace CarefulAudioRepair.Data
 
                 return patchesForRange.ToArray();
             }
+        }
+
+        public List<AbstractPatch> ToList()
+        {
+            return this.patchCollection.ToList();
+        }
+
+        public void RemoveAllPatches()
+        {
+            while (this.patchCollection.TryTake(out _))
+            {
+            }
+
+            this.Finalized = false;
         }
 
         public void Dispose()

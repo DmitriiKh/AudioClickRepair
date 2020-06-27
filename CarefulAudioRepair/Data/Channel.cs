@@ -65,7 +65,7 @@ namespace CarefulAudioRepair.Data
             this.scannerTools =
                 await scanner.ScanAsync(status, progress).ConfigureAwait(false);
 
-            foreach (var patch in this.scannerTools.PatchCollection)
+            foreach (var patch in this.scannerTools.PatchCollection.ToList())
             {
                 this.RegisterPatch(patch);
             }
@@ -122,9 +122,7 @@ namespace CarefulAudioRepair.Data
 
         private void RemoveAllPatches()
         {
-            while (this.scannerTools.PatchCollection.TryTake(out _))
-            {
-            }
+            this.scannerTools.PatchCollection.RemoveAllPatches();
         }
 
         private void RegisterPatch(AbstractPatch patch)

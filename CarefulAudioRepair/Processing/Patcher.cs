@@ -17,7 +17,7 @@ namespace CarefulAudioRepair.Processing
     internal class Patcher : IPatcher
     {
         private readonly ImmutableArray<double> immutableArray;
-        private readonly BlockingCollection<AbstractPatch> patchCollection;
+        private readonly PatchCollection patchCollection;
         private readonly Func<AbstractPatch, int, double> updateFunc;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace CarefulAudioRepair.Processing
         /// Example: (patch, position) => patch.GetOutputSample(position).</param>
         public Patcher(
             ImmutableArray<double> immutableArray,
-            BlockingCollection<AbstractPatch> patchCollection,
+            PatchCollection patchCollection,
             Func<AbstractPatch, int, double> updateFunc)
         {
             this.immutableArray = immutableArray;
@@ -53,7 +53,7 @@ namespace CarefulAudioRepair.Processing
                 start,
                 length);
 
-            var patches = this.GetPatchesForRange(range);
+            var patches = this.patchCollection.GetPatchesForRange(range);
 
             foreach (var patch in patches)
             {
@@ -76,7 +76,7 @@ namespace CarefulAudioRepair.Processing
         /// <returns>Value of sample.</returns>
         public double GetValue(int position)
         {
-            var patchForPosition = this.PatchForPosition(position);
+            var patchForPosition = this.patchCollection.GetPatchForPosition(position);
 
             return patchForPosition is null
                 ? this.immutableArray[position]
@@ -94,18 +94,18 @@ namespace CarefulAudioRepair.Processing
             }
         }
 
-        private AbstractPatch[] GetPatchesForRange(AbstractFragment range)
-        {
-            var patchesForRange = this.patchCollection.Where(
-                p => p?.StartPosition <= range.EndPosition &&
-                p?.EndPosition >= range.StartPosition);
+        //private AbstractPatch[] GetPatchesForRange(AbstractFragment range)
+        //{
+        //    var patchesForRange = this.patchCollection.Where(
+        //        p => p?.StartPosition <= range.EndPosition &&
+        //        p?.EndPosition >= range.StartPosition);
 
-            return patchesForRange.ToArray();
-        }
+        //    return patchesForRange.ToArray();
+        //}
 
-        private AbstractPatch PatchForPosition(int position) =>
-            this.patchCollection.FirstOrDefault(
-                p => p?.StartPosition <= position &&
-                p?.EndPosition >= position);
+        //private AbstractPatch PatchForPosition(int position) =>
+        //    this.patchCollection.FirstOrDefault(
+        //        p => p?.StartPosition <= position &&
+        //        p?.EndPosition >= position);
     }
 }
