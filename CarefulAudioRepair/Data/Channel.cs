@@ -120,11 +120,6 @@ namespace CarefulAudioRepair.Data
         public double[] GetInputRange(int start, int length) =>
             this.scannerTools.Input.Skip(start - 1).Take(length).ToArray();
 
-        private void RemoveAllPatches()
-        {
-            this.scannerTools.PatchCollection.RemoveAllPatches();
-        }
-
         private void RegisterPatch(AbstractPatch patch)
         {
             patch.Updater += this.PatchUpdater;
