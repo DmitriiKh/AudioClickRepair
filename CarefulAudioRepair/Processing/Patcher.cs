@@ -93,19 +93,5 @@ namespace CarefulAudioRepair.Processing
                 range.SetValue(position, this.updateFunc(patch, position));
             }
         }
-
-        //private AbstractPatch[] GetPatchesForRange(AbstractFragment range)
-        //{
-        //    var patchesForRange = this.patchCollection.Where(
-        //        p => p?.StartPosition <= range.EndPosition &&
-        //        p?.EndPosition >= range.StartPosition);
-
-        //    return patchesForRange.ToArray();
-        //}
-
-        //private AbstractPatch PatchForPosition(int position) =>
-        //    this.patchCollection.FirstOrDefault(
-        //        p => p?.StartPosition <= position &&
-        //        p?.EndPosition >= position);
     }
 }
