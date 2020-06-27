@@ -5,9 +5,7 @@
 namespace CarefulAudioRepair.Processing
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Immutable;
-    using System.Linq;
     using CarefulAudioRepair.Data;
 
     /// <summary>
