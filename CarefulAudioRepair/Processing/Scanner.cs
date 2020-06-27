@@ -41,8 +41,6 @@ namespace CarefulAudioRepair.Processing
                 this.tools.GetReady(status, progress);
             }
 
-            this.tools.PatchCollection.RemoveAllPatches();
-
             var suspects = this.DetectSuspiciousSamples(status, progress);
 
             if (suspects.Any())
@@ -62,6 +60,8 @@ namespace CarefulAudioRepair.Processing
         {
             status.Report("Detection");
             progress.Report(0);
+
+            this.tools.PatchCollection.RemoveAllPatches();
 
             var suspectsList = new List<Suspect>();
 
