@@ -10,7 +10,7 @@ namespace CarefulAudioRepair.Data
     using System.Collections.Immutable;
     using System.Linq;
 
-    internal class PatchCollection
+    internal class PatchCollection : IDisposable
     {
         private readonly BlockingCollection<AbstractPatch> patchCollection =
             new BlockingCollection<AbstractPatch>();
@@ -111,6 +111,11 @@ namespace CarefulAudioRepair.Data
 
                 return patchesForRange.ToArray();
             }
+        }
+
+        public void Dispose()
+        {
+            this.patchCollection.Dispose();
         }
 
         private int GetIndexOnOrBefore(int position)
