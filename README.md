@@ -14,6 +14,8 @@ var progress = new Progress<double>();
 await audio.ScanAsync(status, progress);
 
 var patches = audio.GetPatches(ChannelType.Left);
+
+var outputMono = audio.GetOutputArray(ChannelType.Left);
 ```
 
 OR
@@ -32,4 +34,7 @@ await audio.ScanAsync(status, progress);
 
 var patchesLeft = audio.GetPatches(ChannelType.Left);
 var patchesRight = audio.GetPatches(ChannelType.Right);
+
+var outputLeft = audio.GetOutputArray(ChannelType.Left);
+var outputRight = audio.GetOutputArray(ChannelType.Right);
 ```
