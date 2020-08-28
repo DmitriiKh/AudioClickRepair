@@ -7,6 +7,7 @@ namespace CarefulAudioRepair.Processing
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -153,6 +154,9 @@ namespace CarefulAudioRepair.Processing
 
         private void CheckSuspect(Suspect suspect)
         {
+#if DEBUG
+            var startTime = DateTime.Now;
+#endif
             var firstPatch = this.tools.PatchMaker.NewPatch(
                     suspect.Start,
                     this.tools.Settings.MaxLengthOfCorrection,
@@ -169,16 +173,18 @@ namespace CarefulAudioRepair.Processing
                 if (errorLevelAtDetection > this.tools.Settings.ThresholdForDetection)
                 {
                     var patch = this.tools.PatchMaker.NewPatch(
-                    position,
-                    this.tools.Settings.MaxLengthOfCorrection,
-                    suspect.ErrorLevelAtDetection);
+                        position,
+                        this.tools.Settings.MaxLengthOfCorrection,
+                        suspect.ErrorLevelAtDetection);
 
                     this.tools.PatchCollection.Add(patch);
-
-                    var newEnd = patch.StartPosition + suspect.Length;
-                    end = Math.Max(end, newEnd);
                 }
             }
+
+#if DEBUG
+            var endTime = DateTime.Now;
+            Debug.WriteLine(@"Suspect {0}->{1} took time {2} sec", suspect.Start, suspect.ErrorLevelAtDetection, endTime - startTime);
+#endif
         }
 
         private struct Suspect
