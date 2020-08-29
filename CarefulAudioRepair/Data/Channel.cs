@@ -29,9 +29,19 @@ namespace CarefulAudioRepair.Data
                 throw new ArgumentNullException(nameof(inputSamples));
             }
 
-            this.scannerTools = new ScannerTools(
-                ImmutableArray.Create(inputSamples),
-                settings);
+            var inputImmutable = ImmutableArray.Create(inputSamples);
+
+            this.scannerTools = new ScannerTools(inputImmutable, settings);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Channel"/> class.
+        /// </summary>
+        /// <param name="inputSamples">Input audio samples.</param>
+        /// <param name="settings">Audio setting.</param>
+        public Channel(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
+        {
+            this.scannerTools = new ScannerTools(inputSamples, settings);
         }
 
         /// <summary>
