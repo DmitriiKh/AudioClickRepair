@@ -5,6 +5,7 @@
 namespace CarefulAudioRepair.Data
 {
     using System;
+    using System.Collections.Immutable;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -25,6 +26,27 @@ namespace CarefulAudioRepair.Data
         public Stereo(
             double[] leftChannelSamples,
             double[] rightChannelSamples,
+            IAudioProcessingSettings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            this.Settings = settings;
+            this.leftChannel = new Channel(leftChannelSamples, settings);
+            this.rightChannel = new Channel(rightChannelSamples, settings);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Stereo"/> class.
+        /// </summary>
+        /// <param name="leftChannelSamples">Input samples (left channel).</param>
+        /// <param name="rightChannelSamples">Input samples (right channel.</param>
+        /// <param name="settings">Settings associated with this audio data.</param>
+        public Stereo(
+            ImmutableArray<double> leftChannelSamples,
+            ImmutableArray<double> rightChannelSamples,
             IAudioProcessingSettings settings)
         {
             if (settings is null)
