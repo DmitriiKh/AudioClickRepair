@@ -5,6 +5,7 @@
 namespace CarefulAudioRepair.Data
 {
     using System;
+    using System.Collections.Immutable;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -21,6 +22,22 @@ namespace CarefulAudioRepair.Data
         /// <param name="samples">Input samples.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
         public Mono(double[] samples, IAudioProcessingSettings settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            this.Settings = settings;
+            this.monoChannel = new Channel(samples, settings);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Mono"/> class.
+        /// </summary>
+        /// <param name="samples">Input samples.</param>
+        /// <param name="settings">Settings associated with this audio data.</param>
+        public Mono(ImmutableArray<double> samples, IAudioProcessingSettings settings)
         {
             if (settings is null)
             {
