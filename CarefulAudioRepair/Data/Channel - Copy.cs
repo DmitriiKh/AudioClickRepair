@@ -104,7 +104,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="position">Position of input sample.</param>
         /// <returns>Value.</returns>
-        public double GetInputSample(int position) => this.scannerTools.Input[position];
+        public double GetInputSample(int position) => this.inputImmutable[position];
 
         /// <summary>
         /// Returns value of output sample at position.
