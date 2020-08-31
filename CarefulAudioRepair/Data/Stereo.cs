@@ -135,8 +135,15 @@ namespace CarefulAudioRepair.Data
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.leftChannel.Dispose();
-            this.rightChannel.Dispose();
+            if (this.leftChannel is IDisposable left)
+            {
+                left.Dispose();
+            }
+
+            if (this.rightChannel is IDisposable right)
+            {
+                right.Dispose();
+            }
         }
 
         /// <inheritdoc/>

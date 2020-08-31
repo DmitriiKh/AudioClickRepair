@@ -298,9 +298,6 @@
             <param name="position">Position of prediction error.</param>
             <returns>Value.</returns>
         </member>
-        <member name="M:CarefulAudioRepair.Data.MemoryEfficientChannel.Dispose">
-            <inheritdoc/>
-        </member>
         <member name="M:CarefulAudioRepair.Data.MemoryEfficientChannel.GetInputRange(System.Int32,System.Int32)">
             <summary>
             Gets range of samples from input array.
