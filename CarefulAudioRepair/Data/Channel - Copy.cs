@@ -84,6 +84,8 @@ namespace CarefulAudioRepair.Data
             {
                 this.RegisterPatch(patch);
             }
+
+            this.patchCollection.AddRange(tools.PatchCollection.ToList());
         }
 
         /// <summary>

@@ -12,8 +12,6 @@ namespace CarefulAudioRepair.Data
         bool IsPreprocessed { get; }
         int LengthSamples { get; }
         int NumberOfPatches { get; }
-
-        void Dispose();
         Patch[] GetAllPatches();
         double[] GetInputRange(int start, int length);
         double GetInputSample(int position);
