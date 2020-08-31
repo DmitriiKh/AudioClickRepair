@@ -13,7 +13,7 @@ namespace CarefulAudioRepair.Data
     /// <summary>
     /// Represents audio samples for one channel.
     /// </summary>
-    internal class Channel : IDisposable
+    internal class Channel : IDisposable, IChannel
     {
         private ScannerTools scannerTools;
 
