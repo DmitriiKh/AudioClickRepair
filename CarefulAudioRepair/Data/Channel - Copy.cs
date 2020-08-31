@@ -119,8 +119,14 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="position">Position of prediction error.</param>
         /// <returns>Value.</returns>
-        public double GetPredictionErr(int position) =>
-            this.scannerTools.PredictionErrPatcher.GetValue(position);
+        public double GetPredictionErr(int position)
+        {
+            var tools = new ScannerTools(this.inputImmutable, this.settings);
+            var predictionErr = tools.PredictionErrPatcher.GetValue(position);
+            tools.Dispose();
+
+            return predictionErr;
+        }
 
         /// <inheritdoc/>
         public void Dispose()
