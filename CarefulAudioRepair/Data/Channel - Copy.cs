@@ -15,7 +15,12 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     internal class MemoryEfficientChannel : IDisposable, IChannel
     {
+        private readonly ImmutableArray<double> inputImmutable;
+        private readonly IAudioProcessingSettings settings;
+
+        // TODO: remove this field as it requires too much memory
         private ScannerTools scannerTools;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel"/> class.
@@ -29,9 +34,8 @@ namespace CarefulAudioRepair.Data
                 throw new ArgumentNullException(nameof(inputSamples));
             }
 
-            var inputImmutable = ImmutableArray.Create(inputSamples);
-
-            this.scannerTools = new ScannerTools(inputImmutable, settings);
+            this.inputImmutable = ImmutableArray.Create(inputSamples);
+            this.settings = settings;
         }
 
         /// <summary>
@@ -41,7 +45,8 @@ namespace CarefulAudioRepair.Data
         /// <param name="settings">Audio setting.</param>
         public MemoryEfficientChannel(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
         {
-            this.scannerTools = new ScannerTools(inputSamples, settings);
+            this.inputImmutable = inputSamples;
+            this.settings = settings;
         }
 
         /// <summary>
