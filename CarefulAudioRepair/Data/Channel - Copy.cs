@@ -5,6 +5,7 @@
 namespace CarefulAudioRepair.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Linq;
     using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace CarefulAudioRepair.Data
     {
         private readonly ImmutableArray<double> inputImmutable;
         private readonly IAudioProcessingSettings settings;
+        private readonly List<AbstractPatch> patchCollection;
 
         // TODO: remove this field as it requires too much memory
         private ScannerTools scannerTools;
@@ -63,7 +65,7 @@ namespace CarefulAudioRepair.Data
         /// <summary>
         /// Gets number of patches.
         /// </summary>
-        public int NumberOfPatches => this.scannerTools.PatchCollection.Count;
+        public int NumberOfPatches => this.patchCollection.Count;
 
         /// <summary>
         /// Asynchronously scans audio for damaged samples and repairs them.
