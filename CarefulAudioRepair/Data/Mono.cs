@@ -106,7 +106,13 @@ namespace CarefulAudioRepair.Data
         }
 
         /// <inheritdoc/>
-        public void Dispose() => this.monoChannel.Dispose();
+        public void Dispose()
+        {
+            if (this.monoChannel is IDisposable channel)
+            {
+                channel.Dispose();
+            }
+        }
 
         /// <inheritdoc/>
         public double[] GetInputRange(ChannelType channelType, int start, int length)
