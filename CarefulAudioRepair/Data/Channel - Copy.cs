@@ -53,7 +53,7 @@ namespace CarefulAudioRepair.Data
         /// Gets a value indicating whether scan was performed once on this data
         /// so the prediction errors were calculated.
         /// </summary>
-        public bool IsPreprocessed => this.scannerTools.IsPreprocessed;
+        public bool IsPreprocessed => false;
 
         /// <summary>
         /// Gets length of audio in samples.
