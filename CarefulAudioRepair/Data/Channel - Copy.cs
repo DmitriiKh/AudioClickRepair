@@ -135,7 +135,7 @@ namespace CarefulAudioRepair.Data
         /// <param name="length">Range length.</param>
         /// <returns>Array of input samples.</returns>
         public double[] GetInputRange(int start, int length) =>
-            this.scannerTools.Input.Skip(start - 1).Take(length).ToArray();
+            this.inputImmutable.Skip(start - 1).Take(length).ToArray();
 
         private void RegisterPatch(AbstractPatch patch)
         {
