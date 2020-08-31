@@ -77,12 +77,14 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            var scanner = new Scanner(this.scannerTools);
+            var input = this.inputImmutable;
 
-            this.scannerTools =
+            var scanner = new Scanner(new ScannerTools(input, this.settings));
+
+            var tools =
                 await scanner.ScanAsync(status, progress).ConfigureAwait(false);
 
-            foreach (var patch in this.scannerTools.PatchCollection.ToList())
+            foreach (var patch in tools.PatchCollection.ToList())
             {
                 this.RegisterPatch(patch);
             }
