@@ -111,8 +111,14 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="position">Position of output sample.</param>
         /// <returns>Value.</returns>
-        public double GetOutputSample(int position) =>
-            this.scannerTools.InputPatcher.GetValue(position);
+        public double GetOutputSample(int position)
+        {
+            var tools = new ScannerTools(this.inputImmutable, this.settings);
+            var outputSample = tools.InputPatcher.GetValue(position);
+            tools.Dispose();
+
+            return outputSample;
+        }
 
         /// <summary>
         /// Returns value of prediction error at position.
