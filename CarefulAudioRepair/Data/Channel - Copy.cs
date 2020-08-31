@@ -20,10 +20,6 @@ namespace CarefulAudioRepair.Data
         private readonly IAudioProcessingSettings settings;
         private readonly List<AbstractPatch> patchCollection;
 
-        // TODO: remove this field as it requires too much memory
-        private ScannerTools scannerTools;
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel"/> class.
         /// </summary>
@@ -139,7 +135,6 @@ namespace CarefulAudioRepair.Data
         /// <inheritdoc/>
         public void Dispose()
         {
-            this.scannerTools.Dispose();
         }
 
         /// <summary>
