@@ -18,7 +18,7 @@ namespace CarefulAudioRepair.Data
     {
         private readonly ImmutableArray<double> inputImmutable;
         private readonly IAudioProcessingSettings settings;
-        private readonly List<AbstractPatch> patchCollection = new List<AbstractPatch>();
+        private readonly List<AbstractPatch> patches = new List<AbstractPatch>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel"/> class.
@@ -61,7 +61,7 @@ namespace CarefulAudioRepair.Data
         /// <summary>
         /// Gets number of patches.
         /// </summary>
-        public int NumberOfPatches => this.patchCollection.Count;
+        public int NumberOfPatches => this.patches.Count;
 
         /// <summary>
         /// Asynchronously scans audio for damaged samples and repairs them.
@@ -85,7 +85,7 @@ namespace CarefulAudioRepair.Data
                 this.RegisterPatch(patch);
             }
 
-            this.patchCollection.AddRange(tools.PatchCollection.ToList());
+            this.patches.AddRange(tools.PatchCollection.ToList());
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace CarefulAudioRepair.Data
         /// <returns>Array of patches.</returns>
         public Patch[] GetAllPatches()
         {
-            var patchList = this.patchCollection.ToList();
+            var patchList = this.patches.ToList();
             patchList.Sort();
             return patchList.Select(p => p as Patch).ToArray();
         }
