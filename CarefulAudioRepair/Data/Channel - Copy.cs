@@ -142,7 +142,11 @@ namespace CarefulAudioRepair.Data
             patch.Updater += this.PatchUpdater;
         }
 
-        private void PatchUpdater(object sender, EventArgs e) =>
-            this.scannerTools.Regenerarator.RestorePatch(sender as AbstractPatch);
+        private void PatchUpdater(object sender, EventArgs e)
+        {
+            var tools = new ScannerTools(this.inputImmutable, this.settings);
+            tools.Regenerarator.RestorePatch(sender as AbstractPatch);
+            tools.Dispose();
+        }
     }
 }
