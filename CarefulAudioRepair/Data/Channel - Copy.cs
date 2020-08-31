@@ -94,7 +94,7 @@ namespace CarefulAudioRepair.Data
         /// <returns>Array of patches.</returns>
         public Patch[] GetAllPatches()
         {
-            var patchList = this.scannerTools.PatchCollection.ToList();
+            var patchList = this.patchCollection.ToList();
             patchList.Sort();
             return patchList.Select(p => p as Patch).ToArray();
         }
