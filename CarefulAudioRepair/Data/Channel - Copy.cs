@@ -14,7 +14,7 @@ namespace CarefulAudioRepair.Data
     /// <summary>
     /// Represents audio samples for one channel.
     /// </summary>
-    internal class MemoryEfficientChannel : IDisposable, IChannel
+    internal class MemoryEfficientChannel : IChannel
     {
         private readonly ImmutableArray<double> inputImmutable;
         private readonly IAudioProcessingSettings settings;
@@ -130,11 +130,6 @@ namespace CarefulAudioRepair.Data
             tools.Dispose();
 
             return predictionErr;
-        }
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
         }
 
         /// <summary>
