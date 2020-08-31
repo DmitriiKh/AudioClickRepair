@@ -58,7 +58,7 @@ namespace CarefulAudioRepair.Data
         /// <summary>
         /// Gets length of audio in samples.
         /// </summary>
-        public int LengthSamples => this.scannerTools.Input.Length;
+        public int LengthSamples => this.inputImmutable.Length;
 
         /// <summary>
         /// Gets number of patches.
