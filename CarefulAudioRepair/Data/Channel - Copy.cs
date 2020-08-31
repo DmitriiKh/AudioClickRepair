@@ -18,7 +18,7 @@ namespace CarefulAudioRepair.Data
     {
         private readonly ImmutableArray<double> inputImmutable;
         private readonly IAudioProcessingSettings settings;
-        private readonly List<AbstractPatch> patchCollection;
+        private readonly List<AbstractPatch> patchCollection = new List<AbstractPatch>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Channel"/> class.
