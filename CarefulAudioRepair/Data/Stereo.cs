@@ -14,8 +14,8 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     public sealed class Stereo : IAudio
     {
-        private readonly Channel leftChannel;
-        private readonly Channel rightChannel;
+        private readonly IChannel leftChannel;
+        private readonly IChannel rightChannel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Stereo"/> class.
@@ -34,8 +34,8 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.leftChannel = new Channel(leftChannelSamples, settings);
-            this.rightChannel = new Channel(rightChannelSamples, settings);
+            this.leftChannel = new MemoryEfficientChannel(leftChannelSamples, settings);
+            this.rightChannel = new MemoryEfficientChannel(rightChannelSamples, settings);
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.leftChannel = new Channel(leftChannelSamples, settings);
-            this.rightChannel = new Channel(rightChannelSamples, settings);
+            this.leftChannel = new MemoryEfficientChannel(leftChannelSamples, settings);
+            this.rightChannel = new MemoryEfficientChannel(rightChannelSamples, settings);
         }
 
         /// <inheritdoc/>

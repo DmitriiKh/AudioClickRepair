@@ -14,7 +14,7 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     public sealed class Mono : IAudio
     {
-        private readonly Channel monoChannel;
+        private readonly IChannel monoChannel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mono"/> class.
@@ -29,7 +29,7 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.monoChannel = new Channel(samples, settings);
+            this.monoChannel = new MemoryEfficientChannel(samples, settings);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.monoChannel = new Channel(samples, settings);
+            this.monoChannel = new MemoryEfficientChannel(samples, settings);
         }
 
         /// <inheritdoc/>
