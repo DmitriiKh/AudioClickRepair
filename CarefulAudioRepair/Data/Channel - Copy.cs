@@ -73,19 +73,38 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            var input = this.inputImmutable;
+            this.patches.Clear();
 
-            var scanner = new Scanner(new ScannerTools(input, this.settings));
+            const int chunkLength = 1000000;
+            var overlap = this.settings.HistoryLengthSamples * 2;
 
-            var tools =
-                await scanner.ScanAsync(status, progress).ConfigureAwait(false);
-
-            foreach (var patch in tools.PatchCollection.ToList())
+            for (var start = 0; start < this.LengthSamples; start += chunkLength)
             {
-                this.RegisterPatch(patch);
-            }
+                var endExcluding = Math.Min(
+                    start + chunkLength + overlap,
+                    this.inputImmutable.Length);
 
-            this.patches.AddRange(tools.PatchCollection.ToList());
+                var input = Enumerable.Range(start, endExcluding - start)
+                    .Select(i => this.inputImmutable[i])
+                    .ToImmutableArray();
+
+                var scanner = new Scanner(new ScannerTools(input, this.settings));
+
+                var tools = await scanner.ScanAsync(status, progress)
+                    .ConfigureAwait(false);
+
+                foreach (var patch in tools.PatchCollection.ToList())
+                {
+                    var newPatch = new Patch(
+                        patch.GetInternalArray(),
+                        patch.StartPosition + start,
+                        patch.ErrorLevelAtDetection);
+
+                    this.RegisterPatch(newPatch);
+
+                    this.patches.Add(newPatch);
+                }
+            }
         }
 
         /// <summary>
