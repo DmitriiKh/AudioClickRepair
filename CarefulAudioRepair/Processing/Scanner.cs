@@ -29,37 +29,45 @@ namespace CarefulAudioRepair.Processing
 
         /// <inheritdoc/>
         public async Task<ScannerTools> ScanAsync(
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress)
         {
-            return await Task.Run(() => this.Scan(status, progress)).ConfigureAwait(false);
+            return await Task.Run(() => this.Scan(parentStatus, status, progress))
+                .ConfigureAwait(false);
         }
 
-        private ScannerTools Scan(IProgress<string> status, IProgress<double> progress)
+        private ScannerTools Scan(
+            string parentStatus,
+            IProgress<string> status,
+            IProgress<double> progress)
         {
             if (!this.tools.IsPreprocessed)
             {
-                this.tools.GetReady(status, progress);
+                this.tools.GetReady(parentStatus, status, progress);
             }
 
-            var suspects = this.DetectSuspiciousSamples(status, progress);
+            var suspects = this.DetectSuspiciousSamples(
+                parentStatus,
+                status,
+                progress);
 
             if (suspects.Any())
             {
-                this.GenerateNewPatches(suspects, status, progress);
+                this.GenerateNewPatches(suspects, parentStatus, status, progress);
             }
-
-            status.Report(string.Empty);
+            
             progress.Report(100);
 
             return this.tools;
         }
 
         private Suspect[] DetectSuspiciousSamples(
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress)
         {
-            status.Report("Detection");
+            status.Report(parentStatus + "Detection");
             progress.Report(0);
 
             this.tools.PatchCollection.RemoveAllPatches();
@@ -118,10 +126,11 @@ namespace CarefulAudioRepair.Processing
 
         private void GenerateNewPatches(
             Suspect[] suspects,
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress)
         {
-            status.Report("Restoration");
+            status.Report(parentStatus + "Restoration");
             progress.Report(0);
 
             var suspectRange = Partitioner.Create(

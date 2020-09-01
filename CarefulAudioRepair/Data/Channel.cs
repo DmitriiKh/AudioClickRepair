@@ -67,13 +67,14 @@ namespace CarefulAudioRepair.Data
         /// <param name="progress">Parameter to report progress through.</param>
         /// <returns>Task.</returns>
         public async Task ScanAsync(
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress)
         {
             var scanner = new Scanner(this.scannerTools);
 
             this.scannerTools =
-                await scanner.ScanAsync(status, progress).ConfigureAwait(false);
+                await scanner.ScanAsync(parentStatus, status, progress).ConfigureAwait(false);
 
             foreach (var patch in this.scannerTools.PatchCollection.ToList())
             {

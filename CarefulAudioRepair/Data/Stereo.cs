@@ -73,10 +73,12 @@ namespace CarefulAudioRepair.Data
             IProgress<string> status,
             IProgress<double> progress)
         {
-            await this.leftChannel.ScanAsync(status, progress)
+            await this.leftChannel.ScanAsync("Left-", status, progress)
                 .ConfigureAwait(false);
-            await this.rightChannel.ScanAsync(status, progress)
+            await this.rightChannel.ScanAsync("Right-", status, progress)
                 .ConfigureAwait(false);
+
+            status?.Report(string.Empty);
         }
 
         /// <inheritdoc/>

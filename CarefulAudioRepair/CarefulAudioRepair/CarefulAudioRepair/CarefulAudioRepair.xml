@@ -263,7 +263,7 @@
             Gets number of patches.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Data.MemoryEfficientChannel.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+        <member name="M:CarefulAudioRepair.Data.MemoryEfficientChannel.ScanAsync(System.String,System.IProgress{System.String},System.IProgress{System.Double})">
             <summary>
             Asynchronously scans audio for damaged samples and repairs them.
             </summary>
@@ -341,7 +341,7 @@
             Gets number of patches.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Data.Channel.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+        <member name="M:CarefulAudioRepair.Data.Channel.ScanAsync(System.String,System.IProgress{System.String},System.IProgress{System.Double})">
             <summary>
             Asynchronously scans audio for damaged samples and repairs them.
             </summary>
@@ -1006,7 +1006,7 @@
             Interface for Scanner.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Processing.IScanner.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+        <member name="M:CarefulAudioRepair.Processing.IScanner.ScanAsync(System.String,System.IProgress{System.String},System.IProgress{System.Double})">
             <summary>
             Scans audio using ScannerTools.
             Changes ScannerTools.PatchCollection and ScannerTools.PredictionErrPatcher.
@@ -1101,7 +1101,7 @@
             </summary>
             <param name="tools">Set of tools.</param>
         </member>
-        <member name="M:CarefulAudioRepair.Processing.Scanner.ScanAsync(System.IProgress{System.String},System.IProgress{System.Double})">
+        <member name="M:CarefulAudioRepair.Processing.Scanner.ScanAsync(System.String,System.IProgress{System.String},System.IProgress{System.Double})">
             <inheritdoc/>
         </member>
         <member name="T:CarefulAudioRepair.Processing.ScannerTools">
@@ -1175,10 +1175,11 @@
         <member name="M:CarefulAudioRepair.Processing.ScannerTools.Dispose">
             <inheritdoc/>
         </member>
-        <member name="M:CarefulAudioRepair.Processing.ScannerTools.GetReady(System.IProgress{System.String},System.IProgress{System.Double})">
+        <member name="M:CarefulAudioRepair.Processing.ScannerTools.GetReady(System.String,System.IProgress{System.String},System.IProgress{System.Double})">
             <summary>
             Calculates prediction errors for input and gets ready for the detection phase.
             </summary>
+            <param name="parentStatus"></param>
             <param name="status">Parameter to report status through.</param>
             <param name="progress">Parameter to report progress through.</param>
         </member>

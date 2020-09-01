@@ -2,12 +2,11 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
-using System.Collections.Generic;
-
 namespace CarefulAudioRepair.Processing
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Collections.Immutable;
     using System.Threading.Tasks;
     using CarefulAudioRepair.Data;
@@ -110,13 +109,15 @@ namespace CarefulAudioRepair.Processing
         /// <summary>
         /// Calculates prediction errors for input and gets ready for the detection phase.
         /// </summary>
+        /// <param name="parentStatus"></param>
         /// <param name="status">Parameter to report status through.</param>
         /// <param name="progress">Parameter to report progress through.</param>
         public void GetReady(
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress)
         {
-            status.Report("Preparation");
+            status.Report(parentStatus + "Preparation");
             progress.Report(0);
 
             var errors = this.CalculatePredictionErrors(progress);

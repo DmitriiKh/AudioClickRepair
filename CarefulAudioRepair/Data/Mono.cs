@@ -60,9 +60,13 @@ namespace CarefulAudioRepair.Data
         /// <inheritdoc/>
         public async Task ScanAsync(
             IProgress<string> status,
-            IProgress<double> progress) =>
-            await this.monoChannel.ScanAsync(status, progress)
+            IProgress<double> progress)
+        {
+            await this.monoChannel.ScanAsync("Mono-", status, progress)
                 .ConfigureAwait(false);
+
+            status?.Report(string.Empty);
+        }
 
         /// <inheritdoc/>
         public int GetTotalNumberOfPatches() =>

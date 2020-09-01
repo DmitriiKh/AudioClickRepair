@@ -70,6 +70,7 @@ namespace CarefulAudioRepair.Data
         /// <param name="progress">Parameter to report progress through.</param>
         /// <returns>Task.</returns>
         public async Task ScanAsync(
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress)
         {
@@ -78,7 +79,9 @@ namespace CarefulAudioRepair.Data
             const int chunkLength = 1000000;
             var overlap = this.settings.HistoryLengthSamples * 2;
 
-            for (var start = 0; start < this.LengthSamples; start += chunkLength)
+            for (int start = 0, chunkIndex = 1;
+                start < this.LengthSamples;
+                start += chunkLength, chunkIndex++)
             {
                 var endExcluding = Math.Min(
                     start + chunkLength + overlap,
@@ -90,7 +93,10 @@ namespace CarefulAudioRepair.Data
 
                 var scanner = new Scanner(new ScannerTools(input, this.settings));
 
-                var tools = await scanner.ScanAsync(status, progress)
+                var tools = await scanner.ScanAsync(
+                        parentStatus + chunkIndex + "-",
+                        status,
+                        progress)
                     .ConfigureAwait(false);
 
                 foreach (var patch in tools.PatchCollection.ToList())

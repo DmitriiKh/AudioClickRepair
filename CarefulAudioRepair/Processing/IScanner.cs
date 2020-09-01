@@ -20,6 +20,7 @@ namespace CarefulAudioRepair.Processing
         /// <param name="progress">Parameter to report progress through.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         public Task<ScannerTools> ScanAsync(
+            string parentStatus,
             IProgress<string> status,
             IProgress<double> progress);
     }

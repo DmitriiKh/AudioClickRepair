@@ -17,6 +17,6 @@ namespace CarefulAudioRepair.Data
         double GetInputSample(int position);
         double GetOutputSample(int position);
         double GetPredictionErr(int position);
-        Task ScanAsync(IProgress<string> status, IProgress<double> progress);
+        Task ScanAsync(string parentStatus, IProgress<string> status, IProgress<double> progress);
     }
 }
