@@ -1109,12 +1109,13 @@
             Contains a set of objects to support the Scanner class.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Processing.ScannerTools.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},CarefulAudioRepair.Data.IAudioProcessingSettings)">
+        <member name="M:CarefulAudioRepair.Processing.ScannerTools.#ctor(System.Collections.Immutable.ImmutableArray{System.Double},CarefulAudioRepair.Data.IAudioProcessingSettings,System.Collections.Generic.List{CarefulAudioRepair.Data.AbstractPatch})">
             <summary>
             Initializes a new instance of the <see cref="T:CarefulAudioRepair.Processing.ScannerTools"/> class.
             </summary>
             <param name="inputSamples">Input audio samples.</param>
             <param name="settings">Settings for processing audio.</param>
+            <param name="patches"></param>
         </member>
         <member name="P:CarefulAudioRepair.Processing.ScannerTools.IsPreprocessed">
             <summary>

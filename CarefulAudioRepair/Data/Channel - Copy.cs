@@ -113,7 +113,7 @@ namespace CarefulAudioRepair.Data
         /// <returns>Value.</returns>
         public double GetOutputSample(int position)
         {
-            var tools = new ScannerTools(this.inputImmutable, this.settings);
+            var tools = new ScannerTools(this.inputImmutable, this.settings, this.patches);
             var outputSample = tools.InputPatcher.GetValue(position);
             tools.Dispose();
 

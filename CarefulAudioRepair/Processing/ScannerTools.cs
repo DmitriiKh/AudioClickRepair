@@ -2,6 +2,8 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
+
 namespace CarefulAudioRepair.Processing
 {
     using System;
@@ -22,9 +24,11 @@ namespace CarefulAudioRepair.Processing
         /// </summary>
         /// <param name="inputSamples">Input audio samples.</param>
         /// <param name="settings">Settings for processing audio.</param>
-        public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
+        /// <param name="patches"></param>
+        public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings,
+            List<AbstractPatch> patches = null)
         {
-            this.PatchCollection = new PatchCollection();
+            this.PatchCollection = new PatchCollection(patches);
 
             this.Input = inputSamples;
 

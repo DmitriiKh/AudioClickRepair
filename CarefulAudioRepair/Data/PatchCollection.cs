@@ -19,8 +19,17 @@ namespace CarefulAudioRepair.Data
 
         private int[] startPositions;
 
-        public PatchCollection()
+        public PatchCollection(List<AbstractPatch> patches = null)
         {
+            if (patches is null)
+            {
+                return;
+            }
+
+            foreach (var patch in patches)
+            {
+                this.patchCollection.Add(patch);
+            }
         }
 
         public bool Finalized { get; private set; } = false;
