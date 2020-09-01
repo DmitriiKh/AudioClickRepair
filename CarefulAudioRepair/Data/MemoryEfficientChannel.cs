@@ -1,4 +1,4 @@
-﻿// <copyright file="Channel.cs" company="Dmitrii Khrustalev">
+﻿// <copyright file="MemoryEfficientChannel.cs" company="Dmitrii Khrustalev">
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
@@ -21,7 +21,7 @@ namespace CarefulAudioRepair.Data
         private readonly List<AbstractPatch> patches = new List<AbstractPatch>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Channel"/> class.
+        /// Initializes a new instance of the <see cref="MemoryEfficientChannel"/> class.
         /// </summary>
         /// <param name="inputSamples">Input audio samples.</param>
         /// <param name="settings">Audio setting.</param>
@@ -37,7 +37,7 @@ namespace CarefulAudioRepair.Data
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Channel"/> class.
+        /// Initializes a new instance of the <see cref="MemoryEfficientChannel"/> class.
         /// </summary>
         /// <param name="inputSamples">Input audio samples.</param>
         /// <param name="settings">Audio setting.</param>
@@ -66,6 +66,7 @@ namespace CarefulAudioRepair.Data
         /// <summary>
         /// Asynchronously scans audio for damaged samples and repairs them.
         /// </summary>
+        /// <param name="parentStatus">Status from parent.</param>
         /// <param name="status">Parameter to report status through.</param>
         /// <param name="progress">Parameter to report progress through.</param>
         /// <returns>Task.</returns>
