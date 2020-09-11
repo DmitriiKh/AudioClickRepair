@@ -34,8 +34,8 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.leftChannel = new MemoryEfficientChannel(leftChannelSamples, settings);
-            this.rightChannel = new MemoryEfficientChannel(rightChannelSamples, settings);
+            this.leftChannel = new Channel(leftChannelSamples, settings);
+            this.rightChannel = new Channel(rightChannelSamples, settings);
         }
 
         /// <summary>

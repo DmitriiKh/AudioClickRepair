@@ -45,7 +45,7 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.monoChannel = new MemoryEfficientChannel(samples, settings);
+            this.monoChannel = new Channel(samples, settings);
         }
 
         /// <inheritdoc/>
