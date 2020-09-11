@@ -21,7 +21,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="samples">Input samples.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
-        public Mono(double[] samples, IAudioProcessingSettings settings)
+        public Mono(float[] samples, IAudioProcessingSettings settings)
         {
             if (settings is null)
             {
@@ -29,7 +29,7 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.monoChannel = new MemoryEfficientChannel(samples, settings);
+            this.monoChannel = new Channel(samples, settings);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="samples">Input samples.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
-        public Mono(ImmutableArray<double> samples, IAudioProcessingSettings settings)
+        public Mono(ImmutableArray<float> samples, IAudioProcessingSettings settings)
         {
             if (settings is null)
             {
@@ -88,7 +88,7 @@ namespace CarefulAudioRepair.Data
         public double GetInputSample(ChannelType channelType, int index) =>
             this.monoChannel.GetInputSample(index);
 
-        public ImmutableArray<double> GetInputArray(ChannelType channelType) =>
+        public ImmutableArray<float> GetInputArray(ChannelType channelType) =>
             this.monoChannel.GetInputArray();
 
         /// <inheritdoc/>
@@ -100,7 +100,7 @@ namespace CarefulAudioRepair.Data
             this.monoChannel.GetPredictionErr(index);
 
         /// <inheritdoc/>
-        public double[] GetOutputArray(ChannelType channelType) =>
+        public float[] GetOutputArray(ChannelType channelType) =>
             this.monoChannel.GetOutputArray();
 
         /// <inheritdoc/>

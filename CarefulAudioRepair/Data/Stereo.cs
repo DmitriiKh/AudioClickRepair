@@ -24,8 +24,8 @@ namespace CarefulAudioRepair.Data
         /// <param name="rightChannelSamples">Input samples (right channel.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
         public Stereo(
-            double[] leftChannelSamples,
-            double[] rightChannelSamples,
+            float[] leftChannelSamples,
+            float[] rightChannelSamples,
             IAudioProcessingSettings settings)
         {
             if (settings is null)
@@ -45,8 +45,8 @@ namespace CarefulAudioRepair.Data
         /// <param name="rightChannelSamples">Input samples (right channel.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
         public Stereo(
-            ImmutableArray<double> leftChannelSamples,
-            ImmutableArray<double> rightChannelSamples,
+            ImmutableArray<float> leftChannelSamples,
+            ImmutableArray<float> rightChannelSamples,
             IAudioProcessingSettings settings)
         {
             if (settings is null)
@@ -55,8 +55,8 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.leftChannel = new MemoryEfficientChannel(leftChannelSamples, settings);
-            this.rightChannel = new MemoryEfficientChannel(rightChannelSamples, settings);
+            this.leftChannel = new Channel(leftChannelSamples, settings);
+            this.rightChannel = new Channel(rightChannelSamples, settings);
         }
 
         /// <inheritdoc/>
@@ -109,7 +109,7 @@ namespace CarefulAudioRepair.Data
             ? this.leftChannel.GetInputSample(index)
             : this.rightChannel.GetInputSample(index);
 
-        public ImmutableArray<double> GetInputArray(ChannelType channelType) =>
+        public ImmutableArray<float> GetInputArray(ChannelType channelType) =>
             channelType == ChannelType.Left
                 ? this.leftChannel.GetInputArray()
                 : this.rightChannel.GetInputArray();
@@ -127,7 +127,7 @@ namespace CarefulAudioRepair.Data
             : this.rightChannel.GetPredictionErr(index);
 
         /// <inheritdoc/>
-        public double[] GetOutputArray(ChannelType channelType) =>
+        public float[] GetOutputArray(ChannelType channelType) =>
             channelType == ChannelType.Left
                 ? this.leftChannel.GetOutputArray()
                 : this.rightChannel.GetOutputArray();

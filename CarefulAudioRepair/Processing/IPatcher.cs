@@ -26,5 +26,7 @@ namespace CarefulAudioRepair.Processing
         /// <param name="position">Position of the required sample.</param>
         /// <returns>Value of the sample.</returns>
         double GetValue(int position);
+
+        float[] GetAll();
     }
 }

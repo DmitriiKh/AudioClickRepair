@@ -16,7 +16,7 @@ namespace CarefulAudioRepair.Processing
     /// </summary>
     internal class ScannerTools : IDisposable
     {
-        private ImmutableArray<double> predictionErr;
+        private ImmutableArray<float> predictionErr;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScannerTools"/> class.
@@ -24,7 +24,7 @@ namespace CarefulAudioRepair.Processing
         /// <param name="inputSamples">Input audio samples.</param>
         /// <param name="settings">Settings for processing audio.</param>
         /// <param name="patches"></param>
-        public ScannerTools(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings,
+        public ScannerTools(ImmutableArray<float> inputSamples, IAudioProcessingSettings settings,
             List<AbstractPatch> patches = null)
         {
             this.PatchCollection = new PatchCollection(patches);
@@ -73,7 +73,7 @@ namespace CarefulAudioRepair.Processing
         /// <summary>
         /// Gets input samples.
         /// </summary>
-        public ImmutableArray<double> Input { get; }
+        public ImmutableArray<float> Input { get; }
 
         /// <summary>
         /// Gets settings for processing audio.
@@ -120,7 +120,9 @@ namespace CarefulAudioRepair.Processing
             status.Report(parentStatus + "Preparation");
             progress.Report(0);
 
-            var errors = this.CalculatePredictionErrors(progress);
+            var errors = Array.ConvertAll(
+                this.CalculatePredictionErrors(progress),
+                (e) => (float)e);
 
             // Initialize fields that depend on prediction errors
             this.predictionErr = ImmutableArray.Create(errors);

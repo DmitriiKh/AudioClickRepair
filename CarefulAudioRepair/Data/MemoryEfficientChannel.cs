@@ -1,4 +1,4 @@
-﻿// <copyright file="MemoryEfficientChannel.cs" company="Dmitrii Khrustalev">
+﻿/*// <copyright file="MemoryEfficientChannel.cs" company="Dmitrii Khrustalev">
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
@@ -192,4 +192,4 @@ namespace CarefulAudioRepair.Data
             tools.Dispose();
         }
     }
-}
+}*/

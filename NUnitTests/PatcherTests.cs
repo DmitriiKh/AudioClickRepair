@@ -10,7 +10,7 @@ namespace NUnitTests
     public class PatcherTests
     {
         private const int _testArrayLength = 1000;
-        private ImmutableArray<double> _arrayValueEqualsIndex;
+        private ImmutableArray<float> _arrayValueEqualsIndex;
         private PatchCollection _patchCollection;
         private IPatcher _patcher;
 
@@ -18,7 +18,7 @@ namespace NUnitTests
         public void Setup()
         {
             _arrayValueEqualsIndex = Enumerable.Range(0, _testArrayLength)
-                .Select(i => (double)i)
+                .Select(i => (float)i)
                 .ToImmutableArray();
 
             _patchCollection = new PatchCollection();

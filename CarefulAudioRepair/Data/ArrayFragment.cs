@@ -37,7 +37,7 @@ namespace CarefulAudioRepair.Data
         /// <param name="rangeLength">Length of sequence to be copied.</param>
         /// <returns>RangeData.</returns>
         public ArrayFragment(
-            ImmutableArray<double> immutableArray,
+            ImmutableArray<float> immutableArray,
             int rangeStart,
             int rangeLength)
             : this(
@@ -47,14 +47,14 @@ namespace CarefulAudioRepair.Data
         }
 
         private static double[] GetFragment(
-            ImmutableArray<double> immutableArray,
+            ImmutableArray<float> immutableArray,
             int rangeStart,
             int rangeLength)
         {
-            var shortArray = new double[rangeLength];
+            var shortArray = new float[rangeLength];
             immutableArray.CopyTo(rangeStart, shortArray, 0, rangeLength);
 
-            return shortArray;
+            return Array.ConvertAll(shortArray, input => (double)input);
         }
     }
 }

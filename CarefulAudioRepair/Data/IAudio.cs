@@ -84,7 +84,7 @@ namespace CarefulAudioRepair.Data
         /// <returns>Array of input samples.</returns>
         public double[] GetInputRange(ChannelType channelType, int start, int length);
 
-        public ImmutableArray<double> GetInputArray(ChannelType channelType);
+        public ImmutableArray<float> GetInputArray(ChannelType channelType);
 
         /// <summary>
         /// Returns value of output sample from specified channel at specified position.
@@ -107,6 +107,6 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="channelType">Left or Right channel.</param>
         /// <returns>Array of samples.</returns>
-        public double[] GetOutputArray(ChannelType channelType);
+        public float[] GetOutputArray(ChannelType channelType);
     }
 }

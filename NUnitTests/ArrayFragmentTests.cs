@@ -8,13 +8,13 @@ namespace NUnitTests
     public class ArrayFragmentTests
     {
         private const int _testArrayLength = 1000;
-        private ImmutableArray<double> _arrayValueEqualsIndex;
+        private ImmutableArray<float> _arrayValueEqualsIndex;
 
         [SetUp]
         public void Setup()
         {
             _arrayValueEqualsIndex = Enumerable.Range(0, _testArrayLength)
-                .Select(i => (double)i)
+                .Select(i => (float)i)
                 .ToImmutableArray();
         }
 

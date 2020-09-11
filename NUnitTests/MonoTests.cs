@@ -20,7 +20,7 @@ namespace NUnitTests
         [TestCase(1024)]
         public void Mono_ScansArray_DoNotThrow(int inputLength)
         {
-            var zeros = new double[inputLength];
+            var zeros = new float[inputLength];
             var audio = new Mono(
                 zeros,
                 new AudioProcessingSettings() { HistoryLengthSamples = 512 });

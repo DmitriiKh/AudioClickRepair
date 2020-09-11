@@ -2,6 +2,8 @@
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
+using System.Linq;
+
 namespace CarefulAudioRepair.Processing
 {
     using System;
@@ -14,7 +16,7 @@ namespace CarefulAudioRepair.Processing
     /// </summary>
     internal class Patcher : IPatcher
     {
-        private readonly ImmutableArray<double> immutableArray;
+        private readonly ImmutableArray<float> immutableArray;
         private readonly PatchCollection patchCollection;
         private readonly Func<AbstractPatch, int, double> updateFunc;
 
@@ -26,7 +28,7 @@ namespace CarefulAudioRepair.Processing
         /// <param name="updateFunc">Function to call to get the patched value.
         /// Example: (patch, position) => patch.GetOutputSample(position).</param>
         public Patcher(
-            ImmutableArray<double> immutableArray,
+            ImmutableArray<float> immutableArray,
             PatchCollection patchCollection,
             Func<AbstractPatch, int, double> updateFunc)
         {
@@ -79,6 +81,23 @@ namespace CarefulAudioRepair.Processing
             return patchForPosition is null
                 ? this.immutableArray[position]
                 : this.updateFunc(patchForPosition, position);
+        }
+
+        public float[] GetAll()
+        {
+            var outputArray = this.immutableArray.ToArray();
+
+            var patches = this.patchCollection.ToList();
+
+            foreach (var patch in patches)
+            {
+                for (var position = patch.StartPosition; position <= patch.EndPosition; position++)
+                {
+                    outputArray[position] = (float)patch.GetValue(position);
+                }
+            }
+
+            return outputArray;
         }
 
         private void UpdateRange(AbstractFragment range, AbstractPatch patch)
