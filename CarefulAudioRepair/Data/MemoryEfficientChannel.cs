@@ -1,4 +1,4 @@
-﻿/*// <copyright file="MemoryEfficientChannel.cs" company="Dmitrii Khrustalev">
+﻿// <copyright file="MemoryEfficientChannel.cs" company="Dmitrii Khrustalev">
 // Copyright (c) Dmitrii Khrustalev. All rights reserved.
 // </copyright>
 
@@ -16,7 +16,7 @@ namespace CarefulAudioRepair.Data
     /// </summary>
     internal class MemoryEfficientChannel : IChannel
     {
-        private readonly ImmutableArray<double> inputImmutable;
+        private readonly ImmutableArray<float> inputImmutable;
         private readonly IAudioProcessingSettings settings;
         private readonly List<AbstractPatch> patches = new List<AbstractPatch>();
 
@@ -25,7 +25,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="inputSamples">Input audio samples.</param>
         /// <param name="settings">Audio setting.</param>
-        public MemoryEfficientChannel(double[] inputSamples, IAudioProcessingSettings settings)
+        public MemoryEfficientChannel(float[] inputSamples, IAudioProcessingSettings settings)
         {
             if (inputSamples is null)
             {
@@ -41,7 +41,7 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="inputSamples">Input audio samples.</param>
         /// <param name="settings">Audio setting.</param>
-        public MemoryEfficientChannel(ImmutableArray<double> inputSamples, IAudioProcessingSettings settings)
+        public MemoryEfficientChannel(ImmutableArray<float> inputSamples, IAudioProcessingSettings settings)
         {
             this.inputImmutable = inputSamples;
             this.settings = settings;
@@ -78,6 +78,7 @@ namespace CarefulAudioRepair.Data
             this.patches.Clear();
 
             const int chunkLength = 1000000;
+            var chunkCount = (int)Math.Ceiling((double)this.LengthSamples / chunkLength);
             var overlap = this.settings.HistoryLengthSamples * 2;
 
             for (int start = 0, chunkIndex = 1;
@@ -95,7 +96,7 @@ namespace CarefulAudioRepair.Data
                 var scanner = new Scanner(new ScannerTools(input, this.settings));
 
                 var tools = await scanner.ScanAsync(
-                        parentStatus + chunkIndex + "-",
+                        parentStatus + chunkIndex + " of " + chunkCount + "-",
                         status,
                         progress)
                     .ConfigureAwait(false);
@@ -114,12 +115,12 @@ namespace CarefulAudioRepair.Data
             }
         }
 
-        public ImmutableArray<double> GetInputArray() => this.inputImmutable;
+        public ImmutableArray<float> GetInputArray() => this.inputImmutable;
 
-        public double[] GetOutputArray()
+        public float[] GetOutputArray()
         {
             var tools = new ScannerTools(this.inputImmutable, this.settings, this.patches);
-            var outputArray = tools.InputPatcher.GetRange(0, this.LengthSamples - 1);
+            var outputArray = tools.InputPatcher.GetAll();
             tools.Dispose();
 
             return outputArray;
@@ -178,7 +179,7 @@ namespace CarefulAudioRepair.Data
         /// <param name="length">Range length.</param>
         /// <returns>Array of input samples.</returns>
         public double[] GetInputRange(int start, int length) =>
-            this.inputImmutable.Skip(start - 1).Take(length).ToArray();
+            this.inputImmutable.Skip(start - 1).Take(length).Select(s => (double)s).ToArray();
 
         private void RegisterPatch(AbstractPatch patch)
         {
@@ -192,4 +193,4 @@ namespace CarefulAudioRepair.Data
             tools.Dispose();
         }
     }
-}*/
+}
