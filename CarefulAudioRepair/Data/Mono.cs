@@ -100,17 +100,8 @@ namespace CarefulAudioRepair.Data
             this.monoChannel.GetPredictionErr(index);
 
         /// <inheritdoc/>
-        public double[] GetOutputArray(ChannelType channelType)
-        {
-            var array = new double[this.LengthSamples];
-
-            for (var index = 0; index < array.Length; index++)
-            {
-                array[index] = this.GetOutputSample(channelType, index);
-            }
-
-            return array;
-        }
+        public double[] GetOutputArray(ChannelType channelType) =>
+            this.monoChannel.GetOutputArray();
 
         /// <inheritdoc/>
         public void Dispose()

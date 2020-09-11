@@ -20,5 +20,6 @@ namespace CarefulAudioRepair.Data
         double GetPredictionErr(int position);
         Task ScanAsync(string parentStatus, IProgress<string> status, IProgress<double> progress);
         ImmutableArray<double> GetInputArray();
+        double[] GetOutputArray();
     }
 }

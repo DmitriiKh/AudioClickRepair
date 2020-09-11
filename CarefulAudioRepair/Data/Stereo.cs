@@ -127,17 +127,10 @@ namespace CarefulAudioRepair.Data
             : this.rightChannel.GetPredictionErr(index);
 
         /// <inheritdoc/>
-        public double[] GetOutputArray(ChannelType channelType)
-        {
-            var array = new double[this.LengthSamples];
-
-            for (var index = 0; index < array.Length; index++)
-            {
-                array[index] = this.GetOutputSample(channelType, index);
-            }
-
-            return array;
-        }
+        public double[] GetOutputArray(ChannelType channelType) =>
+            channelType == ChannelType.Left
+                ? this.leftChannel.GetOutputArray()
+                : this.rightChannel.GetOutputArray();
 
         /// <inheritdoc/>
         public void Dispose()
