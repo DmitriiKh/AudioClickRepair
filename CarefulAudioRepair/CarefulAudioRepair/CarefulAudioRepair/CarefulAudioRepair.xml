@@ -539,19 +539,21 @@
                 about damaged samples.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Data.Mono.#ctor(System.Single[],CarefulAudioRepair.Data.IAudioProcessingSettings)">
+        <member name="M:CarefulAudioRepair.Data.Mono.#ctor(System.Single[],CarefulAudioRepair.Data.IAudioProcessingSettings,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Mono"/> class.
             </summary>
             <param name="samples">Input samples.</param>
             <param name="settings">Settings associated with this audio data.</param>
+            <param name="memoryEfficient"></param>
         </member>
-        <member name="M:CarefulAudioRepair.Data.Mono.#ctor(System.Collections.Immutable.ImmutableArray{System.Single},CarefulAudioRepair.Data.IAudioProcessingSettings)">
+        <member name="M:CarefulAudioRepair.Data.Mono.#ctor(System.Collections.Immutable.ImmutableArray{System.Single},CarefulAudioRepair.Data.IAudioProcessingSettings,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Mono"/> class.
             </summary>
             <param name="samples">Input samples.</param>
             <param name="settings">Settings associated with this audio data.</param>
+            <param name="memoryEfficient"></param>
         </member>
         <member name="P:CarefulAudioRepair.Data.Mono.IsStereo">
             <inheritdoc/>
@@ -636,21 +638,23 @@
                 about damaged samples.
             </summary>
         </member>
-        <member name="M:CarefulAudioRepair.Data.Stereo.#ctor(System.Single[],System.Single[],CarefulAudioRepair.Data.IAudioProcessingSettings)">
+        <member name="M:CarefulAudioRepair.Data.Stereo.#ctor(System.Single[],System.Single[],CarefulAudioRepair.Data.IAudioProcessingSettings,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Stereo"/> class.
             </summary>
             <param name="leftChannelSamples">Input samples (left channel).</param>
             <param name="rightChannelSamples">Input samples (right channel.</param>
             <param name="settings">Settings associated with this audio data.</param>
+            <param name="memoryEfficient"></param>
         </member>
-        <member name="M:CarefulAudioRepair.Data.Stereo.#ctor(System.Collections.Immutable.ImmutableArray{System.Single},System.Collections.Immutable.ImmutableArray{System.Single},CarefulAudioRepair.Data.IAudioProcessingSettings)">
+        <member name="M:CarefulAudioRepair.Data.Stereo.#ctor(System.Collections.Immutable.ImmutableArray{System.Single},System.Collections.Immutable.ImmutableArray{System.Single},CarefulAudioRepair.Data.IAudioProcessingSettings,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:CarefulAudioRepair.Data.Stereo"/> class.
             </summary>
             <param name="leftChannelSamples">Input samples (left channel).</param>
             <param name="rightChannelSamples">Input samples (right channel.</param>
             <param name="settings">Settings associated with this audio data.</param>
+            <param name="memoryEfficient"></param>
         </member>
         <member name="P:CarefulAudioRepair.Data.Stereo.IsStereo">
             <inheritdoc/>
