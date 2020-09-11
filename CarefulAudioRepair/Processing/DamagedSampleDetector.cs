@@ -54,6 +54,12 @@ namespace CarefulAudioRepair.Processing
 
             var normalError = this.normCalculator.GetResult(errors);
 
+            if (normalError == 0)
+            {
+                // we will not divide by zero
+                return 1d;
+            }
+
             var inputSamples = this.inputPatcher.GetRange(
                 position - this.predictor.InputDataSize,
                 this.predictor.InputDataSize,
