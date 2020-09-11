@@ -109,6 +109,11 @@ namespace CarefulAudioRepair.Data
             ? this.leftChannel.GetInputSample(index)
             : this.rightChannel.GetInputSample(index);
 
+        public ImmutableArray<double> GetInputArray(ChannelType channelType) =>
+            channelType == ChannelType.Left
+                ? this.leftChannel.GetInputArray()
+                : this.rightChannel.GetInputArray();
+
         /// <inheritdoc/>
         public double GetOutputSample(ChannelType channelType, int position) =>
             channelType == ChannelType.Left

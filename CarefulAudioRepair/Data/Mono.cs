@@ -88,6 +88,9 @@ namespace CarefulAudioRepair.Data
         public double GetInputSample(ChannelType channelType, int index) =>
             this.monoChannel.GetInputSample(index);
 
+        public ImmutableArray<double> GetInputArray(ChannelType channelType) =>
+            this.monoChannel.GetInputArray();
+
         /// <inheritdoc/>
         public double GetOutputSample(ChannelType channelType, int position) =>
             this.monoChannel.GetOutputSample(position);

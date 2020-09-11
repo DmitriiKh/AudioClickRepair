@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -82,6 +83,8 @@ namespace CarefulAudioRepair.Data
         /// <param name="length">Range length.</param>
         /// <returns>Array of input samples.</returns>
         public double[] GetInputRange(ChannelType channelType, int start, int length);
+
+        public ImmutableArray<double> GetInputArray(ChannelType channelType);
 
         /// <summary>
         /// Returns value of output sample from specified channel at specified position.

@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
 
 namespace CarefulAudioRepair.Data
@@ -18,5 +19,6 @@ namespace CarefulAudioRepair.Data
         double GetOutputSample(int position);
         double GetPredictionErr(int position);
         Task ScanAsync(string parentStatus, IProgress<string> status, IProgress<double> progress);
+        ImmutableArray<double> GetInputArray();
     }
 }
