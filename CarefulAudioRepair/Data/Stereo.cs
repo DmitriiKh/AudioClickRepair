@@ -23,10 +23,12 @@ namespace CarefulAudioRepair.Data
         /// <param name="leftChannelSamples">Input samples (left channel).</param>
         /// <param name="rightChannelSamples">Input samples (right channel.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
+        /// <param name="memoryEfficient"></param>
         public Stereo(
             float[] leftChannelSamples,
             float[] rightChannelSamples,
-            IAudioProcessingSettings settings)
+            IAudioProcessingSettings settings,
+            bool memoryEfficient = false)
         {
             if (settings is null)
             {
@@ -34,8 +36,9 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.leftChannel = new Channel(leftChannelSamples, settings);
-            this.rightChannel = new Channel(rightChannelSamples, settings);
+
+            this.leftChannel = CreateChannel(leftChannelSamples, settings, memoryEfficient);
+            this.rightChannel = CreateChannel(rightChannelSamples, settings, memoryEfficient);
         }
 
         /// <summary>
@@ -44,10 +47,12 @@ namespace CarefulAudioRepair.Data
         /// <param name="leftChannelSamples">Input samples (left channel).</param>
         /// <param name="rightChannelSamples">Input samples (right channel.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
+        /// <param name="memoryEfficient"></param>
         public Stereo(
             ImmutableArray<float> leftChannelSamples,
             ImmutableArray<float> rightChannelSamples,
-            IAudioProcessingSettings settings)
+            IAudioProcessingSettings settings,
+            bool memoryEfficient = false)
         {
             if (settings is null)
             {
@@ -55,8 +60,29 @@ namespace CarefulAudioRepair.Data
             }
 
             this.Settings = settings;
-            this.leftChannel = new Channel(leftChannelSamples, settings);
-            this.rightChannel = new Channel(rightChannelSamples, settings);
+
+            this.leftChannel = CreateChannel(leftChannelSamples, settings, memoryEfficient);
+            this.rightChannel = CreateChannel(rightChannelSamples, settings, memoryEfficient);
+        }
+
+        private static IChannel CreateChannel(ImmutableArray<float> samples, IAudioProcessingSettings settings, bool memoryEfficient)
+        {
+            if (memoryEfficient)
+            {
+                return new MemoryEfficientChannel(samples, settings);
+            }
+
+            return new Channel(samples, settings);
+        }
+
+        private static IChannel CreateChannel(float[] samples, IAudioProcessingSettings settings, bool memoryEfficient)
+        {
+            if (memoryEfficient)
+            {
+                return new MemoryEfficientChannel(samples, settings);
+            }
+
+            return new Channel(samples, settings);
         }
 
         /// <inheritdoc/>

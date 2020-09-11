@@ -21,15 +21,19 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="samples">Input samples.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
-        public Mono(float[] samples, IAudioProcessingSettings settings)
+        /// <param name="memoryEfficient"></param>
+        public Mono(float[] samples, IAudioProcessingSettings settings, bool memoryEfficient = false)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
-            this.Settings = settings;
-            this.monoChannel = new Channel(samples, settings);
+            if (memoryEfficient)
+            {
+                this.monoChannel = new MemoryEfficientChannel(samples, settings);
+            }
+            else
+            {
+                this.monoChannel = new Channel(samples, settings);
+            }
         }
 
         /// <summary>
@@ -37,15 +41,19 @@ namespace CarefulAudioRepair.Data
         /// </summary>
         /// <param name="samples">Input samples.</param>
         /// <param name="settings">Settings associated with this audio data.</param>
-        public Mono(ImmutableArray<float> samples, IAudioProcessingSettings settings)
+        /// <param name="memoryEfficient"></param>
+        public Mono(ImmutableArray<float> samples, IAudioProcessingSettings settings, bool memoryEfficient = false)
         {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
+            this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
-            this.Settings = settings;
-            this.monoChannel = new Channel(samples, settings);
+            if (memoryEfficient)
+            {
+                this.monoChannel = new MemoryEfficientChannel(samples, settings);
+            }
+            else
+            {
+                this.monoChannel = new Channel(samples, settings);
+            }
         }
 
         /// <inheritdoc/>
