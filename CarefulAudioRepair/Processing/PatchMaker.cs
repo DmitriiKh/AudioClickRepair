@@ -42,7 +42,11 @@ namespace CarefulAudioRepair.Processing
             int maxLengthOfCorrection,
             double errorLevelAtDetection)
         {
+            const double allowedSeconds = 3;
+
             var patches = new List<AbstractPatch>();
+
+            var startTime = DateTime.Now;
 
             for (var leftShift = 0; leftShift <= MaxLeftShift; leftShift++)
             {
@@ -53,6 +57,18 @@ namespace CarefulAudioRepair.Processing
                     errorLevelAtDetection);
 
                 patches.AddRange(patchesNew);
+
+                if ((DateTime.Now - startTime).TotalSeconds > allowedSeconds)
+                {
+
+                    var bestPatch = this.BestOf(patches);
+                    if (bestPatch != null)
+                    {
+                        bestPatch.Approved = false;
+                    }
+
+                    return bestPatch;
+                }
             }
 
             return this.BestOf(patches);
