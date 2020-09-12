@@ -133,27 +133,13 @@ namespace CarefulAudioRepair.Processing
             status.Report(parentStatus + "Restoration");
             progress.Report(0);
 
-            var suspectRange = Partitioner.Create(
-                0,
-                suspects.Length,
-                (int)Math.Ceiling((double)suspects.Length / Environment.ProcessorCount));
+            var suspectTotal = suspects.Length;
+            var suspectCount = 0;
 
-            Parallel.ForEach(suspectRange, (range, state, index) =>
+            Parallel.ForEach(suspects, (suspect) =>
             {
-                for (var suspectIndex = range.Item1;
-                    suspectIndex < range.Item2;
-                    suspectIndex++)
-                {
-                    this.CheckSuspect(suspects[suspectIndex]);
-
-                    // Only the first thread reports
-                    if (index == 0)
-                    {
-                        progress.Report(
-                            100.0 * (suspectIndex - range.Item1)
-                            / (range.Item2 - range.Item1));
-                    }
-                }
+                this.CheckSuspect(suspect);
+                progress?.Report(100.0 * ++suspectCount / suspectTotal);
             });
 
             this.tools.PatchCollection.Finalize();
